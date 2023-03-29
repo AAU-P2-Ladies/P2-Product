@@ -1,0 +1,20 @@
+{
+  "name": "p2-product",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AAU-P2-Ladies/P2-Product.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AAU-P2-Ladies/P2-Product/issues"
+  },
+  "homepage": "https://github.com/AAU-P2-Ladies/P2-Product#readme"
+}
