@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/AAU-P2-Ladies/P2-Product/issues"
   },
-  "homepage": "https://github.com/AAU-P2-Ladies/P2-Product#readme"
+  "homepage": "https://github.com/AAU-P2-Ladies/P2-Product#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
