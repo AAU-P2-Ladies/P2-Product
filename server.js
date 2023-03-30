@@ -13,6 +13,12 @@ app.get('/', (req, res) => {
 
 })
 
+app.get('/new', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'))
+
+})
+
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`)
