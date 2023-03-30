@@ -1,1 +1,1 @@
-hello friends
+No emojis & emotes
