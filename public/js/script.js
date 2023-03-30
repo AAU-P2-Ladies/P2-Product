@@ -1,1 +1,3 @@
-//extensions: emojis, css intellisense, express til server
+
+document.getElementById("test").style.color = "red";
+

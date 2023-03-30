@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 
 })
 
-app.get('/new', (req, res) => {
+app.get('/coordinator', (req, res) => {
 
     res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'))
 
