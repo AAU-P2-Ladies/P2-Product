@@ -1,3 +1,3 @@
-
-document.getElementById("test").style.color = "red";
-
+window.onload = function() {
+    document.getElementById("test").style.color = "blue";
+  }
