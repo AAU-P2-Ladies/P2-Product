@@ -9,7 +9,7 @@ loginButton.addEventListener("click", (e)=>{
     const username = loginForm.username.value;
     const password = loginForm.password.value;
 
-    fetch('http://localhost:3000', {
+    fetch('http://localhost:3000/', {
         method: "POST",
         headers:{
             "Content-Type": "applicantion/json",
