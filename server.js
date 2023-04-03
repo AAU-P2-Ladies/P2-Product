@@ -10,9 +10,12 @@ const app = express()
 const port = 3000
 
 app.use(express.json())
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 const oneDay = 1000 * 60 * 60 * 24;
+
+var session;
 
 app.use(sessions({
 
@@ -43,7 +46,7 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req,res) => {
 
-    if (req.body.username == myusername && req.body.password == mypassword){
+    if (req.body.username == '123' && req.body.password == '123'){
     
         session = req.session;
         session.userid = req.body.username;

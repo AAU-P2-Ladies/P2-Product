@@ -1,3 +1,4 @@
+
 const loginForm = document.getElementById("login-form");
 const loginButton = document.getElementById("log-submit");
 const loginErrorMsg = document.getElementById("login-error-msg");
@@ -21,3 +22,7 @@ loginButton.addEventListener("click", (e)=>{
 
     }).then((res)=> res.json).then((e) => console.error(e))
 });
+
+window.onload = function() {
+    document.getElementById("test").style.color = "blue";
+  }
