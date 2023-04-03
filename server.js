@@ -10,6 +10,7 @@ const app = express()
 const port = 3000
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -46,10 +47,12 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req,res) => {
 
+    console.log(req)
+
     if (req.body.username == '123' && req.body.password == '123'){
     
         session = req.session;
-        session.userid = req.body.username;
+        session.userid = req.username;
         
         console.log(req.session)
         
@@ -67,6 +70,13 @@ app.get('/coordinator', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'))
 
 })
+
+app.get('/logout', (req,res) => {
+
+    req.session.destroy();
+    res.redirect('/');
+
+});
 
 app.listen(port, () => {
 
