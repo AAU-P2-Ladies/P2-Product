@@ -2,7 +2,7 @@ const loginForm = document.getElementById("login-form");
 const loginButton = document.getElementById("log-submit");
 const loginErrorMsg = document.getElementById("login-error-msg");
 
-
+/*
 loginButton.addEventListener("click", (e)=>{
     e.preventDefault()
 
@@ -19,5 +19,5 @@ loginButton.addEventListener("click", (e)=>{
             "password": `${password}`,
         },
 
-    }).then((res)=> res.json).then((e) => console.error(parseJson(e)))
-});
+    }).then((res)=> res.json).then((e) => console.error(e))
+}); */
