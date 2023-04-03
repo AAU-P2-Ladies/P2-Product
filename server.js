@@ -6,11 +6,18 @@ const app = express()
 
 const port = 3000
 app.use(express.json())
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
 
     res.sendFile(path.join(__dirname, '/public/html/index.html'))
+
+})
+
+app.get('/coordinator', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'))
 
 })
 
