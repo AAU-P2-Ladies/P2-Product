@@ -1,4 +1,3 @@
-
 const loginForm = document.getElementById("login-form");
 const loginButton = document.getElementById("log-submit");
 const loginErrorMsg = document.getElementById("login-error-msg");
@@ -10,7 +9,7 @@ loginButton.addEventListener("click", (e)=>{
     const username = loginForm.username.value;
     const password = loginForm.password.value;
 
-    fetch('http://localhost:3000/', {
+    fetch('/login', {
         method: "POST",
         headers:{
             "Content-Type": "applicantion/json",
@@ -20,9 +19,5 @@ loginButton.addEventListener("click", (e)=>{
             "password": `${password}`,
         },
 
-    }).then((res)=> res.json).then((e) => console.error(e))
+    }).then((res)=> res.json).then((e) => console.error(parseJson(e)))
 });
-
-window.onload = function() {
-    document.getElementById("test").style.color = "blue";
-  }
