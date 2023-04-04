@@ -5,14 +5,14 @@ const sessions = require('express-session');
 
 var fs = require('fs'), json;
 
-const app = express()
+const app = express();
 
-const port = 3000
+const port = 3000;
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')));
 
 const oneDay = 1000 * 60 * 60 * 24;
 
@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 
     session = req.session;
 
-    if (session.userid){
+    if (session.userid) {
     
         res.send("Welcome User <a href=\'/logout'>click to logout</a>");
     
@@ -45,16 +45,31 @@ app.get('/', (req, res) => {
 
 })
 
+ 
 app.post('/login', (req,res) => {
 
-    console.log(req)
+    //console.log(req);
 
-    if (req.body.username == '123' && req.body.password == '123'){
+    let users = getJSONFile('users.json');
+
+    /*users.find((m) => {
+
+        if (m.navn === 'Merete Kaldahl Andersen') {
+    
+            console.log(m.email)
+        
+        }
+
+    });*/
+
+    console.log
+
+    if ((users.find(m => m.navn == req.body.username)) && (users.find(m => m.password == req.body.password))){
     
         session = req.session;
         session.userid = req.username;
         
-        console.log(req.session)
+        console.log(req.session);
         
         res.send(`Hey there, welcome <a href=\'/logout'>click to logout</a>`);
     
@@ -67,7 +82,7 @@ app.post('/login', (req,res) => {
 
 app.get('/coordinator', (req, res) => {
 
-    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'))
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
 
 })
 
@@ -80,11 +95,11 @@ app.get('/logout', (req,res) => {
 
 app.listen(port, () => {
 
-    console.log(`Server listening at http://localhost:${port}`)
+    console.log(`Server listening at http://localhost:${port}`);
 
 })
-   
-function readJsonFileSync(filepath, encoding) {
+
+function readJSONFileSync(filepath, encoding) {
 
     if (typeof (encoding) == 'undefined') {
         
@@ -98,12 +113,21 @@ function readJsonFileSync(filepath, encoding) {
 
 }
     
-function getConfig(file) {
+function getJSONFile(file) {
     
     var filepath = __dirname + '/' + file;
 
-    return readJsonFileSync(filepath);
+    return readJSONFileSync(filepath);
 
 }
 
-// console.log(getConfig('users.json'))
+let users = getJSONFile('users.json');
+
+users.find((m) => {
+
+    if (m.navn === 'Merete Kaldahl Andersen') {
+
+        console.log(m.email)
+    
+    }
+});
