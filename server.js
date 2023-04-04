@@ -75,7 +75,7 @@ app.post('/login', (req,res) => {
     
     } else {
     
-        res.send('Invalid username or password');
+        res.status(404)
     
     }
 })
