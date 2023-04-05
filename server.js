@@ -7,7 +7,7 @@ var fs = require('fs'), json;
 
 const app = express();
 
-const port = 3000;
+const port = 3080;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -23,7 +23,7 @@ app.use(sessions({
     secret: "merete",
     saveUninitialized: true,
     cookie: { maxAge: oneDay },
-    resave: true 
+    resave: false 
 
 }));
 
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
     if (session.userid) {
     
-        res.send("Welcome User <a href=\'/logout'>click to logout</a>");
+        res.send("Welcome User <a href=\'./logout'>click to logout</a>");
     
     } else {
 
@@ -50,34 +50,43 @@ app.post('/login', (req,res) => {
 
     //console.log(req);
 
-    let users = getJSONFile('users.json');
+    let users = getJSONFile('users.json').some((m) => {
 
-    /*users.find((m) => {
+        //console.log(m);
 
-        if (m.navn === 'Merete Kaldahl Andersen') {
-    
-            console.log(m.email)
+        if (m.navn == req.body.username) {
+
+            if (m.password == req.body.password) {
+
+                session = req.session;
+                session.userid = req.body.username;
+                
+                console.log(req.session);
+
+                console.log(m.navn);
+                
+                res.json({ error: false, username: true, password: true });
+
+                return true;
+
+            } else {
+
+                res.json({ error: true, username: true, password: false });
+
+                return true;
+
+            } 
         
         }
 
-    });*/
+    });
 
-    console.log
+    if (!users) {
 
-    if ((users.find(m => m.navn == req.body.username)) && (users.find(m => m.password == req.body.password))){
-    
-        session = req.session;
-        session.userid = req.username;
-        
-        console.log(req.session);
-        
-        res.send(`Hey there, welcome <a href=\'/logout'>click to logout</a>`);
-    
-    } else {
-    
-        res.status(404)
-    
+        res.json({ error: true, username: false, password: false }); 
+
     }
+
 })
 
 app.get('/coordinator', (req, res) => {
@@ -89,7 +98,7 @@ app.get('/coordinator', (req, res) => {
 app.get('/logout', (req,res) => {
 
     req.session.destroy();
-    res.redirect('/');
+    res.redirect('./');
 
 });
 
