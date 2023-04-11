@@ -79,8 +79,9 @@ let rbutton = registerButton.addEventListener("click", (e) => {
 
     })
     .catch((err) => {
-
+      
       console.error(err);
+      fetch('./register_login')
 
     });
 

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+const { exit } = require('process');
 
 var fs = require('fs'), json;
 
@@ -54,7 +55,7 @@ app.post('/login', (req,res) => {
 
         //console.log(m);
 
-        if (m.navn == req.body.username) {
+        if (m.username == req.body.username) {
 
             if (m.password == req.body.password) {
 
@@ -63,7 +64,7 @@ app.post('/login', (req,res) => {
                 
                 console.log(req.session);
 
-                console.log(m.navn);
+                console.log(m.username);
                 
                 res.json({ error: false, username: true, password: true });
 
@@ -93,17 +94,31 @@ app.post('/register',(req, res) => {
     
     let users = getJSONFile('users.json');
 
+    users.some((m) =>{
+        if (m.username == req.body.username) {
+
+            
+                
+            res.status(404);
+            res.end();
+               
+        }
+    });
+
+    
+
     users.push(req.body);
 
     fs.writeFile("./users.json",JSON.stringify(users, null, 4),JSON.stringify(json, null, 4), err => {
         if (err) throw err;
       });
     
-    res.status(200);
 
-    res.redirect('./');
 
     
+    
+    res.status(200)
+    return res.end();
 });
 
 app.get('/coordinator', (req, res) => {
