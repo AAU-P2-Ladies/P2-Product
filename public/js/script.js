@@ -28,10 +28,6 @@ let button = loginButton.addEventListener("click", (e) => {
 
         alert("Invalid Username or Password"); 
 
-      } else if (data.error && !data.password) {
-
-        alert("Invalid Password"); 
-
       } else  {
 
         location.href = './';
