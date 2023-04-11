@@ -89,11 +89,28 @@ app.post('/login', (req,res) => {
 
 })
 
+app.post('/register',(req, res) => {
+    
+    let users = getJSONFile('users.json');
+
+    users.push(req.body);
+
+    fs.writeFile("./users.json",JSON.stringify(users, null, 4),JSON.stringify(json, null, 4), err => {
+        if (err) throw err;
+      });
+    
+    res.status(200);
+
+    res.redirect('./');
+
+    
+});
+
 app.get('/coordinator', (req, res) => {
 
     res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
 
-})
+});
 
 app.get('/logout', (req,res) => {
 
@@ -102,11 +119,17 @@ app.get('/logout', (req,res) => {
 
 });
 
+app.get('/register_login',(req, res) =>{
+
+    res.sendFile(path.join(__dirname, '/public/html/register.html'));
+
+});
+
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
 
-})
+});
     
 function getJSONFile(file) {
     
@@ -116,15 +139,4 @@ function getJSONFile(file) {
     
     return JSON.parse(file);
 
-}
-
-let users = getJSONFile('users.json');
-
-users.find((m) => {
-
-    if (m.navn === 'Merete Kaldahl Andersen') {
-
-        console.log(m.email)
-    
-    }
-});
+};
