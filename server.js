@@ -124,11 +124,6 @@ app.post('/register',(req, res) => {
 
 });
 
-app.get('/coordinator', (req, res) => {
-
-    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
-
-});
 
 app.get('/logout', (req,res) => {
 
@@ -155,6 +150,21 @@ function getJSONFile(file) {
 
     var file = fs.readFileSync(filepath, 'utf8');
     
-    return JSON.parse(file);
 
-};
+    }
+});
+
+app.get('/coordinator_start', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+
+})
+
+app.get('/coordinator_config', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+
+})
+
+    
+
