@@ -107,26 +107,14 @@ app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 
 })
-
-function readJSONFileSync(filepath, encoding) {
-
-    if (typeof (encoding) == 'undefined') {
-        
-        encoding = 'utf8';
-    
-    }
-    
-    var file = fs.readFileSync(filepath, encoding);
-    
-    return JSON.parse(file);
-
-}
     
 function getJSONFile(file) {
     
     var filepath = __dirname + '/' + file;
 
-    return readJSONFileSync(filepath);
+    var file = fs.readFileSync(filepath, 'utf8');
+    
+    return JSON.parse(file);
 
 }
 
