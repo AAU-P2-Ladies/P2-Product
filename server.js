@@ -94,31 +94,34 @@ app.post('/register',(req, res) => {
     
     let users = getJSONFile('users.json');
 
-    users.some((m) =>{
+    let checkUser = users.some((m) => {
+
         if (m.username == req.body.username) {
 
-            
-                
-            res.status(404);
-            res.end();
+            return true;
                
         }
+
     });
 
-    
+    if (checkUser) {
 
-    users.push(req.body);
+        res.redirect('./');
 
-    fs.writeFile("./users.json",JSON.stringify(users, null, 4),JSON.stringify(json, null, 4), err => {
-        if (err) throw err;
-      });
-    
+        return res.end();
 
+    } else {
 
-    
-    
-    res.status(200)
-    return res.end();
+        users.push(req.body);
+
+        fs.writeFile("./users.json",JSON.stringify(users, null, 4),JSON.stringify(json, null, 4), err => {
+            if (err) throw err;
+        });
+
+        res.json({ error: false });
+
+    }
+
 });
 
 app.get('/coordinator', (req, res) => {
