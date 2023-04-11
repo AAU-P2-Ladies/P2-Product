@@ -2,9 +2,13 @@ const loginForm = document.getElementById("login-form");
 const loginUsername = document.getElementById("login-username");
 const loginPassword = document.getElementById("login-password");
 const loginButton = document.getElementById("login-submit");
-const loginErrorMsg = document.getElementById("login-error-msg");
+const registerForm = document.getElementById("register-form");
+const registerUsername = document.getElementById("register-username");
+const registerPassword = document.getElementById("register-password");
+const registerButton = document.getElementById("register-submit");
 
-let button = loginButton.addEventListener("click", (e) => {
+
+let lbutton = loginButton.addEventListener("click", (e) => {
 
   e.preventDefault();
 
@@ -28,10 +32,6 @@ let button = loginButton.addEventListener("click", (e) => {
 
         alert("Invalid Username or Password"); 
 
-      } else if (data.error && !data.password) {
-
-        alert("Invalid Password"); 
-
       } else  {
 
         location.href = './';
@@ -42,6 +42,46 @@ let button = loginButton.addEventListener("click", (e) => {
     .catch((err) => {
 
       console.error(err);
+
+    });
+
+});
+
+let rbutton = registerButton.addEventListener("click", (e) => {
+
+  e.preventDefault();
+
+    fetch('./register', {
+        method: "POST",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            username: registerUsername.value,
+            password: registerPassword.value,
+        }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+
+      console.log(data);
+
+      if (!data) {
+
+        alert("Invalid"); 
+
+      } else  {
+
+        location.href = './';
+
+      }
+
+    })
+    .catch((err) => {
+      
+      console.error(err);
+      fetch('./register_login')
 
     });
 

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+const { exit } = require('process');
 
 var fs = require('fs'), json;
 
@@ -54,7 +55,7 @@ app.post('/login', (req,res) => {
 
         //console.log(m);
 
-        if (m.navn == req.body.username) {
+        if (m.username == req.body.username) {
 
             if (m.password == req.body.password) {
 
@@ -63,7 +64,7 @@ app.post('/login', (req,res) => {
                 
                 console.log(req.session);
 
-                console.log(m.navn);
+                console.log(m.username);
                 
                 res.json({ error: false, username: true, password: true });
 
@@ -89,16 +90,39 @@ app.post('/login', (req,res) => {
 
 })
 
+app.post('/register',(req, res) => {
+    
+    let users = getJSONFile('users.json');
 
+    let checkUser = users.some((m) => {
 
+        if (m.username == req.body.username) {
 
+            return true;
+               
+        }
 
+    });
 
+    if (checkUser) {
 
+        res.redirect('./');
 
+        return res.end();
 
+    } else {
 
+        users.push(req.body);
 
+        fs.writeFile("./users.json",JSON.stringify(users, null, 4),JSON.stringify(json, null, 4), err => {
+            if (err) throw err;
+        });
+
+        res.json({ error: false });
+
+    }
+
+});
 
 
 app.get('/logout', (req,res) => {
@@ -108,42 +132,25 @@ app.get('/logout', (req,res) => {
 
 });
 
+app.get('/register_login',(req, res) =>{
+
+    res.sendFile(path.join(__dirname, '/public/html/register.html'));
+
+});
+
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
 
-})
-
-function readJSONFileSync(filepath, encoding) {
-
-    if (typeof (encoding) == 'undefined') {
-        
-        encoding = 'utf8';
-    
-    }
-    
-    var file = fs.readFileSync(filepath, encoding);
-    
-    return JSON.parse(file);
-
-}
+});
     
 function getJSONFile(file) {
     
     var filepath = __dirname + '/' + file;
 
-    return readJSONFileSync(filepath);
-
-}
-
-let users = getJSONFile('users.json');
-
-users.find((m) => {
-
-    if (m.navn === 'Merete Kaldahl Andersen') {
-
-        console.log(m.email)
+    var file = fs.readFileSync(filepath, 'utf8');
     
+
     }
 });
 
@@ -158,3 +165,6 @@ app.get('/coordinator_config', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
 
 })
+
+    
+
