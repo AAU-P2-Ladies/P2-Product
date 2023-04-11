@@ -2,7 +2,6 @@ const loginForm = document.getElementById("login-form");
 const loginUsername = document.getElementById("login-username");
 const loginPassword = document.getElementById("login-password");
 const loginButton = document.getElementById("login-submit");
-const loginErrorMsg = document.getElementById("login-error-msg");
 
 let button = loginButton.addEventListener("click", (e) => {
 
