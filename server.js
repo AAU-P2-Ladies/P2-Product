@@ -89,7 +89,13 @@ app.post('/login', (req,res) => {
 
 })
 
-app.get('/coordinator', (req, res) => {
+app.get('/coordinator_start', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+
+})
+
+app.get('/coordinator_config', (req, res) => {
 
     res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
 
