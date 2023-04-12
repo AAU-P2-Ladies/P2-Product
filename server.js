@@ -106,7 +106,7 @@ app.post('/register',(req, res) => {
 
     if (checkUser) {
 
-        res.redirect('./');
+        res.redirect('./register_login');
 
         return res.end();
 
@@ -118,7 +118,7 @@ app.post('/register',(req, res) => {
             if (err) throw err;
         });
 
-        res.json({ error: false });
+        res.redirect('./');
 
     }
 
