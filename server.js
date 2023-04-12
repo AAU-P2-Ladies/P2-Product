@@ -150,9 +150,8 @@ function getJSONFile(file) {
 
     var file = fs.readFileSync(filepath, 'utf8');
     
+}
 
-    }
-});
 
 app.get('/coordinator_start', (req, res) => {
 
@@ -165,6 +164,3 @@ app.get('/coordinator_config', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
 
 })
-
-    
-
