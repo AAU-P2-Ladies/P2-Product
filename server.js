@@ -159,6 +159,17 @@ app.get('/student_start', (req, res) => {
 
 });
 
+app.get('/student_group', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/student_group.html'));
+
+});
+
+app.get('/student_profile', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/student_profile.html'));
+
+});
 
 app.listen(port, () => {
 
