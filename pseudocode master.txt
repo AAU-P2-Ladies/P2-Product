@@ -68,10 +68,10 @@ function swap_check(origin, groups[], min_diversity, matrix)
         for j = 1 to groups[i].students.length
             target = groups[i].students[j]
             pref_avg_old[2] = group_pref_avg(target, groups[i])
-            swap(origin, target)
+            swap_students(origin, target)
             diverse_new[1] = group_diversity_check(groups[origin.group_num])
             diverse_new[2] = group_diversity_check(groups[i])
-            //If the number of diverse groups does not go down, calculate the preference delta
+            //If the number of diverse groups is not decreased by the swap, calculate the preference delta
             diversity_delta = diverse_new[1] + diverse_new[2] - diverse_old[1] - diverse_old[2
             if diversity_delta > 0
                 div_improvements[target.index] = true
@@ -82,31 +82,41 @@ function swap_check(origin, groups[], min_diversity, matrix)
                 pref_delta[target.index] = pref_avg_new[1] + pref_avg_new[2] - pref_avg_old[1] - pref_avg_old[2]
             else
                 pref_delta[target.index] = 0
-            swap(origin,target)
-    //Find min in this case returns the index of the minimum number
-    if indexOf(div_improvements, true) == -1
+            swap_students(origin,target)
+    //If no swaps can increase the number of diverse groups, simply return the best swap
+    if indexOf(div_improvements, true) == 0
         best_swap = find_min(pref_delta)
+        //If the best swap does not improve the pref satisfaction (ie. is not negative), return 0
         if pref_delta[best_swap] >= 0
-            return -1
+            return 0
         else 
             return best_swap
-    //If there exist swaps that increase the number of diverse groups, find the best of these swaps
+    //If there exist swaps that increase the number of diverse groups, find the best of these swaps and return it
     else
         return = find_min_space(pref_delta, div_improvements)
 
+//Swaps two students and also makes sure that their attached group number is still correct
 function swap_students(student1, student2)
     swap(student1.group_num, student2.group_num)
     swap(student1, student2)
 
+//This function takes an existing set of groups and tries to ensure minimum diversity.
+//Furthermore, it swaps students in order to maximize preference satisfaction
 function master_algorithm(students[], groups[], min_diversity, matrix)
-    if homogenous_groups
+    check_min_diversity(groups[], min_diversity)
+    //If there exist groups that do not fulfill min diversity, start with those
+    if homogenous_groups[0] != NIL
+        //Call swap_check on each student in these groups
         for i = 1 to homogenous_groups.length
             for j = 1 to groups[i].students.length
                 target = swap_check(groups[i].students[j], groups, min_diversity, matrix)
+                //Only swap if there is a valid target
                 if target > 0
                     swap (groups[i].students[j], taget)
     swapped = true
     iterations = 0
+    //Now loop through all the students, calling swap_check
+    //Keep looping until not a single improving swap can be made
     //max iterations will be some variable that makes the program terminate in case it runs too long
     while(swapped == true and iterations <= max_iterations)
         swapped = false
