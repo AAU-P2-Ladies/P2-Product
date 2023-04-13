@@ -1,0 +1,90 @@
+//This function loops through each role a student has
+//Maximum for loop iterations would be the number of roles squared
+//In the case of Belbin roles, this means an absolute maximum of 36 iterations
+function role_check(student1, student2)
+    //If one "student" is an empty space, no overlap
+    if student1 == NIL or student2 == NIL
+        return 0
+    sum = 0
+    For(i in student1.roles)
+        For j in(student2.roles)
+            if student1.roles[i] == student2.roles[j]
+                sum += 1
+    return sum
+    
+//This function finds the minimum positive element in an array
+//If there are no positive elements, returns 0
+function find_min_pos(array)
+    i = 1
+    key = 0
+    while key == 0
+        if array[i] > 0
+            key = array[i]
+        i++
+    for i to array.length
+        if array[i] < key and array[i] > 0
+            key = array[i]
+    return key
+
+//This function takes an array of students and finds the number of unique roles and returns the percentage of roles that are unique_roles
+//It will be used to check for the "role diversity" in each group
+function check_role_diversity(students[])
+    unique_roles[]
+    total_roles
+    for i = 1 to students.size
+        for j = 1 to students[i].roles.size
+            if students[i].roles[j] in unique_roles == false
+                unique_roles.append(students[i].roles[j])
+            total_roles++
+    return unique_roles.size/total_roles
+            
+
+//This function will return an array of arrays of groups, with maximized role diversity
+function find_min_diversity(students[], group_size)
+    group_number = ceiling(students.length/group_size)
+    //If the students cannot be evenly divided, there have to be a number of smaller groups
+     if students.length mod group_size != 0
+        smaller_groups = group_size - (students.length mod group_size)
+    //small_group_size = ceiling(smaller_groups/group_number)
+        while(smaller_groups > group_number)
+            group_size -= floor(smaller_groups/group_number)
+            smaller_groups = group_size - (students.length mod group_size)
+    groups[group_number]
+    overlap[group_number]
+    //The first student in the first group, since order does not matter
+    groups[1].students[1] = students[1]
+    //Looping through each student to put them into groups
+    student_loop: For(x = 2 to students.length)
+        //Looping through the groups to compare to current student x
+        group_loop: For(i in groups)
+            if groups[i].students[1] == NIL
+                groups[i].students[1] = students[x]
+                break
+            if groups[i].full == true
+                overlap[i] = 0
+                continue
+            overlap[i] = 0
+            compare_loop: For(j = 1 to group_size)
+                //Calculate the overlap between current student and group until a space is empty
+                overlap[i] += role_check(students[x], groups[i].students[j])
+                    if groups[i].students[j] == NIL
+                        //If overlap is 0, student is placed into group
+                        //If student is placed into a group, break so that the student loop continues
+                        //Else, break so that the next loop is checked
+                        if overlap[i] == 0
+                            groups[i].students[j] = students[x]
+                            break group_loop
+                        break
+        i = find_min_pos(overlap)
+        groups[i].students.append(students[x])
+        //If the number of students in the group is equal to the group size, or 1 smaller if the group is part of the last smaller groups, it becomes full
+        if groups[i].students.length == group_size or 
+          (i > group_number - smaller_groups and groups[i].students.length == group_size - 1)
+            groups[i].full = true
+    //Finding the minimum diversity, meaning the number of unique roles in a group divided by the total number of roles
+    diversity_min = check_role_diversity(group[1])
+    for i = 2 to groups.size
+        diversity = check_role_diversity(group[i])
+        if diversity < diversity_min
+            diversity_min = diversity
+    return diversity_min
