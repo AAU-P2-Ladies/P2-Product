@@ -149,6 +149,8 @@ function getJSONFile(file) {
     var filepath = __dirname + '/' + file;
 
     var file = fs.readFileSync(filepath, 'utf8');
+
+    return JSON.parse(file);
     
 }
 
