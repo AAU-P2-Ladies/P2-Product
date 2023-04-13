@@ -15,6 +15,10 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//app.engine('.html', require('ejs').__express);
+//app.set('view engine', 'html');
+//app.set('views', __dirname + '/views');
+
 const oneDay = 1000 * 60 * 60 * 24;
 
 var session;
