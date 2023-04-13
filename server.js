@@ -7,7 +7,6 @@ const { exit } = require('process');
 var fs = require('fs'), json;
 
 const app = express();
-
 const port = 3080;
 
 app.use(express.json());
@@ -142,6 +141,25 @@ app.get('/register_login',(req, res) =>{
 
 });
 
+app.get('/coordinator_start', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+
+});
+
+app.get('/coordinator_config', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+
+});
+
+app.get('/student_start', (req, res) => {
+
+    res.sendFile(path.join(__dirname, '/public/html/student_start.html'));
+
+});
+
+
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
@@ -157,16 +175,3 @@ function getJSONFile(file) {
     return JSON.parse(file);
     
 }
-
-
-app.get('/coordinator_start', (req, res) => {
-
-    res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
-
-});
-
-app.get('/coordinator_config', (req, res) => {
-
-    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
-
-});
