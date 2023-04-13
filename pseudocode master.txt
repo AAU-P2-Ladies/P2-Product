@@ -1,0 +1,120 @@
+//This helper function checks a group and returns the role diversity percentage
+function check_role_diversity(students[])
+    unique_roles[]
+    total_roles
+    for i = 1 to students.size
+        for j = 1 to students[i].roles.size
+            if students[i].roles[j] in unique_roles == false
+                unique_roles.append(students[i].roles[j])
+            total_roles++
+    return unique_roles.size/total_roles
+
+//This function takes an array of groups and returns an array containing only the groups that are below minimum diversity
+function check_min_diversity(groups[], min_diversity)
+    homogenous_groups[]
+    for i = 1 to groups.size
+        if check_role_diversity(groups[i]) < min_diversity
+            homogenous_groups.append(i)
+        
+//This boolean function takes a group and a minimum diversity.
+//It returns true if only if the group has reached minimum diversity
+function group_diversity_check(group, min_diversity)
+    if(check_role_diversity(group.students)) < min_diversity
+        return true
+    else
+        return false
+        
+//This function finds a students' preference average with the 
+function group_pref_avg(student, group)
+    pref_sum = 0
+    for i = 1 to group.students.size
+        pref_sum += pref_check(student, group.students[i])
+    return pref_sum/group.students.size
+    
+function find_min_space(array, boolean)
+    i = 1
+    key = 0
+    while key == 0
+        if boolean[i] == true
+            key = array[i]
+        i++
+    for i to array.length
+        if groups[i] < key and boolean[i] == true
+            key = array[i]
+    return key
+
+//This "small" helper function finds the best swap for an origin student and all the other potential groups
+//It either returns the index of the student that should be swapped
+//If no improving swaps can be made, return -1
+function swap_check(origin, groups[], min_diversity, matrix)
+    origin_group = groups[origin.group_num]
+    pref_delta[students.length]
+    div_improvements[false]
+    //Initialize some 2-element arrays.
+    //The first element is for the origin group and the second element is for the new group.
+    diverse_old = [false, false]
+    diverse_new = [false, false]
+    diverse_old[1] = group_diversity_check(origin_group, min_diversity)
+    pref_avg_old[2]
+    pref_avg_new[2]
+    pref_avg_old[1] += group_pref_avg(origin, origin_group)
+    //This loop goes through every group
+    for i = 1 to groups.length
+        diverse_old[2] = group_diversity_check(groups[i])
+        //If this is the origin's group, no swaps need to be checked
+        if origin_group == groups[i]
+            continue
+        //Now to through all students to check what a swap would do
+        for j = 1 to groups[i].students.length
+            target = groups[i].students[j]
+            pref_avg_old[2] = group_pref_avg(target, groups[i])
+            swap(origin, target)
+            diverse_new[1] = group_diversity_check(groups[origin.group_num])
+            diverse_new[2] = group_diversity_check(groups[i])
+            //If the number of diverse groups does not go down, calculate the preference delta
+            diversity_delta = diverse_new[1] + diverse_new[2] - diverse_old[1] - diverse_old[2
+            if diversity_delta > 0
+                div_improvements[target.index] = true
+            if diversity_delta >= 0
+                //The preference delta is simply the difference in average preference for the two groups
+                pref_avg_new[1] = group_pref_avg(target, origin_group)
+                pref_avg_new[2] = group_pref_avg(origin, groups[i])
+                pref_delta[target.index] = pref_avg_new[1] + pref_avg_new[2] - pref_avg_old[1] - pref_avg_old[2]
+            else
+                pref_delta[target.index] = 0
+            swap(origin,target)
+    //Find min in this case returns the index of the minimum number
+    if indexOf(div_improvements, true) == -1
+        best_swap = find_min(pref_delta)
+        if pref_delta[best_swap] >= 0
+            return -1
+        else 
+            return best_swap
+    //If there exist swaps that increase the number of diverse groups, find the best of these swaps
+    else
+        return = find_min_space(pref_delta, div_improvements)
+
+function swap_students(student1, student2)
+    swap(student1.group_num, student2.group_num)
+    swap(student1, student2)
+
+function master_algorithm(students[], groups[], min_diversity, matrix)
+    if homogenous_groups
+        for i = 1 to homogenous_groups.length
+            for j = 1 to groups[i].students.length
+                target = swap_check(groups[i].students[j], groups, min_diversity, matrix)
+                if target > 0
+                    swap (groups[i].students[j], taget)
+    swapped = true
+    iterations = 0
+    //max iterations will be some variable that makes the program terminate in case it runs too long
+    while(swapped == true and iterations <= max_iterations)
+        swapped = false
+        iterations++
+        for i = 1 to groups.length
+            for j = 1 to groups[i].students.length
+                target = swap_check(groups[i].students[j], groups, min_diversity, matrix)
+                if target > 0
+                    swapped = true
+                    swap(groups[i].students[j], target)
+    return groups
