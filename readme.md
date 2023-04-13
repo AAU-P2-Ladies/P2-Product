@@ -1,3 +1,3 @@
-No emojis & emotes \n
-simon er en sur dut 😠💢💥 \n
+No emojis & emotes 
+simon er en sur dut 😠💢💥 
 E9
