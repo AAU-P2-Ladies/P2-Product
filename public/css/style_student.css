@@ -1,0 +1,113 @@
+#feedbackText{
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 1px, rgba(6, 24, 44, 0.65) 0px 1px 1px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    padding: 5px;
+    margin: 10px 10px 10px 10px;
+    border-radius: 5px;
+}
+
+#groupTable{
+    float: left;
+    margin-left: 75px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.feedbackForm{
+    float: right;
+    padding-right: 75px;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+table{
+    width:20%;
+    border:1px solid;
+}
+
+th, td {
+    border: 1px solid black;
+    
+}
+
+tr:nth-child(odd) {
+    background-color: #ff57eb;
+    
+}
+  
+tr:nth-child(even) {
+    background-color: #f0ff1d;
+    
+}
+
+#anchor1, #anchor2, #anchor3{
+    color:#5A5555;
+}
+
+h1{
+    color: #5A5555;
+    font-family: 'Source Sans Pro', sans-serif; 
+    font-size: 18px; 
+    font-weight: 400; 
+    line-height: 32px; 
+    margin: 0 0 5px; 
+}
+
+h5{
+    color: gray;
+    font-family: 'Source Sans Pro', sans-serif; 
+    font-size: 18px; 
+    font-weight: 400; 
+    line-height: 32px; 
+    margin: 0 0 5px; 
+}
+
+label{
+    color: gray;
+    font-family: 'Source Sans Pro', sans-serif; 
+    font-size: 14px; 
+    font-weight: 400; 
+    line-height: 32px; 
+    margin: 0 0 5px; 
+}
+
+#newDivOne, #newDivTwo{
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 1px, rgba(6, 24, 44, 0.65) 0px 1px 1px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    padding: 5px;
+    margin: 10px 10px 10px 10px;
+    border-radius: 5px;
+}
+
+.selectt {
+    margin: 10px 10px 10px 10px;
+}
+
+body {
+    background-image: url('svend.png');
+}
+
+p {
+    color: rgb(32, 37, 37);
+    
+}
+
+.buttonS, #knapidd{
+    background-color: white;
+    color:rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+}
+
+
+.priotet, .students {
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    padding: 5px;
+    margin: 10px 10px 10px 10px;
+}
+
+.boks{
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    padding: 10px;
+    text-align: center;
+}
