@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 
     if (session.userid) {
     
-        res.send("Welcome User <a href=\'./logout'>click to logout</a>");
+        res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
     
     } else {
 
