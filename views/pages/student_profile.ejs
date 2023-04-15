@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+  <head>
+
+    <%- include('../partials/head'); %>
+    
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style_student.css">
+  
+  </head>
+  <body class="d-flex flex-column h-100">
+
+    <%- include('../partials/navbar'); %>
+
+    <div class="boks">
+      <h5>You have been invited to a group formation. Input your preferences!</h5>
+      <p>SW2-2023</p>
+        <form action="" method="post" id="StudentProfile">
+          
+          <label for="override">Override code:</label>
+          <input type="text" id="override" name="override">
+              
+          <input type="submit" class="buttonS" value="Join Group formation">
+          
+      </form>
+    </div>
+      
+    <%- include('../partials/footer'); %>
+    
+    <script type="application/javascript" src="./js/student_profile.js"></script>
+  </body>
+</html>
+

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+const bcrypt = require("bcrypt");
 const { exit } = require('process');
 
 var fs = require('fs'), json;
@@ -9,14 +10,14 @@ var fs = require('fs'), json;
 const app = express();
 const port = 3080;
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.engine('ejs', require('ejs').renderFile);
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-//app.engine('.html', require('ejs').__express);
-//app.set('view engine', 'html');
-//app.set('views', __dirname + '/views');
 
 const oneDay = 1000 * 60 * 60 * 24;
 
@@ -33,41 +34,51 @@ app.use(sessions({
 
 app.use(cookieParser());
 
+app.use(function(req, res, next) {
+
+    res.locals.isLoggedIn = req.session.userid ? 1 : 0;
+    next();
+
+});
+
 app.get('/', (req, res) => {
 
-    session = req.session;
-
-    if (session.userid) {
+    if (req.session.userid) {
     
-        res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+        //res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+
+        res.render('pages/coordinator_start')
     
     } else {
 
-        res.sendFile(path.join(__dirname, '/public/html/index.html'));
+        res.render('pages/index')
+
+        /* res.render('pages/index', {
+            isLoggedIn: session.userid ? 1 : 0
+        }); */
 
     }
 
 })
 
  
-app.post('/login', (req,res) => {
+app.post('/login', (req, res) => {
 
     //console.log(req);
 
-    let users = getJSONFile('users.json').some((m) => {
+    let checkUser = getJSONFile('users.json').some((user) => {
 
         //console.log(m);
 
-        if (m.username == req.body.username) {
+        if (user.username == req.body.username) {
 
-            if (m.password == req.body.password) {
+            if (user.password == req.body.password) {
 
-                session = req.session;
-                session.userid = req.body.username;
+                // session = req.session;
+                // session.userid = req.body.username;
                 
-                console.log(req.session);
-
-                console.log(m.username);
+                // console.log(req.session);
+                // console.log(m.username);
                 
                 res.json({ error: false, username: true, password: true });
 
@@ -85,7 +96,7 @@ app.post('/login', (req,res) => {
 
     });
 
-    if (!users) {
+    if (!checkUser) {
 
         res.json({ error: true, username: false, password: false }); 
 
@@ -97,9 +108,9 @@ app.post('/register',(req, res) => {
     
     let users = getJSONFile('users.json');
 
-    let checkUser = users.some((m) => {
+    let checkUser = users.some((user) => {
 
-        if (m.username == req.body.username) {
+        if (user.username == req.body.username) {
 
             return true;
                
@@ -109,7 +120,7 @@ app.post('/register',(req, res) => {
 
     if (checkUser) {
 
-        res.redirect('./register_login');
+        res.redirect('./register');
 
         return res.end();
 
@@ -117,8 +128,14 @@ app.post('/register',(req, res) => {
 
         users.push(req.body);
 
-        fs.writeFile("./users.json",JSON.stringify(users, null, 4),JSON.stringify(json, null, 4), err => {
-            if (err) throw err;
+        fs.writeFile("./users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
+
+            if (err) {
+
+                console.error(err);
+
+            } 
+        
         });
 
         res.redirect('./');
@@ -127,47 +144,59 @@ app.post('/register',(req, res) => {
 
 });
 
+app.get('/register',(req, res) =>{
 
-app.get('/logout', (req,res) => {
+    // res.sendFile(path.join(__dirname, '/public/html/register.html'));
 
-    req.session.destroy();
-    res.redirect('./');
-
-});
-
-app.get('/register_login',(req, res) =>{
-
-    res.sendFile(path.join(__dirname, '/public/html/register.html'));
+    res.render('pages/register');
 
 });
 
 app.get('/coordinator_start', (req, res) => {
 
-    res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+    //res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+
+    res.render('pages/coordinator_start');
 
 });
 
 app.get('/coordinator_config', (req, res) => {
 
-    res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+    //res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+
+    res.render('pages/coordinator_config');
 
 });
 
 app.get('/student_start', (req, res) => {
 
-    res.sendFile(path.join(__dirname, '/public/html/student_start.html'));
+    //res.sendFile(path.join(__dirname, '/public/html/student_start.html'));
+
+    res.render('pages/student_start');
 
 });
 
 app.get('/student_group', (req, res) => {
 
-    res.sendFile(path.join(__dirname, '/public/html/student_group.html'));
+    //res.sendFile(path.join(__dirname, '/public/html/student_group.html'));
+
+    res.render('pages/student_group');
 
 });
 
 app.get('/student_profile', (req, res) => {
 
-    res.sendFile(path.join(__dirname, '/public/html/student_profile.html'));
+    //res.sendFile(path.join(__dirname, '/public/html/student_profile.html'));
+
+    res.render('pages/student_profile');
+
+});
+
+app.get('/logout', (req,res) => {
+
+    req.session.destroy();
+
+    res.redirect('./');
 
 });
 

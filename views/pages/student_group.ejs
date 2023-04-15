@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+  <head>
+    
+    <%- include('../partials/head'); %>
+    
+    <title>Student Group</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style_student.css">
+
+  </head>
+  <body class="d-flex flex-column h-100">
+
+    <%- include('../partials/navbar'); %>
+  
+    <div class="boks" id="divBoks">
+      
+      <form action="./action_page.php" class="feedbackForm">
+        <p>
+          <label for="feedbackText">Submit your feedback HERE!:</label>
+        </p>
+        <textarea id="feedbackText" name="feedbackText" rows="4" cols="50"></textarea>
+        <br>
+        <input type="submit" value="Submit" class="buttonS">
+      </form>
+    </div>
+
+    <%- include('../partials/footer'); %>
+      
+    <script type="application/javascript" src="./js/student_group.js"></script>
+  </body>
+</html>
+

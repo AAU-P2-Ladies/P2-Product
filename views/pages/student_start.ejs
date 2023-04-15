@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+  <head>
+    
+    <%- include('../partials/head'); %>
+    
+    <title>Student Start</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style_student.css">
+
+  </head>
+  <body class="d-flex flex-column h-100">
+
+    <%- include('../partials/navbar'); %>
+
+    <div class="boks">
+      <img src="progressbar.png" alt="progress bar" width="700" height="100">
+      <br><br><br>
+      <a href="./student_profile" id="anchor1">Create your profile HERE!</a><br>
+      <a href="./student_profile" id="anchor2">Watch your current group and submit feedback</a><br>
+      <a href="./student_profile" id="anchor3">The groups are DONE. Watch them HERE!</a><br><br>
+      <br>
+      <button value="knapknap" id="knapidd"> YELPOW</button>
+    </div>
+
+    <%- include('../partials/footer'); %>
+      
+    <script type="application/javascript" src="./js/student_start.js"></script>
+  </body>
+</html>
+
