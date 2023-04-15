@@ -74,8 +74,8 @@ app.post('/login', (req, res) => {
 
             if (user.password == req.body.password) {
 
-                // session = req.session;
-                // session.userid = req.body.username;
+                session = req.session;
+                session.userid = req.body.username;
                 
                 // console.log(req.session);
                 // console.log(m.username);
