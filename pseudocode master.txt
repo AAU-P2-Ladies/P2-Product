@@ -2,8 +2,8 @@
 function check_role_diversity(students[])
     unique_roles[]
     total_roles
-    for i = 1 to students.size
-        for j = 1 to students[i].roles.size
+    for i = 1 to students.length
+        for j = 1 to students[i].roles.length
             if students[i].roles[j] in unique_roles == false
                 unique_roles.append(students[i].roles[j])
             total_roles++
@@ -12,9 +12,10 @@ function check_role_diversity(students[])
 //This function takes an array of groups and returns an array containing only the groups that are below minimum diversity
 function check_min_diversity(groups[], min_diversity)
     homogenous_groups[]
-    for i = 1 to groups.size
+    for i = 1 to groups.length
         if check_role_diversity(groups[i]) < min_diversity
-            homogenous_groups.append(i)
+            homogenous_groups.append(groups[i])
+    return homogenous_groups
         
 //This boolean function takes a group and a minimum diversity.
 //It returns true if only if the group has reached minimum diversity
@@ -27,9 +28,9 @@ function group_diversity_check(group, min_diversity)
 //This function finds a students' preference average with the 
 function group_pref_avg(student, group)
     pref_sum = 0
-    for i = 1 to group.students.size
+    for i = 1 to group.students.length
         pref_sum += pref_check(student, group.students[i])
-    return pref_sum/group.students.size
+    return pref_sum/group.students.length
     
 function find_min_space(array, boolean)
     i = 1
@@ -46,21 +47,21 @@ function find_min_space(array, boolean)
 //This "small" helper function finds the best swap for an origin student and all the other potential groups
 //It either returns the index of the student that should be swapped
 //If no improving swaps can be made, return -1
-function swap_check(origin, groups[], min_diversity, matrix)
+function swap_check(origin, students[], groups[], min_diversity, matrix)
     origin_group = groups[origin.group_num]
-    pref_delta[students.length]
-    div_improvements[false]
+    initialize pref_delta[students.length]
+    initialize div_improvements[students.length]
     //Initialize some 2-element arrays.
     //The first element is for the origin group and the second element is for the new group.
-    diverse_old = [false, false]
-    diverse_new = [false, false]
+    initialize diverse_old[2] = false
+    initialize diverse_new[2] = false
     diverse_old[1] = group_diversity_check(origin_group, min_diversity)
-    pref_avg_old[2]
-    pref_avg_new[2]
+    initialize pref_avg_old[2]
+    initialize pref_avg_new[2]
     pref_avg_old[1] += group_pref_avg(origin, origin_group)
     //This loop goes through every group
     for i = 1 to groups.length
-        diverse_old[2] = group_diversity_check(groups[i])
+        diverse_old[2] = group_diversity_check(groups[i], min_diversity)
         //If this is the origin's group, no swaps need to be checked
         if origin_group == groups[i]
             continue
@@ -105,20 +106,20 @@ function swap_students(student1, student2)
 function master_algorithm(students[], groups[], min_diversity, matrix)
     check_min_diversity(groups[], min_diversity)
     //If there exist groups that do not fulfill min diversity, start with those
-    if homogenous_groups[0] != NIL
+    if homogenous_groups[1] != NIL
         //Call swap_check on each student in these groups
         for i = 1 to homogenous_groups.length
             for j = 1 to groups[i].students.length
-                target = swap_check(groups[i].students[j], groups, min_diversity, matrix)
+                target = swap_check(groups[i].students[j], students, groups, min_diversity, matrix)
                 //Only swap if there is a valid target
                 if target > 0
-                    swap (groups[i].students[j], taget)
+                    swap(groups[i].students[j], students[target])
     swapped = true
     iterations = 0
     //Now loop through all the students, calling swap_check
     //Keep looping until not a single improving swap can be made
     //max iterations will be some variable that makes the program terminate in case it runs too long
-    while(swapped == true and iterations <= max_iterations)
+    while(swapped == true && iterations <= max_iterations)
         swapped = false
         iterations++
         for i = 1 to groups.length
