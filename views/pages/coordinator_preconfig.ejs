@@ -30,9 +30,10 @@
     </div>
 
     <div class="file_upload">
-        <p>Please upload the student list and the list of topics here:</p>
         <form action="javascript:void(0);"><!atm do not want page to reload when submitting to form>
+            <p>Upload student list:</p>
             <input type="file" id="student_list" name="student_list"><br><br>
+            <p>Upload topic list:</p>
             <input type="file" id="topics" name="topics">
           </form>
           <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
@@ -41,8 +42,7 @@
     <div class="buttons">
         <p>When you have finished configuration, please save and unlock student page to continue!🌟</p>
         <button type="button" id="back_btn">Go back</button>
-        <button type="button" id="save_btn">Save configurations</button>
-        <button type="button" id="unlock_btn">Unlock student profile page</button>
+        <button type="button" id="save_btn">Next</button>
     </div>
     
     <%- include('../partials/footer'); %>

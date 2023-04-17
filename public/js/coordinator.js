@@ -14,7 +14,7 @@ back_btn.addEventListener("click", function(){
 if(start_new_btn){
 start_new_btn.addEventListener("click", function(){
     console.log('clickededded');
-    window.location.href='/coordinator_config';
+    window.location.href='/coordinator_preconfig';
 
 })
 }
