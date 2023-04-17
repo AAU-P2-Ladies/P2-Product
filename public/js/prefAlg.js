@@ -1,5 +1,7 @@
 //let startTime = performance.now()
 
+const role_number = 9
+
 //Creates the object Student
 function Student(first, index, prefs = [], blocks = [], roles = [], group_nr, topics = []) {
     this.firstName = first;
@@ -47,7 +49,7 @@ let group_size = 7;
 //Initilize the student arrays with StudentNum amount of students 
 let students = [];
 for (let s = 0;s<StudentNum;s++) {
-    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), getRandomInts(StudentNum,s,2), [1, 5, 9], -1, getRandomInts(9,10,2))
+    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), getRandomInts(StudentNum,s,2), getRandomInts(8,-1,3), -1, getRandomInts(9,10,2))
     students.push(student0)
 }
 
@@ -68,7 +70,7 @@ indexStudents(students);
 let matrix = preferenceMatrix(students);
 
 //Returns the created groups
-let groups = prefGroups(students, matrix, updated_group_size);
+let groups = pref_groups(students, matrix, updated_group_size);
 
 /**
 * Creates a preferenceMatrix consisting of
@@ -138,8 +140,8 @@ return students
 
 //findPrefSum is created to make the code more readable 
 //Returns the preference value of Student1 and Student2
-function findPrefSum (student1, student2, matrix) {
-    return matrix[student1.index][student2.index]
+function find_pref_sum (student1, student2, matrix) {
+    return matrix[student1.index][student2.index];
 }
 
 
@@ -157,7 +159,7 @@ function pref_check (student1, student2, student_number) {
     }
 }
 
-function prefGroups (students, matrix, group_size) {  
+function pref_groups (students, matrix, group_size) {  
     const group_number = Math.ceil(students.length/group_size);
     
     let smaller_groups = 0;
@@ -228,7 +230,7 @@ function prefGroups (students, matrix, group_size) {
                 if (groups[groupNum].students[j] == undefined) {
                     break;
                 }
-                studentToGroupsPref[groupNum] += findPrefSum(students[x], groups[groupNum].students[j], matrix);
+                studentToGroupsPref[groupNum] += find_pref_sum(students[x], groups[groupNum].students[j], matrix);
             }
             studentToGroupsPref[groupNum] /= j;
         } 
@@ -250,7 +252,7 @@ function prefGroups (students, matrix, group_size) {
      * Only purpose is to print the groups for debugging.
      * Can be deleted
      */
-    for (let i = 0; i < group_number; i++) {
+    for (let i = 0; i < 0; i++) {
         console.log("Group:",i)
         for (let j = 0; j < group_size; j++) {
             if (groups[i].students[j] != undefined) {
@@ -266,5 +268,98 @@ function prefGroups (students, matrix, group_size) {
 }
 
 
+
+
 //let endTime = performance.now()
+
+//This function takes an array of students (preferably from a group)
+//It returns the fraction of roles that are unique
+function check_role_diversity(students){
+    let unique_roles = [];
+    let total_roles = 0;
+    //Going through every student
+    for(let student of students){
+        //For each student, going through their roles
+        for(let i in student.roles){
+        //If the role is not in unique roles, add it to unique roles
+            if(unique_roles.indexOf(student.roles[i]) == -1){
+                unique_roles.push(student.roles[i]);
+            }
+            //cap number of total roles at max amount of roles available
+            if(total_roles < role_number){
+                total_roles++;
+            }
+            }
+    }
+    return unique_roles.length/total_roles;
+}
+
+//This function takes a group and a minimum diversity
+//It returns true if the group's diversity is above or equal to the minimum
+//False otherwise
+function group_diversity_check(group, min_diversity){
+    if(check_role_diversity(group.students) >= min_diversity){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+//This function takes an array of groups and a minimum diversity
+//It returns a new array of groups, including only those that are below the required diversity
+function check_min_diversity(groups, min_diversity){
+    let homogenous_groups = [];
+    for (let group of groups){
+        //If the group's diversity is below the minimum, add to homogenous groups
+        if (!group_diversity_check(group, min_diversity)){
+            homogenous_groups.push(group);
+        }
+    }
+    return homogenous_groups;
+}
+
+
+
+
+//This function takes a student and a group as input
+//It iterates through the group and sums up the preference numbers between student and 
+function group_pref_avg(student, group, matrix){
+    pref_sum = 0;
+    for (let other_student of group.students){
+        pref_sum += find_pref_sum(student, other_student, matrix);
+    }
+    return pref_sum/group.students.length;
+}
+//This helper function finds the swap that does not inflict minimum diversity of groups if such a swap exists
+//As input, it takes an array and another array containing booleans
+//It returns the minimum from the first array, but only if the corresponding booleans is true
+function find_min_space(array, boolean){
+    let i = 1;
+    let key = 0;
+    while(key == 0){
+        if(boolean[i] == true)
+            key = array[i];
+        i++;
+    }
+    for(i in array){
+        if(groups[i] < key && boolean[i] == true)
+        key = array[i];
+    }
+    return key;
+}
+
+function swap_students(student1, student2){
+
+}
+
+
+//
+function swap_check(origin, students, groups, min_diversity, matrix){
+
+}
+
+function master_algorithm(students, groups, min_diversity, matrix){
+
+}
 
