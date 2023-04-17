@@ -18,23 +18,15 @@
         <p>Welcome to the configuration page, please proceed to fill out below!🌟</p>
         <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
     </div>
-    
-    <div class="input_form">
-        <p>This form will configure the specific questions desired/roles to be used</p>
-        <form action="javascript:void(0);"> <!atm do not want page to reload when submitting to form>
-            <label for="name_group_formation">Name of Group formation:</label>
-            <input type="text" id="name_group_formation" name="name_group_formation"><br><br>
-            
-        </form>
-        <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
-    </div>
 
     <div class="file_upload">
-        <form action="javascript:void(0);"><!atm do not want page to reload when submitting to form>
+        <form id="fileForm" action="javascript:void(0);"><!atm do not want page to reload when submitting to form>
+            <label for="name_group_formation">Name of Group formation:</label>
+            <input type="text" id="name_group_formation" name="name_group_formation" required><br><br>
             <p>Upload student list:</p>
-            <input type="file" id="student_list" name="student_list"><br><br>
+            <input type="file" id="student_list" name="student_list" required><br><br>
             <p>Upload topic list:</p>
-            <input type="file" id="topics" name="topics">
+            <input type="file" id="topics" name="topics" required>
           </form>
           <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
     </div>
@@ -42,7 +34,7 @@
     <div class="buttons">
         <p>When you have finished configuration, please save and unlock student page to continue!🌟</p>
         <button type="button" id="back_btn">Go back</button>
-        <button type="button" id="save_btn">Next</button>
+        <button type="button" id="next_btn" onclick="e.preventDefault();document.getElementById('fileForm').submit();">Next</button>
     </div>
     
     <%- include('../partials/footer'); %>

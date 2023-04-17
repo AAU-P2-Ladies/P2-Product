@@ -161,9 +161,17 @@ app.get('/coordinator_start', (req, res) => {
 
 app.get('/coordinator_config', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+    //res.sendFile(path.join(__dirname, '/public/html/coordinator_preconfig.html'));
 
     res.render('pages/coordinator_config');
+
+});
+
+app.get('/coordinator_preconfig', (req, res) => {
+
+    //res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+
+    res.render('pages/coordinator_preconfig');
 
 });
 
@@ -191,13 +199,7 @@ app.get('/student_profile', (req, res) => {
 
 });
 
-app.get('/coordinator_preconfig', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/coordinator_preconfig.html'));
-
-    res.render('pages/coordinator_preconfig');
-
-});
 
 app.get('/logout', (req,res) => {
 
