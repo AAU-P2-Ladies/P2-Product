@@ -3,6 +3,11 @@
 
 
 * camelCase for function and variable creation
+```js
+function camelCase();
+
+var camelCase;
+```
 * Make specific index naming(avoid x, i & j)
 * In for loops, try to use "of" when possible
 * End every expression with a semicolon 
@@ -16,3 +21,5 @@
 * Comments within function when necessary above the line/loop/statement that is being explained
 * Else on its own line
 * Kamilla and Sina can use snake case if they want to
+
+
