@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
-const bcrypt = require("bcrypt");
 const { exit } = require('process');
 
 var fs = require('fs'), json;
