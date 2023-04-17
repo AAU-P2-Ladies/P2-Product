@@ -10,7 +10,7 @@
 * After if/for/function declarations, no space before curly bracket
 * Two empty lines between function declarations
 * No space between declarations like functions and parentheses
-* If statements can omit "== true" when possible
+* Logical statements can omit "== true" when possible
 * Comments with //
 * Comments above each function defining input, output and general purpose
 * Comments within function when necessary above the line/loop/statement that is being explained
