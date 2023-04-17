@@ -109,6 +109,12 @@ app.post('/register',(req, res) => {
 
     let checkUser = users.some((user) => {
 
+        if (user.keycode == req.body.keycode) {
+            
+            return true;
+               
+        }
+
         if (user.username == req.body.username) {
 
             return true;
@@ -119,9 +125,8 @@ app.post('/register',(req, res) => {
 
     if (checkUser) {
 
-        res.redirect('./register');
-
-        return res.end();
+        
+        return res.json({ error: true, username: false, password: false }); 
 
     } else {
 
