@@ -204,11 +204,43 @@ app.get('/logout', (req,res) => {
 
 });
 
+app.post('/make_keycodes', (req, res) => {
+
+    let groupName = req.body.groupName
+    
+    if (checkFolderName(groupName)) {
+        
+        return res.json({error: true})
+    
+    }
+
+    if (!fs.existsSync('./database/' + groupName + "/keycode.json")){
+        
+    }
+
+});
+
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
 
 });
+
+function checkFolderName(folderName) {
+
+    if (!fs.existsSync('./database/' + folderName)) {
+
+        fs.mkdirSync('./database/' + folderName);
+
+        return false;
+    
+    } else {
+
+        return true;
+
+    }
+
+}
     
 function getJSONFile(file) {
     
