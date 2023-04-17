@@ -208,13 +208,11 @@ app.post('/make_keycodes', (req, res) => {
 
     let groupName = req.body.groupName;
     
-    let keycodes = checkFolderName(groupName)
-    
-
+    let keycodes = checkFolderName(groupName);
 
     console.log(keycodes);
     
-    
+    return res.end();
 
 });
 
@@ -230,17 +228,17 @@ function checkFolderName(folderName) {
 
         fs.mkdirSync('./database/' + folderName);
 
-        if(!fs.existsSync('./database/' + folderName + '/keycode.json')) {
+    }
 
-            let keycode = makeKeycode(10);
+    if(!fs.existsSync('./database/' + folderName + '/keycode.json')) {
 
-            fs.writeFileSync('./database/' + folderName + '/keycode.json', keycode, { flag: 'a+' }, err => {
+        let keycode = makeKeycode(10);
 
-                if (err) throw err;
+        fs.writeFileSync('./database/' + folderName + '/keycode.json', JSON.stringify(keycode), { flag: 'a+' }, err => {
 
-            });
+            if (err) throw err;
 
-        }
+        });
 
     }
     
@@ -259,13 +257,19 @@ function getJSONFile(file) {
 }
 
 function makeKeycode(length) {
+
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
     let counter = 0;
+    
     while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
+      
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    
     }
+    
     return result;
+
 }
