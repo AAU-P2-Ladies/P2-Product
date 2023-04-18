@@ -146,9 +146,8 @@ app.post('/register',(req, res) => {
 
                     res.json({error: false, keycode: req.body.keycode});
 
-                    return res.end();
+                return res.end();
 
-                break;
         
             default:
                 return res.json({ error: true, username: false, password: false }); 
