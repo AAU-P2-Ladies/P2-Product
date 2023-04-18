@@ -144,7 +144,10 @@ app.post('/register',(req, res) => {
         
                     });
 
-                    res.redirect('./');
+                    res.json({error: false, keycode: req.body.keycode});
+
+                    return res.end();
+
                 break;
         
             default:
