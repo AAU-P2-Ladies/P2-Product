@@ -3,6 +3,8 @@ const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const { exit } = require('process');
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 var fs = require('fs'), json;
 
@@ -199,8 +201,6 @@ app.get('/student_profile', (req, res) => {
 
 });
 
-
-
 app.get('/logout', (req,res) => {
 
     req.session.destroy();
@@ -208,7 +208,15 @@ app.get('/logout', (req,res) => {
     res.redirect('./');
 
 });
+/*
+app.post("/fileGroupUpload", upload.any(), (req,res) => {
 
+    console.log(req.body);
+    console.log(req.files);
+    //res.json({ message: "Successfully uploaded files" });
+
+});
+*/
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
@@ -222,5 +230,9 @@ function getJSONFile(file) {
     var file = fs.readFileSync(filepath, 'utf8');
 
     return JSON.parse(file);
+    
+}
+
+function uploadFiles(req, res) {
     
 }

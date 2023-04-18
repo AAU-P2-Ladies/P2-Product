@@ -1,3 +1,31 @@
+.boks{
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    padding: 10px;
+    text-align: center;
+}
+
+.proeve{
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 1px, rgba(6, 24, 44, 0.65) 0px 1px 1px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    padding: 5px;
+    margin: 10px 10px 10px 10px;
+    border-radius: 5px;
+}
+/*
+.hide{
+    visibility:hidden;  
+  }
+*/
+.div1{
+    float: left;
+    margin-left: 175px;
+}
+.div2{
+    float: right;
+    margin-right: 175px;
+}
 .outer {
     display: table;
     position: relative;

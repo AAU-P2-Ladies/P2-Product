@@ -13,51 +13,91 @@
 
     <%- include('../partials/navbar'); %>
 
-    <div class="heading_coordinator">
-        <h1 id="heading">Configuration page</h1>
-        <p>Welcome to the configuration page, please proceed to fill out below!🌟</p>
-        <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
-    </div>
+    <div class="boks">
+        <div class="heading_coordinator">
+            <h1 id="heading">Configuration page</h1>
+            <p>Welcome to the configuration page, please proceed to fill out below!🌟</p>
+            <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
+        </div>
+        
+        <div class="input_form">
+            <p>This form will configure the specific questions desired/roles to be used</p>
+            <form action="javascript:void(0);"> <!atm do not want page to reload when submitting to form>
+                <div class="proeve">
+                    <label for="amount_of_group_members">Amount of Group members per group:</label>
+                    <input type="number" id="AmountOfGroupMembers" name="AmountOfGroupMembers" min="3"><br><br>
+                    
+                    <label for="studentPreferences">Allowed number of preferences for group members:</label>
+                    <input type="number" id="studentPreferences" name="studentPreferences" min="0"><br><br>
+
+                    <label for="previousMembers">Allowed number of previous members to be grouped together:</label>
+                    <input type="number" id="previousMembers" name="previousMembers" min="0"><br><br>
+
+                    <div class="div1">
+                        <input type="text" id="myInput" onkeyup="SearchField('myInput','myUL')" placeholder="Search for names..">
+
+                            <ul id="myUL" class="hide">
+                            <li><a href="#">Adele</a></li>
+                            <li><a href="#">Agnes</a></li>
+                            <li><a href="#">Adrian</a></li>
+                            <li><a href="#">Adil</a></li>
+                            <li><a href="#">Andreas</a></li>
+                            <li><a href="#">Anders</a></li>
+                            <li><a href="#">Adomas</a></li>
+
+                            <li><a href="#">Billy</a></li>
+                            <li><a href="#">Bob</a></li>
+
+                            <li><a href="#">Calvin</a></li>
+                            <li><a href="#">Cim</a></li>
+                            <li><a href="#">Charlotete</a></li>
+                            <li><a href="#">Cello</a></li>
+                            <li><a href="#">Cimmy</a></li>
+                            <li><a href="#">Clara</a></li>
+                            <li><a href="#">Claire</a></li>
+                            <li><a href="#">Christina</a></li>
+                            <li><a href="#">Cindy</a></li>
+                            </ul>
+                    </div>
+
+                    <div class="div2"> 
+                        <input type="text" id="BlockedInput" onkeyup="SearchField('BlockedInput','BlockedUL')" placeholder="Search for names..">
+        
+                            <ul id="BlockedUL">
+
+                                </ul>
+                    </div>
+                    
+
+                </div>
+                
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+                <div>
+                    <input type="checkbox" id="include_roles" name="include_roles" value="">
+                    <label for="vehicle1"> Should roles be included?</label><br>
+                </div>
+                <input type="button" id="form_btn" value="Save">
+            </form>
+            <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
+        </div>
+
+        <div class="buttons">
+            <p>When you have finished configuration, please save and unlock student page to continue!🌟</p>
+            <button type="button" id="back_btn">Go back</button>
+            <button type="button" id="save_btn">Save configurations</button>
+            <button type="button" id="unlock_btn">Unlock student profile page</button>
+        </div>
     
-    <div class="input_form">
-        <p>This form will configure the specific questions desired/roles to be used</p>
-        <form action="javascript:void(0);"> <!atm do not want page to reload when submitting to form>
-            <label for="name_group_formation">Name of Group formation:</label>
-            <input type="text" id="name_group_formation" name="name_group_formation"><br><br>
-            <label for="amount_of_group_members">Amount of Group members:</label>
-            <input type="number" id="AmountOfGroupMembers" name="AmountOfGroupMembers"><br><br>
-            
-            <input type="checkbox" id="include_roles" name="include_roles" value="Bike">
-            <label for="vehicle1"> I have a bike</label><br>
-
-            <label for="question_one">Question 1:</label>
-            <input type="text" id="question_one" name="question_one"><br><br>
-            <label for="question_two">Question 2:</label>
-            <input type="text" id="question_two" name="question_two"><br><br>
-            <label for="question_three">Question 3:</label>
-            <input type="text" id="question_three" name="question_three"><br><br>
-            <input type="button" id="form_btn" value="Save">
-        </form>
-        <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
-    </div>
-
-    <div class="file_upload">
-        <p>Please upload the student list and the list of topics here:</p>
-        <form action="javascript:void(0);"><!atm do not want page to reload when submitting to form>
-            <input type="file" id="student_list" name="student_list"><br><br>
-            <input type="file" id="topics" name="topics">
-          </form>
-          <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
-    </div>
-
-    <div class="buttons">
-        <p>When you have finished configuration, please save and unlock student page to continue!🌟</p>
-        <button type="button" id="back_btn">Go back</button>
-        <button type="button" id="save_btn">Save configurations</button>
-        <button type="button" id="unlock_btn">Unlock student profile page</button>
-    </div>
+    </div>    
     
     <%- include('../partials/footer'); %>
 
 </body>
 </html>
+
+
+Student preference
+Previous group members limit
+Blocked pairs
+Roles

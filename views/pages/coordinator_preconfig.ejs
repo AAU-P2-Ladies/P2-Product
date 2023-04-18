@@ -20,11 +20,11 @@
     </div>
 
     <div class="file_upload">
-        <form id="fileForm" action="javascript:void(0);"><!atm do not want page to reload when submitting to form>
+        <form id="fileForm" action="javascript:void(0);" enctype="multipart/form-data"><!atm do not want page to reload when submitting to form>
             <label for="name_group_formation">Name of Group formation:</label>
             <input type="text" id="name_group_formation" name="name_group_formation" required><br><br>
             <p>Upload student list:</p>
-            <input type="file" id="student_list" name="student_list" required><br><br>
+            <input type="file" id="student_list" name="student_list" accept=".json,application/json" required><br><br>
             <p>Upload topic list:</p>
             <input type="file" id="topics" name="topics" required>
           </form>
