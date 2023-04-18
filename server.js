@@ -124,25 +124,34 @@ app.post('/register',(req, res) => {
     });
 
     if (checkUser) {
-
-        
         return res.json({ error: true, username: false, password: false }); 
 
     } else {
 
-        users.push(req.body);
+        console.log(checkCode(req.body.keycode))
 
-        fs.writeFile("./users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
+        switch (checkCode(req.body.keycode)) {
+            case 1:
+                    users.push(req.body);
 
-            if (err) {
+                    fs.writeFile("./database/coordinators.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
 
-                console.error(err);
+                        if (err) {
 
-            } 
+                            console.error(err);
+
+                        } 
         
-        });
+                    });
 
-        res.redirect('./');
+                    res.redirect('./');
+                break;
+        
+            default:
+                return res.json({ error: true, username: false, password: false }); 
+        }
+
+        
 
     }
 
@@ -207,8 +216,15 @@ app.get('/logout', (req,res) => {
 app.post('/make_keycodes', (req, res) => {
 
     let groupName = req.body.groupName;
+
+    let keycode = makeKeycode(10, 'student');
+
+    let keycodeUsage = JSON.stringify({
+        Code: keycode,
+        Amount: req.body.studentAmount
+    }, null, 4);
     
-    let keycodes = checkFolderName(groupName);
+    let keycodes = checkFolderName(groupName, keycodeUsage);
 
     console.log(keycodes);
     
@@ -222,7 +238,7 @@ app.listen(port, () => {
 
 });
 
-function checkFolderName(folderName) {
+function checkFolderName(folderName, data) {
 
     if (!fs.existsSync('./database/' + folderName)) {
 
@@ -230,11 +246,19 @@ function checkFolderName(folderName) {
 
     }
 
+    if(!fs.existsSync('./database/' + folderName + '/students.json')) {
+
+        fs.writeFileSync('./database/' + folderName + '/students.json', { flag: 'w+' }, err => {
+
+            if (err) throw err;
+
+        });
+
+    }
+
     if(!fs.existsSync('./database/' + folderName + '/keycode.json')) {
 
-        let keycode = makeKeycode(10);
-
-        fs.writeFileSync('./database/' + folderName + '/keycode.json', JSON.stringify(keycode), { flag: 'a+' }, err => {
+        fs.writeFileSync('./database/' + folderName + '/keycode.json', data, { flag: 'w+' }, err => {
 
             if (err) throw err;
 
@@ -256,7 +280,7 @@ function getJSONFile(file) {
     
 }
 
-function makeKeycode(length) {
+function makeKeycode(length, receiver) {
 
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -269,7 +293,37 @@ function makeKeycode(length) {
         counter += 1;
     
     }
+
+    switch (receiver) {
+        case 'student':
+                result = 's-' + result;
+            break;
+        case 'coordinator':
+                result = 'c-' + result;
+            break;
+        default:
+            console.log('nej');
+            //throw "Hej med dig :)"
+    }
     
     return result;
+
+}
+
+function checkCode(code) {
+    
+    if(code.startsWith("c-")) {
+        
+        return 1;
+    
+    } else if(code.startsWith("s-")) {
+    
+        return 2;
+    
+    } else {
+    
+        return 0;
+    
+    }
 
 }
