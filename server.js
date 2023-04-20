@@ -22,6 +22,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const oneDay = 1000 * 60 * 60 * 24;
 
+const multerConfig = {
+    
+    storage: multer.diskStorage({
+     //Setup where the user's file will go
+     destination: function(req, file, next){
+       next(null, './database/uploads');
+       },   
+        
+        //Then give the file a unique name
+        filename: function(req, file, next){
+            console.log(file);
+            const ext = file.mimetype.split('/')[1];
+            next(null, file.fieldname + '-' + Date.now() + '.'+ext);
+          }
+    }),   
+        
+        //A means of ensuring only images are uploaded. 
+    fileFilter: function(req, file, next){
+        if(!file){
+            next();
+        }
+        const json = file.mimetype.startsWith('application/');
+        if(json){
+           console.log('file uploaded');
+            next(null, true);
+        }else{
+            console.log("file not supported");
+              
+            //TODO:  A better message response to user on failure.
+            return next();
+        }
+    }
+};
+
 var session;
 
 app.use(sessions({
@@ -186,6 +220,20 @@ app.get('/coordinator_preconfig', (req, res) => {
 
 });
 
+app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, res) =>{
+
+    
+    //console.log(req.file.filename);
+
+    let students = getJSONFile("uploads/"+req.file.filename)
+
+
+    
+
+    //res.render('pages/coordinator_start');
+
+})
+
 app.get('/student_start', (req, res) => {
 
     //res.sendFile(path.join(__dirname, '/public/html/student_start.html'));
@@ -217,15 +265,45 @@ app.get('/logout', (req,res) => {
     res.redirect('./');
 
 });
-/*
-app.post("/fileGroupUpload", upload.any(), (req,res) => {
 
-    console.log(req.body);
-    console.log(req.files);
-    //res.json({ message: "Successfully uploaded files" });
+app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
-});
-*/
+    
+    //console.log(req.body);
+    //console.log(req.files);
+
+    let studentList = [];
+    let topicsList = [];
+
+    for (let index = 0; index < req.files.length; index++) {
+
+        if (req.files[index]["fieldname"] == "studentListInput") {
+
+            studentList = getJSONFile("uploads/" + req.files[index]["filename"]);
+
+        }
+
+        if (req.files[index]["fieldname"] == "topicsInput") {
+
+            topicsList = getJSONFile("uploads/" + req.files[index]["filename"]);
+
+        }
+
+    }
+
+    if(isJSON(studentList) && isJSON(topicsList))
+    
+    console.log(studentList);
+    console.log(topicsList);
+
+    //let students = getJSONFile("uploads/" + req.file[0].studentListInput)
+
+    
+    
+
+    //res.render('pages/coordinator_start');
+
+})
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
@@ -234,7 +312,7 @@ app.listen(port, () => {
     
 function getJSONFile(file) {
     
-    var filepath = __dirname + '/' + file;
+    var filepath = __dirname + '/database/' + file;
 
     var file = fs.readFileSync(filepath, 'utf8');
 
@@ -242,6 +320,11 @@ function getJSONFile(file) {
     
 }
 
-function uploadFiles(req, res) {
-    
+function isJSON(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
