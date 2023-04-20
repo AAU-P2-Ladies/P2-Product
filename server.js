@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const { exit } = require('process');
+const multer  = require('multer');
 
 var fs = require('fs'), json;
 
@@ -19,6 +20,43 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const oneDay = 1000 * 60 * 60 * 24;
+
+//MULTER CONFIG: to get file photos to temp server storage
+const multerConfig = {
+    
+    storage: multer.diskStorage({
+     //Setup where the user's file will go
+     destination: function(req, file, next){
+       next(null, './database/uploads');
+       },   
+        
+        //Then give the file a unique name
+        filename: function(req, file, next){
+            console.log(file);
+            const ext = file.mimetype.split('/')[1];
+            next(null, file.fieldname + '-' + Date.now() + '.'+ext);
+          }
+    }),   
+        
+        //A means of ensuring only images are uploaded. 
+    fileFilter: function(req, file, next){
+        if(!file){
+            next();
+        }
+        const json = file.mimetype.startsWith('application/');
+        if(json){
+           console.log('file uploaded');
+            next(null, true);
+        }else{
+            console.log("file not supported");
+              
+            //TODO:  A better message response to user on failure.
+            return next();
+        }
+    }
+};
+
+
 
 var session;
 
@@ -63,25 +101,128 @@ app.get('/', (req, res) => {
  
 app.post('/login', (req, res) => {
 
-    //console.log(req);
+    //console.log(req.body);
 
-    let checkUser = getJSONFile('users.json').some((user) => {
+    let users = getJSONFile('users.json');
+    
+    let checkUser = users.some((user) => {
 
-        //console.log(m);
+        // console.log(user);
 
         if (user.username == req.body.username) {
 
             if (user.password == req.body.password) {
 
-                session = req.session;
-                session.userid = req.body.username;
-                
-                // console.log(req.session);
-                // console.log(m.username);
-                
-                res.json({ error: false, username: true, password: true });
+                if (req.body.class) {
 
-                return true;
+                    if (user.classes.length == 0) {
+
+                        res.json({ error: true, username: true, password: true, class: false });
+
+                        return true;
+
+                    } else {
+
+                        for (let index = 0; index < user.classes.length; index++) {
+
+                            if (user.classes[index]["class"] == req.body.class) {
+
+                                session = req.session;
+                                session.userid = req.body.username;
+                                session.class = req.body.class;
+                                
+                                // console.log(req.session);
+                                // console.log(m.username);
+                                console.log(session.class);
+                                
+                                res.json({ error: false, username: true, password: true, class: true });
+
+                                return true;
+
+                            }
+
+                        }
+
+                        res.json({ error: true, username: true, password: true, class: false });
+
+                        return true;
+
+                    }
+
+                } else if (req.body.keycode) {
+
+                    let keycodes = getJSONFile('keycodes.json');
+
+                    let keycode = "";
+                    let class1 = "";
+
+                    for (let index = 0; index < keycodes.length; index++) {
+
+                        if (keycodes[index]["keycode"] == req.body.keycode) {
+
+                            console.log('hej ' + req.body.keycode);
+
+                            keycode = keycodes[index]["keycode"];
+                            class1 = keycodes[index]["class"];
+
+                            break;
+
+                        }
+
+                    }
+
+                    if (keycode == "" && class1 == "") {
+
+                        res.json({ error: true, username: true, password: true, keycode: false });
+
+                        return true;
+
+                    } else {
+
+                        session = req.session;
+                        session.userid = req.body.username;
+                        session.class = class1;
+
+                        let duplicateClass = 0;
+
+                        for (let index = 0; index < user.classes.length; index++) {
+
+                            if (user.classes[index]["class"] == class1) {
+
+                                duplicateClass = 1;
+                                break;
+
+                            }
+
+                        }
+
+                        if (duplicateClass == 0) {
+
+                            user.classes.push({ class: class1 });
+
+                        }
+                        
+                        // console.log(req.session);
+                        // console.log(m.username);
+                        console.log(user);
+
+                        fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
+
+                            if (err) {
+                
+                                console.error(err);
+                
+                            } 
+                
+                        });
+                        
+                        res.json({ error: false, username: true, password: true, keycode: true });
+
+                        return true;
+
+                    }
+
+                }
 
             } else {
 
@@ -101,19 +242,53 @@ app.post('/login', (req, res) => {
 
     }
 
+    return res.end();
+
 })
 
-app.post('/register',(req, res) => {
+app.post('/checkUserLogin',(req, res) => {
     
     let users = getJSONFile('users.json');
 
     let checkUser = users.some((user) => {
 
-        if (user.keycode == req.body.keycode) {
-            
-            return true;
+        if (user.username == req.body.username) {
+
+            if (user.password == req.body.password) {
+
+                res.json({ error: false, username: true, password: true, classes: user.classes, isCoordinator: user.isCoordinator });
+
+                return true;
+
+            } else {
+
+                res.json({ error: true, username: true, password: false });
+    
+                return true;
+    
+            } 
                
         }
+
+    });
+
+    if (!checkUser) {
+
+        res.json({ error: true, username: false, password: false }); 
+
+    }
+
+    return res.end();
+
+});
+
+app.post('/register',(req, res) => {
+    
+    let users = getJSONFile('users.json');
+
+    console.log(users);
+
+    let checkUser = users.some((user) => {
 
         if (user.username == req.body.username) {
 
@@ -124,36 +299,35 @@ app.post('/register',(req, res) => {
     });
 
     if (checkUser) {
+        
         return res.json({ error: true, username: false, password: false }); 
 
     } else {
 
-        console.log(checkCode(req.body.keycode))
+        let registerUser = req.body;
 
-        switch (checkCode(req.body.keycode)) {
-            case 1:
-                    users.push(req.body);
-
-                    fs.writeFile("./database/coordinators.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
-
-                        if (err) {
-
-                            console.error(err);
-
-                        } 
+        Object.assign(registerUser, {
+            groups: [],
+            isCoordinator: 0
+        });
         
-                    });
+        users.push(registerUser);
 
-                    res.json({error: false, keycode: req.body.keycode});
+        console.log(users)
 
-                return res.end();
+        fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
 
-        
-            default:
-                return res.json({ error: true, username: false, password: false }); 
-        }
+            if (err) {
 
-        
+                console.error(err);
+
+            } 
+
+        });
+
+        res.json({error: false, keycode: req.body.keycode});
+
+        return res.end();
 
     }
 
@@ -182,6 +356,22 @@ app.get('/coordinator_config', (req, res) => {
     res.render('pages/coordinator_config');
 
 });
+
+app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, res) =>{
+
+    
+    //console.log(req.file.filename);
+
+    let students = getJSONFile("uploads/"+req.file.filename)
+
+   
+    studentObjectMaker(students.names, req.body.groupName);
+
+    
+
+    res.render('pages/coordinator_start');
+
+})
 
 app.get('/student_start', (req, res) => {
 
@@ -215,24 +405,6 @@ app.get('/logout', (req,res) => {
 
 });
 
-app.post('/make_keycodes', (req, res) => {
-
-    let groupName = req.body.groupName;
-
-    let keycode = makeKeycode(10, 'student');
-
-    let keycodeUsage = JSON.stringify({
-        Code: keycode,
-        Amount: req.body.studentAmount
-    }, null, 4);
-    
-    let keycodes = checkFolderName(groupName, keycodeUsage);
-
-    console.log(keycodes);
-    
-    return res.end();
-
-});
 
 app.listen(port, () => {
 
@@ -268,13 +440,15 @@ function checkFolderName(folderName, data) {
 
     }
     
-    return getJSONFile("database/" + folderName + "/keycode.json");
+    return getJSONFile(folderName + "/keycode.json");
     
 }
     
 function getJSONFile(file) {
     
-    var filepath = __dirname + '/' + file;
+    var filepath = __dirname + '/database/' + file;
+
+    console.log(filepath)
 
     var file = fs.readFileSync(filepath, 'utf8');
 
@@ -282,7 +456,7 @@ function getJSONFile(file) {
     
 }
 
-function makeKeycode(length, receiver) {
+function makeKeycode(length) {
 
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -295,37 +469,35 @@ function makeKeycode(length, receiver) {
         counter += 1;
     
     }
-
-    switch (receiver) {
-        case 'student':
-                result = 's-' + result;
-            break;
-        case 'coordinator':
-                result = 'c-' + result;
-            break;
-        default:
-            console.log('nej');
-            //throw "Hej med dig :)"
-    }
     
     return result;
 
 }
 
-function checkCode(code) {
-    
-    if(code.startsWith("c-")) {
+async function studentObjectMaker(users,semester){
+
+
+    let students = [];
+
+
+    for (let i in users) {
         
-        return 1;
-    
-    } else if(code.startsWith("s-")) {
-    
-        return 2;
-    
-    } else {
-    
-        return 0;
+         students[i] = {
+            Name: users[i],
+            Keycodes: makeKeycode(10),
+            isRegistered: 0
+        }
     
     }
+
+    fs.writeFile("./database/"+semester+"/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
+
+        if (err) {
+
+            console.error(err);
+
+        } 
+
+    });
 
 }

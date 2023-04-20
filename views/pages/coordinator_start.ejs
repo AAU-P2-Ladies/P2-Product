@@ -32,7 +32,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form id="formKeycodes" method="post" action="./make_keycodes">
+            <form id="formKeycodes" enctype="multipart/form-data" method="post" action="./coordinator_studentId">
               <div class="mb-3">
                 <label for="student-amount" class="col-form-label">Student Amount:</label>
                 <input type="number" min="0" max class="form-control" name="studentAmount" id="student-amount">
@@ -41,19 +41,14 @@
                 <label for="group-name" class="col-form-label">Group name:</label>
                 <input type="text" class="form-control" name="groupName" id="group-name">
               </div>
-              <!--<div class="mb-3">
-                <label for="school-name" class="col-form-label">School:</label>
-                <input type="text" class="form-control" name id="school-name">
+              <div>
+                <input type="file" id="student_list" name="file">
               </div>
-              <div class="mb-3">
-                <label for="semester" class="col-form-label">Semester:</label>
-                <input type="text" class="form-control" id="semester">
-              </div>-->
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="document.getElementById('formKeycodes').submit();e.preventDefault();">Get keycodes</button>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('formKeycodes').submit();event.preventDefault();">Get keycodes</button>
           </div>
         </div>
       </div>

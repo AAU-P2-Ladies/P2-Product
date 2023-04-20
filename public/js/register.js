@@ -15,7 +15,6 @@ let button = registerButton.addEventListener("click", (e) => {
                 "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            keycode: registerKeycode.value,
             username: registerUsername.value,
             password: registerPassword.value,
         }),
@@ -27,12 +26,9 @@ let button = registerButton.addEventListener("click", (e) => {
 
       if (!data) {
 
-        alert("Invalid"); 
+        alert("Invalid data"); 
         location.href = './register';
 
-      }else if (data.keycode != registerKeycode.value) {
-        alert("Invalid keycode");
-        location.href = './register';
       } else  {
 
         location.href = './';

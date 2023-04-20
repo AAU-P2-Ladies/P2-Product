@@ -15,7 +15,7 @@
     <div class="outer"> 
         <div class="middle">
             <div class="inner">
-              <form action="./login" method="post" id="login-form">
+              <form id="login-form">
                 <div class="form-group">
                   <label for="username">Username</label>
                   <input type="text" class="form-control" id="login-username" name="username" placeholder="Enter your username">
@@ -24,15 +24,43 @@
                   <label for="password">Password</label>
                   <input type="password" class="form-control" id="login-password" name="password" placeholder="Enter your password">
                 </div>
-                <button type="submit" class="btn btn-primary" id="login-submit">Submit</button>
+                <button type="button" class="btn btn-primary" id="login-modal">Submit</button>
               </form>
             </div>
         </div>
     </div> 
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formClasses">
+              <div class="mb-3" id="classesDiv" style="display:none">
+                <label for="classesSelect" class="col-form-label">Classes:</label>
+                <select class="form-select" id="classesSelect">
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="keycode" class="col-form-label">Keycode:</label>
+                <input type="text" class="form-control" name="keycode" id="keycode">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="login-submit">Login</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <%- include('../partials/footer'); %>
     
-    <script type="application/javascript" src="./js/login.js"></script>
+    <script type="application/javascript" src="./js/login.js" async></script>
   </body>
 </html>
 

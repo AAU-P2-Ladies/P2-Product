@@ -20,9 +20,7 @@ start_new_btn.addEventListener("click", function(){
 })
 }
 
-stud_keycode_btn.addEventListener("click", () =>{
-    
-})
+
 
 const exampleModal = document.getElementById('exampleModal')
 if (exampleModal) {
