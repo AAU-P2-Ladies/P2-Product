@@ -1,8 +1,12 @@
 //let startTime = performance.now()
 
-const role_number = 9
+//Define values that should be given by the website
+let min = 0;
+let StudentNum = 100;
+let groupSize = 7;
+const roleNumber = 9
 const maxIterations = 100
-const minDiversity = 0.75
+//const minDiversity = 0.75
 
 //Creates the object Student
 function Student(first, index, prefs = [], blocks = [], roles = [], groupNr, topics = []) {
@@ -43,15 +47,12 @@ function getRandomInts(max,block,numbers){
  * 
  */
   
-//Define values that should be given by the website
-let min = 0;
-let StudentNum = 150;
-let groupSize = 7;
+
 
 //Initilize the student arrays with StudentNum amount of students 
 let students = [];
 for (let s = 0;s<StudentNum;s++) {
-    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), getRandomInts(StudentNum,s,2), getRandomInts(8,-1,3), -1, getRandomInts(9,10,2))
+    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
     students.push(student0)
 }
 
@@ -95,7 +96,7 @@ for (let row = 0; row < numStudents; row++) {
     //Loops through all colums starting from the
     //calculations that have not been calculated yet 
     column_loop:
-    for (let col = row; col < numStudents; col++) {
+    for (let col = row+1; col < numStudents; col++) {
         let prefScore = 0;
         //Calculate the prefScore, consisting of: 
         //  student A's preference to student B  and 
@@ -108,13 +109,16 @@ for (let row = 0; row < numStudents; row++) {
  */
 
 
-        let commonTopics = false;
+        let = commonTopics = true
         //Loops through student A's topics and checking for a match with student B.
         //If a match occur, they have at least 1 common topic and the loop stops
-        for (let topic = 0; topic < students[row].topics.length; topic++) {
-            if (students[col].topics.includes(students[row].topics[topic])) {
-                commonTopics = true;
-                break;
+        if(students[row].topics.length > 0 && students[col].topics.length > 0){
+            commonTopics = false;
+            for (let topic = 0; topic < students[row].topics.length; topic++) {
+                if (students[col].topics.includes(students[row].topics[topic])) {
+                    commonTopics = true;
+                    break;
+                }
             }
         }
 
@@ -146,7 +150,8 @@ function findPrefSum (student1, student2, matrix) {
     return matrix[student1.index][student2.index];
 }
 
-
+//This function checks two students preference for each other, if not blocked and no preference for each other it sets it to number of students divided by 2
+//
 function prefCheck (student1, student2, student_number) {
     let preferenceIndex = student1.prefs.indexOf(student2.index);
     if (preferenceIndex >= 0) {
@@ -157,7 +162,7 @@ function prefCheck (student1, student2, student_number) {
     if (blockIndex >= 0) {
         return student_number
     } else {
-        return Math.ceil((student1.prefs.length+student_number-student1.blocks.length)/2)
+        return Math.ceil((student_number)/2)
     }
 }
 
@@ -276,31 +281,31 @@ function prefGroups (students, matrix, groupSize) {
 
 //This function takes an array of students (preferably from a group)
 //It returns the fraction of roles that are unique
-function check_role_diversity(students){
-    let unique_roles = [];
-    let total_roles = 0;
+function checkRoleDiversity(students){
+    let uniqueRoles = [];
+    let totalRoles = 0;
     //Going through every student
     for(let student of students){
         //For each student, going through their roles
         for(let i in student.roles){
         //If the role is not in unique roles, add it to unique roles
-            if(unique_roles.indexOf(student.roles[i]) == -1){
-                unique_roles.push(student.roles[i]);
+            if(uniqueRoles.indexOf(student.roles[i]) == -1){
+                uniqueRoles.push(student.roles[i]);
             }
             //cap number of total roles at max amount of roles available
-            if(total_roles < role_number){
-                total_roles++;
+            if(totalRoles < roleNumber){
+                totalRoles++;
             }
             }
     }
-    return unique_roles.length/total_roles;
+    return uniqueRoles.length/totalRoles;
 }
 
 //This function takes a group and a minimum diversity
 //It returns true if the group's diversity is above or equal to the minimum
 //False otherwise
 function groupDiversityCheck(group, minDiversity){
-    if(check_role_diversity(group.students) >= minDiversity){
+    if(checkRoleDiversity(group.students) >= minDiversity){
         return true;
     }
     else{
@@ -322,6 +327,15 @@ function checkMinDiversity(groups, minDiversity){
 }
 
 
+function groupPrefSum(students, matrix){
+    let prefSum = 0
+    for(let i = 0; i < students.length; i++){
+        for(let j = i; j < students.length; j++){
+            prefSum += findPrefSum(students[i], students[j], matrix)
+        }
+    }
+    return prefSum;
+}
 
 
 //This function takes a student and a group as input
@@ -440,6 +454,7 @@ function swapCheck(origin, groups, minDiversity, matrix){
     }
 }
 
+
 //This hill climbing algorithm takes the following input
 //An array of students
 //An array of groups containing only these students
@@ -462,7 +477,7 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
                     let originGroup = groups[groups.indexOf(homogenousGroups[i])]
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
-                    console.log("div swap: swapped student " + groups[i].students[j].index + " with " + target.index)
+                    //console.log("div swap: swapped student " + groups[i].students[j].index + " with " + target.index)
                     swapStudents(originGroup, j, targetGroup, targetGroup.students.indexOf(target));
                 }
             }
@@ -474,7 +489,7 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
     //Keep looping until not a single improving swap can be made
     //max iterations will be some variable that makes the program terminate in case it runs too long
     while(swapped == true && iterations <= maxIterations){
-        console.log("entered while loop")
+        //console.log("entered while loop")
         swapped = false;
         iterations++;
         for(let i in groups){
@@ -483,7 +498,7 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
                 if(targetIndex > 0){
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
-                    console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
+                        //console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
                     swapStudents(groups[i], j, targetGroup, targetGroup.students.indexOf(target));
                     swapped = true;
                 }
@@ -500,8 +515,157 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
 }
 
 
+//This function loops through each role a student has
+//Maximum for loop iterations would be the number of roles squared
+//In the case of Belbin roles, this means an absolute maximum of 36 iterations
+function roleCheck(student1, student2){
+    //If one "student" is an empty space, no overlap
+    if(student1 == undefined || student2 == undefined){
+        return 0;
+    }
+    sum = 0;
+    for(i in student1.roles){
+        for(j in student2.roles)
+            if(student1.roles[i] == student2.roles[j]){
+                sum += 1;
+            }
+        }
+    return sum;
+
+}
+
+//This function finds the minimum positive element in an array
+//If there are no positive elements, returns 0
+function findMinPos(array){
+let i = 0;
+let key = -1;
+while (key == -1){
+    if (array[i] > 0){
+        key = i;
+    }
+    i++;
+}
+while(i <= array.length){
+    if (array[i] < array[key] && array[i] > 0){
+        key = i;
+    }
+    i++;
+}
+return key;
+}
+
+
+//This function will return an array of arrays of groups, with maximized role diversity
+function findMinDiversity(students, groupSize){
+    let groupNumber = Math.ceil(students.length/groupSize);
+    //If the students cannot be evenly divided, there have to be a number of smaller groups
+    let smallerGroups = 0;
+    if(students.length % groupSize != 0){
+        smallerGroups = groupSize - (students.length % groupSize)
+     }
+    //small_group_size = ceiling(smallerGroups/groupNumber)
+        while(smallerGroups > groupNumber){
+            groupSize -= Math.floor(smallerGroups/groupNumber)
+            smallerGroups = groupSize - (students.length % groupSize)
+        }
+    let groups = [];
+    for(let i = 0; i < groupNumber; i++){
+        let newGroup = new Group (new Array(),false);
+        groups.push(newGroup);
+    }
+    let overlap = new Array(groupNumber);
+    //The first student in the first group, since order does not matter
+    groups[0].students[0] = students[0];
+    //Looping through each student to put them into groups, labelling loops to be able to break loops properly
+    student_loop: for(let student = 1; student < students.length; student++){
+        //Looping through the groups to compare to current student 
+        group_loop: for(let i in groups){
+            if(groups[i].students.length == 0){
+                groups[i].students.push(students[student]);
+                continue student_loop;
+            }
+            if(groups[i].isFull == true){
+                overlap[i] = -1;
+                continue;
+            }
+            overlap[i] = 0;
+            compare_loop: for(let j in groups[i].students){
+                //Calculate the overlap between current student and group until a space is empty
+                overlap[i] += roleCheck(students[student], groups[i].students[j])
+                    if(groups[i].students.length < j){
+                        //If overlap is 0, student is placed into group
+                        //If student is placed into a group, break so that the student loop continues
+                        //Else, break so that the next loop is checked
+                        if(overlap[i] == 0){
+                            groups[i].push(students[student]);
+                            break group_loop;
+                        }
+                        break;
+                    }
+            }
+        }
+        let i = findMinPos(overlap);
+        groups[i].students.push(students[student]);
+        //If the number of students in the group is equal to the group size, or 1 smaller if the group is part of the last smaller groups, it becomes full
+        if(groups[i].students.length >= groupSize ||
+          (i > groupNumber - smallerGroups && groups[i].students.length == groupSize - 1))
+            groups[i].isFull = true
+    }
+    //Finding the minimum diversity, meaning the number of unique roles in a group divided by the total number of roles
+    let diversityMin = checkRoleDiversity(groups[0].students)
+    for(i = 1; i < groups.length; i++){
+        let diversity = checkRoleDiversity(groups[i].students)
+        if(diversity < diversityMin){
+            diversityMin = diversity
+        }
+    }
+    //EDIT HERE TO CHANGE MINIMUM DIVERSITY CALCULATIONS
+    return diversityMin*0
+}
+
+
+
+
+
+
+//This helper function returns the factorial of a number
+function fact(n){
+    if(n <= 1){
+        return 1
+    }
+    else{
+        return fact(n-1)*n
+    }
+}
+//This helper function returns the binomial coefficient of two numbers
+//It is used to calculate the possible combinations when drawing an amount of numbers out of a total amount of numbers
+function binomial(total, drawn){
+    return fact(total)/(fact(drawn)*fact(total-drawn));
+}
+
+
+function prefSatisfactionPercent(prefSum, studentNum, size){
+    let worst = binomial(size, 2)*studentNum;
+    console.log("worst = " + worst)
+    let best = size*(size-1)*(size-1);
+    console.log("best = " + best)
+    console.log("actual = " + prefSum)
+    let percentage = (worst - prefSum)/(worst - best);
+    return percentage;
+ }
+
 //Below here is only for testing
-console.log(masterAlgorithm(students, groups, minDiversity, matrix, maxIterations))
+
+let totalPercent = 0;
+for(let i in groups){
+    let prefSum = groupPrefSum(groups[i].students, matrix);
+    let percent = prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length)
+    totalPercent += percent;
+    console.log("Pref satisfaction of group" + i + ": " + percent);
+}
+console.log(totalPercent)
+
+console.log(masterAlgorithm(students, groups, findMinDiversity(students, groupSize), matrix, maxIterations))
 
 for (let i = 0; i < 1; i++) {
     console.log("groups after hill climbing:",i)
@@ -511,3 +675,13 @@ for (let i = 0; i < 1; i++) {
         }
     }    
 }
+
+totalPercent = 0;
+
+for(let i in groups){
+    let prefSum = groupPrefSum(groups[i].students, matrix);
+    let percent = prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length);
+    totalPercent += percent;
+    console.log("Pref satisfaction of group" + i + ": " + percent);
+}
+console.log(totalPercent)
