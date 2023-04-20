@@ -90,12 +90,36 @@ p {
     
 }
 
-.buttonS, #knapidd{
+.buttonS, #knapidd, #addPref, #searchPref{
     background-color: white;
     color:rgba(0, 0, 0, 0.4);
     border-radius: 5px;
 }
 
+.buttonS:hover,
+.buttonS:focus,
+#knapidd:hover,
+#knapidd:focus,
+#addPref:hover,
+#addPref:focus,
+#searchPref:hover,
+#searchPref:focus{
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+/*
+#searchPref{
+    
+    width: 50%;
+    display: flex;
+    margin: auto;
+    text-align: right;
+}*/
+#override{
+    text-align: center;
+
+}
 
 .priotet, .students {
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
@@ -111,3 +135,45 @@ p {
     padding: 10px;
     text-align: center;
 }
+
+
+
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }

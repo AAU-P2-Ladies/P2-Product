@@ -144,6 +144,15 @@ app.post('/register',(req, res) => {
     }
 
 });
+/*
+app.post('/prefSearch',(req, res) => {
+
+
+    console.log(req);
+    res.render('pages/student_start');
+
+});
+*/
 
 app.get('/register',(req, res) =>{
 
