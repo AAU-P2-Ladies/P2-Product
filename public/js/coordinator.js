@@ -5,9 +5,10 @@ let start_new_btn = document.getElementById("new_session_btn");
 let nameGroupFormationInput = document.getElementById("name_group_formation");
 let studentListInput = document.getElementById("student_list");
 let topicsInput = document.getElementById("topics");
-let y = document.getElementById("BlockedInput"); 
 let blockedUL = document.getElementById("BlockedUL");
-let ULItems = blockedUL.getElementsByTagName("li");
+let BlockedInput = document.getElementById("BlockedInput");
+let myInput = document.getElementById("myInput");
+//let ULItems = blockedUL.getElementsByTagName("li");
 //document.getElementById("BlockedUL").onclick=submitForm;
 
 
@@ -74,7 +75,9 @@ if(next_btn) {
             alert("Mandatory field not filled!")
         }*/
         window.location.href='/coordinator_config';
-        }      
+        }     else {
+            alert("Mandatory field not filled!")
+        } 
     })
 }
 
@@ -101,8 +104,8 @@ function SearchField(myInputID,myULID) {
         let count = 0;
         // Loop through all list items, and hide those who don't match the search query
         for (i = 0; li.length > i;i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
+        txtValue = li[i].textContent || li[i].innerText;
+        console.log(txtValue)
         if ((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10) {
             li[i].style.display = "";
             count++;
@@ -116,15 +119,20 @@ function SearchField(myInputID,myULID) {
     
   }
 
-  blockedUL.addEventListener('click', function(e) {   // 1.
-    let items = blockedUL.getElementsByTagName("li");
-    for (let i = 0; i < blockedUL.length; i++)
-    {
-       console
+
+  
+  document.getElementById("myUL").addEventListener("click", function(e) {
+    if (e.target && e.target.matches("li")) {
+      myInput.value = e.target.innerText; // new class name here
+      //alert("clicked " + e.target.innerText);
     }
-    if(e.target.tagName === 'LI') {                                      // 2.
-      selected= document.querySelector('li.selected');                   // 2a.
-      if(selected) selected.className= '';                               // "
-      e.target.className= 'selected';                                    // 2b.
+
+  });
+
+blockedUL.addEventListener("click", function(e) {
+    if (e.target && e.target.matches("li")) {
+      BlockedInput.value = e.target.innerText; // new class name here
+      //alert("clicked " + e.target.innerText);
     }
+
   });
