@@ -46,39 +46,35 @@ if(next_btn) {
     next_btn.addEventListener("click", function() {
         if(nameGroupFormationInput.value != "" && studentListInput.value != "" && topicsInput.value != "") {
 
- //           const formData = new FormData();
-            //formData.append("nameGroupFormationInput", nameGroupFormationInput.value);
-            //formData.append("studentListInput", studentListInput.files[0]);
-            //formData.append("topicsInput", topicsInput.files[0]);
+            const formData = new FormData();
+            formData.append("nameGroupFormationInput", nameGroupFormationInput.value);
+            formData.append("studentListInput", studentListInput.files[0]);
+            formData.append("topicsInput", topicsInput.files[0]);
 
- //           formData.append("files", studentListInput.files[0]);
- //           formData.append("files", topicsInput.files[0]);
-
-            /*
+            //formData.append("files", studentListInput.files[0]);
+            //formData.append("files", topicsInput.files[0]);
+            
             console.log(nameGroupFormationInput.value)
             for (var pair of formData.entries()) {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
-            */
-/*
+
             fetch('./fileGroupUpload', {
                 method: "POST",
-                body: formData,
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
+                body: formData
             })
-            .then((res) => console.log(res))
+            .then((response) => response.json())
+            .then((data) => {
+
+                console.log(data)
+
+            })
             .catch((err) => ("Error occured", err));
-            window.location.href='/coordinator_config';
+            //window.location.href='/coordinator_config';
         } else {
             alert("Mandatory field not filled!")
-        }*/
-        window.location.href='/coordinator_config';
-        }     else {
-            alert("Mandatory field not filled!")
-        } 
-    })
+        }
+    })  
 }
 
 if(start_new_btn){
