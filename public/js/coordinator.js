@@ -1,15 +1,22 @@
-let back_btn = document.getElementById("back_btn");
-let next_btn = document.getElementById("next_btn");
+let back_btn = document.getElementById("back_btn");let next_btn = document.getElementById("next_btn");
 let unlock_btn = document.getElementById("unlock_btn");
 let start_new_btn = document.getElementById("new_session_btn");
 
 let nameGroupFormationInput = document.getElementById("name_group_formation");
 let studentListInput = document.getElementById("student_list");
 let topicsInput = document.getElementById("topics");
+let y = document.getElementById("BlockedInput"); 
+let blockedUL = document.getElementById("BlockedUL");
+let ULItems = blockedUL.getElementsByTagName("li");
+//document.getElementById("BlockedUL").onclick=submitForm;
+
+
+
+
 
 let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
 
-blockedUL = document.getElementById("BlockedUL");
+
 
 for(let i of nameArray){
     document.createElement("li")
@@ -81,24 +88,43 @@ if(start_new_btn){
 
 
 function SearchField(myInputID,myULID) {
-    // Declare variables
     var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById(myInputID); // Her @Skjodt
-    filter = input.value.toUpperCase();
-    ul = document.getElementById(myULID);
-    li = ul.getElementsByTagName('li');
-
-    //Måske optimer koden, så den kun tager 'input' ind som parameter
-  
-    // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < li.length; i++) {
-      a = li[i].getElementsByTagName("a")[0];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        li[i].style.display = "";
-      } else {
-        li[i].style.display = "none";
-      }
+        input = document.getElementById(myInputID); // Her @Skjodt
+        filter = input.value.toUpperCase();
+        ul = document.getElementById(myULID);
+        li = ul.getElementsByTagName('li');
+    if(window.event.keyCode=='13'){
+        // Declare variables    
+        
+        ul.hidden = "";
+        //Måske optimer koden, så den kun tager 'input' ind som parameter
+        let count = 0;
+        // Loop through all list items, and hide those who don't match the search query
+        for (i = 0; li.length > i;i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if ((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10) {
+            li[i].style.display = "";
+            count++;
+        } else {
+            li[i].style.display = "none";
+        }
+        }
+    } else if (input.value == "") {
+        ul.hidden = "hidden";
     }
+    
   }
 
+  blockedUL.addEventListener('click', function(e) {   // 1.
+    let items = blockedUL.getElementsByTagName("li");
+    for (let i = 0; i < blockedUL.length; i++)
+    {
+       console
+    }
+    if(e.target.tagName === 'LI') {                                      // 2.
+      selected= document.querySelector('li.selected');                   // 2a.
+      if(selected) selected.className= '';                               // "
+      e.target.className= 'selected';                                    // 2b.
+    }
+  });
