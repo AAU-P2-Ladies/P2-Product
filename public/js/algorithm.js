@@ -1,4 +1,5 @@
 //let startTime = performance.now()
+const helper = require('./algHelpers.js');
 
 //Define values that should be given by the website
 let min = 0;
@@ -67,7 +68,7 @@ if (updatedGroupSize != groupSize) {
 }
 
 //Updates the student array so each student have their index
-indexStudents(students);
+helper.indexStudents(students);
 
 //Returns the preferenceMatrix
 let matrix = preferenceMatrix(students);
@@ -101,7 +102,7 @@ for (let row = 0; row < numStudents; row++) {
         //Calculate the prefScore, consisting of: 
         //  student A's preference to student B  and 
         //  student B's preference to student A 
-        prefScore = prefCheck(students[row], students[col], numStudents) + prefCheck(students[col], students[row], numStudents)
+        prefScore = helper.prefCheck(students[row], students[col], numStudents) + helper.prefCheck(students[col], students[row], numStudents)
             
 
 /**
@@ -136,35 +137,7 @@ for (let row = 0; row < numStudents; row++) {
 return preferenceMatrix;
 }
 
-function indexStudents (students) {
-//Loops through all students assigning their index number
-for (let indexNum = 1; indexNum < students.length; indexNum++) {
-    students[indexNum].index = indexNum;
-}
-return students;
-}
 
-//findPrefSum is created to make the code more readable 
-//Returns the preference value of Student1 and Student2
-function findPrefSum (student1, student2, matrix) {
-    return matrix[student1.index][student2.index];
-}
-
-//This function checks two students preference for each other, if not blocked and no preference for each other it sets it to number of students divided by 2
-//
-function prefCheck (student1, student2, student_number) {
-    let preferenceIndex = student1.prefs.indexOf(student2.index);
-    if (preferenceIndex >= 0) {
-        return preferenceIndex + 1;
-    }
-
-    let blockIndex = student1.blocks.indexOf(student2.index);
-    if (blockIndex >= 0) {
-        return student_number
-    } else {
-        return Math.ceil((student_number)/2)
-    }
-}
 
 function prefGroups (students, matrix, groupSize) {  
     const groupNumber = Math.ceil(students.length/groupSize);
@@ -237,7 +210,7 @@ function prefGroups (students, matrix, groupSize) {
                 if (groups[groupNum].students[j] == undefined) {
                     break;
                 }
-                studentToGroupsPref[groupNum] += findPrefSum(students[x], groups[groupNum].students[j], matrix);
+                studentToGroupsPref[groupNum] += helper.findPrefSum(students[x], groups[groupNum].students[j], matrix);
             }
             studentToGroupsPref[groupNum] /= j;
         } 
@@ -275,119 +248,6 @@ function prefGroups (students, matrix, groupSize) {
 }
 
 
-
-
-//let endTime = performance.now()
-
-//This function takes an array of students (preferably from a group)
-//It returns the fraction of roles that are unique
-function checkRoleDiversity(students){
-    let uniqueRoles = [];
-    let totalRoles = 0;
-    //Going through every student
-    for(let student of students){
-        //For each student, going through their roles
-        for(let i in student.roles){
-        //If the role is not in unique roles, add it to unique roles
-            if(uniqueRoles.indexOf(student.roles[i]) == -1){
-                uniqueRoles.push(student.roles[i]);
-            }
-            //cap number of total roles at max amount of roles available
-            if(totalRoles < roleNumber){
-                totalRoles++;
-            }
-            }
-    }
-    return uniqueRoles.length/totalRoles;
-}
-
-//This function takes a group and a minimum diversity
-//It returns true if the group's diversity is above or equal to the minimum
-//False otherwise
-function groupDiversityCheck(group, minDiversity){
-    if(checkRoleDiversity(group.students) >= minDiversity){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-//This function takes an array of groups and a minimum diversity
-//It returns a new array of groups, including only those that are below the required diversity
-function checkMinDiversity(groups, minDiversity){
-    let homogenousGroups = [];
-    for (let group of groups){
-        //If the group's diversity is below the minimum, add to homogenous groups
-        if (!groupDiversityCheck(group, minDiversity)){
-            homogenousGroups.push(group);
-        }
-    }
-    return homogenousGroups;
-}
-
-
-function groupPrefSum(students, matrix){
-    let prefSum = 0
-    for(let i = 0; i < students.length; i++){
-        for(let j = i; j < students.length; j++){
-            prefSum += findPrefSum(students[i], students[j], matrix)
-        }
-    }
-    return prefSum;
-}
-
-
-//This function takes a student and a group as input
-//It iterates through the group and sums up the preference numbers between student and 
-function groupPrefAvg(student, group, matrix){
-    pref_sum = 0;
-    for (let other_student of group.students){
-        pref_sum += findPrefSum(student, other_student, matrix);
-    }
-    return pref_sum/group.students.length;
-}
-//This helper function finds the swap that does not inflict minimum diversity of groups if such a swap exists
-//As input, it takes an array and another array containing booleans
-//It returns the minimum from the first array, but only if the corresponding booleans is true
-function findMinSpace(array, boolean){
-    let i = 1;
-    let key = -1;
-    while(key == -1){
-        if(boolean[i] == true)
-            key = i;
-        i++;
-    }
-    for(i in array){
-        if(groups[i] < array[key] && boolean[i] == true)
-        key = i;
-    }
-    return key;
-}
-//Finds minimum value and returns index of it
-function findMin(array){
-    let key = 0;
-    for(let i in array){
-        if(array[i] < array[key]){
-            key = i;
-        }
-    }
-    return key;
-}
-
-
-//This helper function swaps two students in two groups
-//Parameters are the groups and the indeces of the students to be swapped
-//The function updates the group arrays with the swapped students and updates the swapped students groupNum attribute
-function swapStudents(group1, student1, group2, student2){
-    let temp = group1.students[student1].groupNr;
-    group1.students[student1].groupNr = group2.students[student2].groupNr;
-    group2.students[student2].groupNr = temp
-    temp = group1.students[student1];
-    group1.students[student1] = group2.students[student2];
-    group2.students[student2] = temp;
-}
-
 //This function takes a student (the origin) and finds the best possible swap between a set of groups
 //It compares the student to every other student in every other group
 //If certain swaps make the number of groups above minimum diversity bigger, make one of those swaps
@@ -403,13 +263,13 @@ function swapCheck(origin, groups, minDiversity, matrix){
     //The first element is for the origin group and the second element is for the new group.
     let diverseOld = [false, false];
     let diverseNew = [false, false];
-    diverseOld[0] = groupDiversityCheck(originGroup, minDiversity);
+    diverseOld[0] = helper.groupDiversityCheck(originGroup, minDiversity);
     let prefAvgOld = [0, 0];
     let prefAvgNew = [0, 0];
-    prefAvgOld[0] += groupPrefAvg(origin, originGroup, matrix);
+    prefAvgOld[0] += helper.groupPrefAvg(origin, originGroup, matrix);
     //This loop goes through every group
     for(let i in groups){
-        diverseOld[1] = groupDiversityCheck(groups[i], minDiversity)
+        diverseOld[1] = helper.groupDiversityCheck(groups[i], minDiversity)
         //If this is the origin's group, no swaps need to be checked
         if(originGroup == groups[i]){
             continue;
@@ -417,10 +277,10 @@ function swapCheck(origin, groups, minDiversity, matrix){
         //Now to through all students to check what a swap would do
         for(j in groups[i].students){
             let target = groups[i].students[j]
-            prefAvgOld[1] = groupPrefAvg(target, groups[i], matrix)
-            swapStudents(originGroup, originIndex, groups[i], j);
-            diverseNew[0] = groupDiversityCheck(originGroup, minDiversity)
-            diverseNew[1] = groupDiversityCheck(groups[i], minDiversity)
+            prefAvgOld[1] = helper.groupPrefAvg(target, groups[i], matrix)
+            helper.swapStudents(originGroup, originIndex, groups[i], j);
+            diverseNew[0] = helper.groupDiversityCheck(originGroup, minDiversity)
+            diverseNew[1] = helper.groupDiversityCheck(groups[i], minDiversity)
             //If the number of diverse groups is not decreased by the swap, calculate the preference delta
             let diversityDelta = diverseNew[0] + diverseNew[1] - diverseOld[0] - diverseOld[1];
             if(diversityDelta > 0){
@@ -428,20 +288,20 @@ function swapCheck(origin, groups, minDiversity, matrix){
             }
             if(diversityDelta >= 0){
                 //The preference delta is simply the difference in average preference for the two groups
-                prefAvgNew[0] = groupPrefAvg(target, originGroup, matrix);
-                prefAvgNew[1] = groupPrefAvg(origin, groups[i], matrix);
+                prefAvgNew[0] = helper.groupPrefAvg(target, originGroup, matrix);
+                prefAvgNew[1] = helper.groupPrefAvg(origin, groups[i], matrix);
                 prefDelta[target.index] = prefAvgNew[0] + prefAvgNew[1] - prefAvgOld[0] - prefAvgOld[1];
             }
             //If the diversity will get worse from this swap, set prefDelta to 0, indicating no swap
             else{
                 prefDelta[target.index] = 0;
             }
-            swapStudents(originGroup, originIndex, groups[i], j);
+            helper.swapStudents(originGroup, originIndex, groups[i], j);
         }
     }
     //If no swaps can increase the number of diverse groups, simply return the best swap
     if(divImprovements.indexOf(true) == -1){
-        let bestSwap = findMin(prefDelta);
+        let bestSwap = helper.findMin(prefDelta);
         //If the best swap does not improve the pref satisfaction (ie. is not negative), return 0
         if(prefDelta[bestSwap] >= 0)
             return -1;
@@ -450,7 +310,7 @@ function swapCheck(origin, groups, minDiversity, matrix){
     }
     //If there exist swaps that increase the number of diverse groups, find the best of these swaps and return it
     else{
-        return findMinSpace(prefDelta, divImprovements);
+        return helper.findMinSpace(prefDelta, divImprovements);
     }
 }
 
@@ -465,7 +325,7 @@ function swapCheck(origin, groups, minDiversity, matrix){
 //Then, it continues to call swapCheck until no improving swaps can be made
 //It also terminates after a large number of iterations
 function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
-    let homogenousGroups = checkMinDiversity(groups, minDiversity);
+    let homogenousGroups = helper.checkMinDiversity(groups, minDiversity);
     //If there exist groups that do not fulfill min diversity, start with those
     if (homogenousGroups.length > 0){
         //Call swapCheck on each student in these groups
@@ -478,7 +338,7 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
                     //console.log("div swap: swapped student " + groups[i].students[j].index + " with " + target.index)
-                    swapStudents(originGroup, j, targetGroup, targetGroup.students.indexOf(target));
+                    helper.swapStudents(originGroup, j, targetGroup, targetGroup.students.indexOf(target));
                 }
             }
         }
@@ -499,7 +359,7 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
                         //console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
-                    swapStudents(groups[i], j, targetGroup, targetGroup.students.indexOf(target));
+                    helper.swapStudents(groups[i], j, targetGroup, targetGroup.students.indexOf(target));
                     swapped = true;
                 }
             }
@@ -512,46 +372,6 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
         console.log("No more swaps can be made, terminating")
     }
     return groups
-}
-
-
-//This function loops through each role a student has
-//Maximum for loop iterations would be the number of roles squared
-//In the case of Belbin roles, this means an absolute maximum of 36 iterations
-function roleCheck(student1, student2){
-    //If one "student" is an empty space, no overlap
-    if(student1 == undefined || student2 == undefined){
-        return 0;
-    }
-    sum = 0;
-    for(i in student1.roles){
-        for(j in student2.roles)
-            if(student1.roles[i] == student2.roles[j]){
-                sum += 1;
-            }
-        }
-    return sum;
-
-}
-
-//This function finds the minimum positive element in an array
-//If there are no positive elements, returns 0
-function findMinPos(array){
-let i = 0;
-let key = -1;
-while (key == -1){
-    if (array[i] > 0){
-        key = i;
-    }
-    i++;
-}
-while(i <= array.length){
-    if (array[i] < array[key] && array[i] > 0){
-        key = i;
-    }
-    i++;
-}
-return key;
 }
 
 
@@ -591,7 +411,7 @@ function findMinDiversity(students, groupSize){
             overlap[i] = 0;
             compare_loop: for(let j in groups[i].students){
                 //Calculate the overlap between current student and group until a space is empty
-                overlap[i] += roleCheck(students[student], groups[i].students[j])
+                overlap[i] += helper.roleCheck(students[student], groups[i].students[j])
                     if(groups[i].students.length < j){
                         //If overlap is 0, student is placed into group
                         //If student is placed into a group, break so that the student loop continues
@@ -604,7 +424,7 @@ function findMinDiversity(students, groupSize){
                     }
             }
         }
-        let i = findMinPos(overlap);
+        let i = helper.findMinPos(overlap);
         groups[i].students.push(students[student]);
         //If the number of students in the group is equal to the group size, or 1 smaller if the group is part of the last smaller groups, it becomes full
         if(groups[i].students.length >= groupSize ||
@@ -612,76 +432,52 @@ function findMinDiversity(students, groupSize){
             groups[i].isFull = true
     }
     //Finding the minimum diversity, meaning the number of unique roles in a group divided by the total number of roles
-    let diversityMin = checkRoleDiversity(groups[0].students)
+    let diversityMin = helper.checkRoleDiversity(groups[0].students, roleNumber)
     for(i = 1; i < groups.length; i++){
-        let diversity = checkRoleDiversity(groups[i].students)
+        let diversity = helper.checkRoleDiversity(groups[i].students, roleNumber)
         if(diversity < diversityMin){
             diversityMin = diversity
         }
     }
     //EDIT HERE TO CHANGE MINIMUM DIVERSITY CALCULATIONS
-    return diversityMin*0
+    return diversityMin;
 }
 
-
-
-
-
-
-//This helper function returns the factorial of a number
-function fact(n){
-    if(n <= 1){
-        return 1
-    }
-    else{
-        return fact(n-1)*n
-    }
-}
-//This helper function returns the binomial coefficient of two numbers
-//It is used to calculate the possible combinations when drawing an amount of numbers out of a total amount of numbers
-function binomial(total, drawn){
-    return fact(total)/(fact(drawn)*fact(total-drawn));
-}
-
-
-function prefSatisfactionPercent(prefSum, studentNum, size){
-    let worst = binomial(size, 2)*studentNum;
-    console.log("worst = " + worst)
-    let best = size*(size-1)*(size-1);
-    console.log("best = " + best)
-    console.log("actual = " + prefSum)
-    let percentage = (worst - prefSum)/(worst - best);
-    return percentage;
- }
 
 //Below here is only for testing
 
+let minDiversity = findMinDiversity(students, groupSize);
+
 let totalPercent = 0;
+let totalDiverse = 0
 for(let i in groups){
-    let prefSum = groupPrefSum(groups[i].students, matrix);
-    let percent = prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length)
+    let prefSum = helper.groupPrefSum(groups[i].students, matrix);
+    let percent = helper.prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length)
+    totalDiverse += helper.groupDiversityCheck(groups[i], minDiversity)
     totalPercent += percent;
     console.log("Pref satisfaction of group" + i + ": " + percent);
 }
-console.log(totalPercent)
+console.log(totalPercent/Math.ceil(StudentNum/groupSize))
+console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
 
-console.log(masterAlgorithm(students, groups, findMinDiversity(students, groupSize), matrix, maxIterations))
+console.log(masterAlgorithm(students, groups, minDiversity, matrix, maxIterations))
 
 for (let i = 0; i < 1; i++) {
-    console.log("groups after hill climbing:",i)
     for (let j = 0; j < groupSize; j++) {
         if (groups[i].students[j] != undefined) {
-            console.log(groups[i].students[j].firstName,groups[i].students[j].groupNr)
+            console.log(groups[i].students[j].firstName,groups[i].students[j].groupNr);
         }
     }    
 }
 
 totalPercent = 0;
-
+totalDiverse = 0;
 for(let i in groups){
-    let prefSum = groupPrefSum(groups[i].students, matrix);
-    let percent = prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length);
+    let prefSum = helper.groupPrefSum(groups[i].students, matrix);
+    let percent = helper.prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length);
+    totalDiverse += helper.groupDiversityCheck(groups[i],minDiversity)
     totalPercent += percent;
     console.log("Pref satisfaction of group" + i + ": " + percent);
 }
-console.log(totalPercent)
+console.log(totalPercent/Math.ceil(StudentNum/groupSize))
+console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
