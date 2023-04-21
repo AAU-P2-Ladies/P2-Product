@@ -1,4 +1,5 @@
-let back_btn = document.getElementById("back_btn");let next_btn = document.getElementById("next_btn");
+let back_btn = document.getElementById("back_btn");
+let next_btn = document.getElementById("next_btn");
 let unlock_btn = document.getElementById("unlock_btn");
 let start_new_btn = document.getElementById("new_session_btn");
 
@@ -18,10 +19,34 @@ let myInput = document.getElementById("myInput");
 let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
 
 
+function createDynamicList(){   
+    let dynalist = document.getElementById("MyDivUL")
+    let dynalist2 = document.getElementById("MyDivBlockedUL")
+    let dyn = document.createElement("ul")
+    let dyn2 = document.createElement("ul")
+    
+    for (let i in nameArray)
+    {
+        let li = document.createElement('li')
+        li.innerText = nameArray[i]
+        li.className = "item"
+        let li2 = document.createElement('li')
+        li2.innerText = nameArray[i]
+        li2.className = "item"
+        dyn.appendChild(li)
+        dyn2.appendChild(li2)
+        
+    }
+    dyn.hidden = "hidden"
+    dyn.id = "myUL" 
+    dyn2.hidden = "hidden"
+    dyn2.id = "BlockedUL"
 
-for(let i of nameArray){
-    document.createElement("li")
+    dynalist2.appendChild(dyn2)
+    dynalist.appendChild(dyn)
 }
+
+
 
 if(back_btn){
     back_btn.addEventListener("click", function(){
@@ -43,7 +68,10 @@ if(studentListInput){
 
 
 if(next_btn) {
-    next_btn.addEventListener("click", function() {
+    next_btn.addEventListener("click", function(e) {
+        
+        e.preventDefault();
+
         if(nameGroupFormationInput.value != "" && studentListInput.value != "" && topicsInput.value != "") {
 
             const formData = new FormData();
@@ -66,11 +94,12 @@ if(next_btn) {
             .then((response) => response.json())
             .then((data) => {
 
-                console.log(data)
+                console.log(data);
+                window.location.href='./coordinator_config';
 
             })
             .catch((err) => ("Error occured", err));
-            //window.location.href='/coordinator_config';
+            
         } else {
             alert("Mandatory field not filled!")
         }
@@ -115,8 +144,10 @@ function SearchField(myInputID,myULID) {
     
   }
 
-
+if(window.location.pathname == "/coordinator_config"){
   
+document.getElementById("proeveDiv").addEventListener("load",createDynamicList())
+
   document.getElementById("myUL").addEventListener("click", function(e) {
     if (e.target && e.target.matches("li")) {
       myInput.value = e.target.innerText; // new class name here
@@ -125,10 +156,11 @@ function SearchField(myInputID,myULID) {
 
   });
 
-blockedUL.addEventListener("click", function(e) {
+document.getElementById("BlockedUL").addEventListener("click", function(e) {
     if (e.target && e.target.matches("li")) {
       BlockedInput.value = e.target.innerText; // new class name here
       //alert("clicked " + e.target.innerText);
     }
-
   });
+  
+}
