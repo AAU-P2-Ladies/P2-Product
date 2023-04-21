@@ -40,19 +40,10 @@ const multerConfig = {
         
         //A means of ensuring only images are uploaded. 
     fileFilter: function(req, file, next){
-        if(!file){
-            next();
+        if (file.mimetype != 'application/json') {
+             return cb(new Error('Wrong file type'));
         }
-        const json = file.mimetype.startsWith('application/');
-        if(json){
-           console.log('file uploaded');
-            next(null, true);
-        }else{
-            console.log("file not supported");
-              
-            //TODO:  A better message response to user on failure.
-            return next();
-        }
+         cb(null, true)
     }
 };
 
