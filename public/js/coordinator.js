@@ -13,7 +13,6 @@ let myInput = document.getElementById("myInput");
 //document.getElementById("BlockedUL").onclick=submitForm;
 
 
-let something = "something";
 
 
 
