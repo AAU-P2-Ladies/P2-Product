@@ -41,9 +41,9 @@ const multerConfig = {
         //A means of ensuring only images are uploaded. 
     fileFilter: function(req, file, next){
         if (file.mimetype != 'application/json') {
-             return cb(new Error('Wrong file type'));
+             return next(new Error('Wrong file type'));
         }
-         cb(null, true)
+         next(null, true)
     }
 };
 
@@ -355,6 +355,7 @@ app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, re
 
     let students = getJSONFile("uploads/"+req.file.filename)
 
+    if (!students.names) throw "Not right format"
    
     studentObjectMaker(students.names, req.body.groupName);
 
