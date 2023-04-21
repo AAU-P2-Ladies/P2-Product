@@ -32,7 +32,7 @@ const multerConfig = {
         
         //Then give the file a unique name
         filename: function(req, file, next){
-            console.log(file);
+            //console.log(file);
             const ext = file.mimetype.split('/')[1];
             next(null, file.fieldname + '-' + Date.now() + '.'+ext);
           }
@@ -45,7 +45,7 @@ const multerConfig = {
         }
         const json = file.mimetype.startsWith('application/');
         if(json){
-           console.log('file uploaded');
+            console.log('file uploaded');
             next(null, true);
         }else{
             console.log("file not supported");
@@ -275,26 +275,38 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
     let studentList = [];
     let topicsList = [];
 
+    console.log(req.files);
     for (let index = 0; index < req.files.length; index++) {
 
-        if (req.files[index]["fieldname"] == "studentListInput") {
+        if (req.files[index].fieldname == "studentListInput" && 
+            isJSON("uploads/" + req.files[index].filename)) {
 
-            studentList = getJSONFile("uploads/" + req.files[index]["filename"]);
+            studentList = getJSONFile("uploads/" + req.files[index].filename);
 
         }
 
-        if (req.files[index]["fieldname"] == "topicsInput") {
+        if (req.files[index].fieldname == "topicsInput"  && 
+        isJSON("uploads/" + req.files[index].filename)) {
 
-            topicsList = getJSONFile("uploads/" + req.files[index]["filename"]);
+            topicsList = getJSONFile("uploads/" + req.files[index].filename);
 
         }
 
     }
-
-    if(isJSON(studentList) && isJSON(topicsList))
     
-    console.log(studentList);
-    console.log(topicsList);
+    for (let index = 0; index < studentList.length; index++) {
+
+        if (studentList[index].hasOwnProperty('name') && 
+            studentList[index].hasOwnProperty('studyNumber')) {
+
+                console.log(studentList[index]);
+
+        }
+
+    }
+    
+    console.log(req.body.nameGroupFormationInput);
+    //console.log(topicsList);
 
     //let students = getJSONFile("uploads/" + req.file[0].studentListInput)
 
@@ -320,9 +332,14 @@ function getJSONFile(file) {
     
 }
 
-function isJSON(str) {
+function isJSON(file) {
+
+    var filepath = __dirname + '/database/' + file;
+
+    var file = fs.readFileSync(filepath, 'utf8');
+
     try {
-        JSON.parse(str);
+        JSON.parse(file);
     } catch (e) {
         return false;
     }

@@ -23,7 +23,7 @@
         <div class="input_form">
             <p>This form will configure the specific questions desired/roles to be used</p>
             <form action="javascript:void(0);"> <!atm do not want page to reload when submitting to form>
-                <div class="proeve">
+                <div class="proeve" id="proeveDiv">
                     <label for="amount_of_group_members">Amount of Group members per group:</label>
                     <input type="number" id="AmountOfGroupMembers" name="AmountOfGroupMembers" min="3"><br><br>
                     
@@ -33,65 +33,12 @@
                     <label for="previousMembers">Allowed number of previous members to be grouped together:</label>
                     <input type="number" id="previousMembers" name="previousMembers" min="0"><br><br>
 
-                    <div class="div1">
+                    <div class="div1" id="MyDivUL">
                         <input type="text" id="myInput" onkeyup="SearchField('myInput','myUL')" placeholder="Search for names..">
+                        </div>
 
-                            <ul id="myUL" hidden="hidden">
-                            <li class="item">a</li>
-                            <li class="item">b</li>
-							<li class="item">Adele</li>
-                            <li class="item">a</li>
-                            <li class="item">b</li>
-                            <li class="item">Agnes Betty </li>
-                            <li class="item">Adrian</li>
-                            <li class="item">Adil</li>
-                            <li class="item">Andreas</li>
-                            <li class="item">Anders</li>
-                            <li class="item">Adomas</li>
-
-                            <li class="item">Billy</li>
-                            <li class="item">Bob</li>
-
-                            <li class="item">Calvin</li>
-                            <li class="item">Cim</li>
-                            <li class="item">Charlotete</li>
-                            <li class="item">Cello</li>
-                            <li class="item">Cimmy</li>
-                            <li class="item">Clara</li>
-                            <li class="item">Claire</li>
-                            <li class="item">Christina</li>
-                            <li class="item">Cindy</li>
-                            </ul>
-                    </div>
-
-                    <div class="div2"> 
-                        <input type="text" id="BlockedInput" onkeyup="SearchField('BlockedInput','BlockedUL')" placeholder="Search for names..">
-        
-                            <ul id="BlockedUL" hidden="hidden">
-                                <li class="item">Adele</li>
-                                <li class="item">a</li>
-                                <li class="item">b</li>
-                                <li class="item">Agnes Betty </li>
-                                <li class="item">Adrian</li>
-                                <li class="item">Adil</li>
-                                <li class="item">Andreas</li>
-                                <li class="item">Anders</li>
-                                <li class="item">Adomas</li>
-    
-                                <li class="item">Billy</li>
-                                <li class="item">Bob</li>
-    
-                                <li class="item">Calvin</li>
-                                <li class="item">Cim</li>
-                                <li class="item">Charlotete</li>
-                                <li class="item">Cello</li>
-                                <li class="item">Cimmy</li>
-                                <li class="item">Clara</li>
-                                <li class="item">Claire</li>
-                                <li class="item">Christina</li>
-                                <li class="item">Cindy</li>
-                                    </ul>
-                                </ul>
+                    <div class="div2" id="MyDivBlockedUL"> 
+                        <input type="text" id="BlockedInput" onkeyup="SearchField('BlockedInput','BlockedUL')" placeholder="Search for names..">        
                     </div>
                     
 
