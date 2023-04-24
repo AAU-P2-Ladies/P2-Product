@@ -22,17 +22,17 @@ function findPrefSum (student1, student2, matrix) {
 
 
 //This function checks two students preference for each other, if not blocked and no preference for each other it sets it to number of students divided by 2
-function prefCheck (student1, student2, student_number) {
+function prefCheck (student1, student2, studentNumber) {
     let preferenceIndex = student1.prefs.indexOf(student2.index);
     if (preferenceIndex >= 0) {
         return preferenceIndex + 1;
     }
     
     let blockIndex = student1.blocks.indexOf(student2.index);
-    if (blockIndex >= 0) {
-        return student_number
+    if(blockIndex >= 0) {
+        return studentNumber
     } else {
-        return Math.ceil((student_number)/2)
+        return Math.ceil((studentNumber)/2)
     }
 }
 
@@ -88,7 +88,7 @@ function checkMinDiversity(groups, minDiversity){
     let homogenousGroups = [];
     for (let group of groups){
         //If the group's diversity is below the minimum, add to homogenous groups
-        if (!groupDiversityCheck(group, minDiversity)){
+        if(!groupDiversityCheck(group, minDiversity)){
             homogenousGroups.push(group);
         }
     }
@@ -106,7 +106,7 @@ function checkRoleDiversity(students, roleNumber){
     for(let student of students){
         //For each student, going through their roles
         for(let i in student.roles){
-        //If the role is not in unique roles, add it to unique roles
+            //If the role is not in unique roles, add it to unique roles
             if(uniqueRoles.indexOf(student.roles[i]) == -1){
                 uniqueRoles.push(student.roles[i]);
             }
