@@ -12,34 +12,8 @@ let myInput = document.getElementById("myInput");
 //let ULItems = blockedUL.getElementsByTagName("li");
 //document.getElementById("BlockedUL").onclick=submitForm;
 
-var nameArray = [];
 
-nameArray = await fetch('./search', {
-    method: "POST",
-    headers: {
-        Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-        className: 'SW2',
-        name: '',
-    }),
-})
-.then((response) => response.json())
-.then((data) => {
 
-    return data.students;
-
-})
-.catch((err) => {
-
-  console.error(err);
-
-  alert("Something went wrong!"); 
-
-});
-
-console.log(nameArray);
 nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
 let blocked = [["Nadia","Tania"],["Tina","Thomas"],["Adomas","Trine"],["Simon","Tobias"],["Carmen","Daniel"],["Jonas","Nicolaj"],["Cathrine","Kamilla"],["Simon","Allan"],["Andreas","Adomas"],["Sina","Merete"]];
 
@@ -172,7 +146,7 @@ function SearchField(myInputID,myULID) {
 if(window.location.pathname == "/coordinator_config"){
   
 document.getElementById("proeveDiv").addEventListener("load",createDynamicList())
-document.getElementById("MyblockedTable").addEventListener("load",createDynamicList2())
+document.getElementById("TableDivId").addEventListener("load",createDynamicList2())
 
   document.getElementById("myUL").addEventListener("click", function(e) {
     if (e.target && e.target.matches("li")) {
@@ -190,6 +164,8 @@ document.getElementById("BlockedUL").addEventListener("click", function(e) {
   });
   
 }
+
+/*
 function addPrefFunction(e){
     e.preventDefault();
   
@@ -208,28 +184,26 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-}
+}*/
 
 
 function createDynamicList2(){   
-    let myInput = document.getElementById("myInput")
-    let BlockedInput = document.getElementById("BlockedInput")
-    let dyn3 = document.createElement("tr")
     let table = document.getElementById("MyBlockedTable")
-    for (let i in blocked.length)
+   console.log(blocked.length)
+   
+    for (let i in blocked)
     {
-        let td = document.createElement('td')
-        td.innerText = blocked[i][0]
-        let td2 = document.createElement('td')
-        td2.innerText = blocked[i][1]
-        let td3 = document.createElement('input')
-        td3.type = "checkbox";
-        td3.id = "blocked_pairs";
-        td3.name = "blocked_pairs";
-        td3.checked = checked;
-        console.log(td)
-        dyn3.appendChild(td)
-        console.log(dyn3)
+        let row = table.insertRow(1)
+        let cell1 = row.insertCell(0)
+        let cell2 = row.insertCell(1)
+        let cell3 = row.insertCell(2)
+        cell1.innerHTML = blocked[i][0]
+        cell2.innerHTML = blocked[i][1]
+        checkbox = document.createElement("input")
+        checkbox.type = "checkbox";
+        checkbox.id = "blocked_pairs";
+        checkbox.name = "blocked_pairs";
+        checkbox.checked = true;
+        cell3.append(checkbox)
     }
-    table.appendChild(dyn3)
 }
