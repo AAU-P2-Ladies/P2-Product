@@ -6,6 +6,13 @@ function indexStudents (students) {
     return students;
 }
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 
 //findPrefSum is created to make the code more readable 
 //Returns the preference value of Student1 and Student2
@@ -214,4 +221,4 @@ function findMinPos(array){
     return key;
     }
 
-module.exports = {indexStudents, findPrefSum, prefCheck, groupPrefSum, groupDiversityCheck, roleCheck, checkMinDiversity, checkRoleDiversity, groupPrefAvg, prefSatisfactionPercent, swapStudents, findMin, findMinPos, findMinSpace}
+module.exports = {indexStudents, shuffleArray, findPrefSum, prefCheck, groupPrefSum, groupDiversityCheck, roleCheck, checkMinDiversity, checkRoleDiversity, groupPrefAvg, prefSatisfactionPercent, swapStudents, findMin, findMinPos, findMinSpace}

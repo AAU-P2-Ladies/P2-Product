@@ -26,55 +26,6 @@ function Student(first, index, prefs = [], blocks = [], roles = [], groupNr, top
     this.isFull = isFull;
 }
 
-/**
-* For debugging
-* Only purpose is to randomize the students preference to eachother
-* Can be deleted
-*/
-function getRandomInts(max,block,numbers){
-    let array = []
-    while (array.length < numbers){
-        let a = Math.floor(Math.random() * (max-1))
-        if (a >= block){
-            a++
-        }
-        if (array.indexOf(a) == -1){
-            array.push(a)
-        }
-    }
-    return array
-}
-/**
- * 
- */
-  
-
-
-//Initilize the student arrays with StudentNum amount of students 
-let students = [];
-for (let s = 0;s<StudentNum;s++) {
-    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
-    students.push(student0)
-}
-
-//Calculate whether the group member size adds up (groups can be made
-// with the group member size but some groups may have one less group member)  
-amountOfStudents = students.length;
-updatedGroupSize = Math.ceil(amountOfStudents/Math.ceil(amountOfStudents/groupSize));
-
-//If it adds up. updatedGroupSize will be the same as groupSize
-if (updatedGroupSize != groupSize) {
-    console.log("The group size does not add up. The new size is: ", updatedGroupSize)
-}
-
-//Updates the student array so each student have their index
-helper.indexStudents(students);
-
-//Returns the preferenceMatrix
-let matrix = preferenceMatrix(students);
-
-//Returns the created groups
-let groups = prefGroups(students, matrix, updatedGroupSize);
 
 /**
 * Creates a preferenceMatrix consisting of
@@ -232,6 +183,7 @@ function prefGroups (students, matrix, groupSize) {
      * Only purpose is to print the groups for debugging.
      * Can be deleted
      */
+    /*
     for (let i = 0; i < 1; i++) {
         console.log(" Initial group:",i)
         for (let j = 0; j < groupSize; j++) {
@@ -240,6 +192,7 @@ function prefGroups (students, matrix, groupSize) {
             }
         }    
     }
+    */
      /**
      * 
      */
@@ -365,12 +318,6 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
             }
         }
     }
-    if(iterations == maxIterations){
-        console.log("Reached max iterations, terminating")
-    }
-    else{
-        console.log("No more swaps can be made, terminating")
-    }
     return groups
 }
 
@@ -444,7 +391,111 @@ function findMinDiversity(students, groupSize){
 }
 
 
+//This function calls the parts of the algorithm in the correct order to generate groups from students
+//It takes an array of student objects and a desired group size
+//It loops through the algorithm until max seconds has been reached
+//Meanwhile, it compares each result and in the end returns the one with the highest diversity and satisfaction percentage
+function algorithmCalls(students, groupSize, maxSeconds){
+    let minDiversity = findMinDiversity(students, groupSize)
+    let time = Date.now();
+    let bestAvgPref = 0;
+    let bestAvgDiversity = 0;
+    let finalGroups = []
+    while(Date.now() - time < maxSeconds*1000){
+        //Each students groupNr has to be reset for each new group formation since prefGroups assumes students are not in a group
+        for(let student of students){
+            student.groupNr = -1;
+        }
+        helper.shuffleArray(students);
+        helper.indexStudents(students);
+        let matrix = preferenceMatrix(students);
+        let groups = prefGroups(students, matrix, groupSize);
+        groups = masterAlgorithm(students, groups, minDiversity, matrix, maxIterations)
+        //Loops through the groups and finds their total preference percentage and diversity percentage
+        let totalDiverse = 0
+        let totalPercent = 0
+        //This loop computes the variables to be compared in order to find the optimal values for this run
+        for(let i in groups){
+            let prefSum = helper.groupPrefSum(groups[i].students, matrix);
+            let percent = helper.prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length);
+            totalDiverse += helper.groupDiversityCheck(groups[i],minDiversity)
+            totalPercent += percent;
+        }
+        let avgPref = totalPercent/Math.ceil(StudentNum/groupSize);
+        let avgDiversity = totalDiverse/Math.ceil(StudentNum/groupSize);
+        if(avgDiversity >= bestAvgDiversity && avgPref >= bestAvgPref){
+            finalGroups = groups;
+            bestAvgDiversity = avgDiversity;
+            bestAvgPref = avgPref;
+        }
+    }
+    console.log("best possible pref percentage: " + bestAvgPref)
+    return finalGroups
+}
+
 //Below here is only for testing
+/**
+* For debugging
+* Only purpose is to randomize the students preference to eachother
+* Can be deleted
+*/
+/*
+function getRandomInts(max,block,numbers){
+    let array = []
+    while (array.length < numbers){
+        let a = Math.floor(Math.random() * (max-1))
+        if (a >= block){
+            a++
+        }
+        if (array.indexOf(a) == -1){
+            array.push(a)
+        }
+    }
+    return array
+}
+/**
+ * 
+ */
+  
+
+
+//Initilize the student arrays with StudentNum amount of students 
+/*
+let students = [];
+for (let s = 0;s<StudentNum;s++) {
+    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
+    students.push(student0)
+}
+
+console.log("Trying for 1 sec")
+algorithmCalls(students, groupSize, 1)
+console.log("Trying for 5 sec")
+algorithmCalls(students, groupSize, 5)
+console.log("Trying for 15 sec")
+algorithmCalls(students, groupSize, 15)
+console.log("Trying for 30 sec")
+algorithmCalls(students, groupSize, 30)
+
+/*
+
+//Calculate whether the group member size adds up (groups can be made
+// with the group member size but some groups may have one less group member)  
+amountOfStudents = students.length;
+updatedGroupSize = Math.ceil(amountOfStudents/Math.ceil(amountOfStudents/groupSize));
+
+//If it adds up. updatedGroupSize will be the same as groupSize
+if (updatedGroupSize != groupSize) {
+    console.log("The group size does not add up. The new size is: ", updatedGroupSize)
+}
+
+//Updates the student array so each student have their index
+helper.indexStudents(students);
+
+//Returns the preferenceMatrix
+let matrix = preferenceMatrix(students);
+
+//Returns the created groups
+let groups = prefGroups(students, matrix, updatedGroupSize);
 
 let minDiversity = findMinDiversity(students, groupSize);
 
@@ -481,3 +532,4 @@ for(let i in groups){
 }
 console.log(totalPercent/Math.ceil(StudentNum/groupSize))
 console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
+*/
