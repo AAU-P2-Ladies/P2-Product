@@ -3,7 +3,8 @@ const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const { exit } = require('process');
-const multer  = require('multer');
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 var fs = require('fs'), json;
 
@@ -323,6 +324,15 @@ app.post('/register',(req, res) => {
     }
 
 });
+/*
+app.post('/prefSearch',(req, res) => {
+
+
+    console.log(req);
+    res.render('pages/student_start');
+
+});
+*/
 
 app.get('/register',(req, res) =>{
 
@@ -342,9 +352,17 @@ app.get('/coordinator_start', (req, res) => {
 
 app.get('/coordinator_config', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+    //res.sendFile(path.join(__dirname, '/public/html/coordinator_preconfig.html'));
 
     res.render('pages/coordinator_config');
+
+});
+
+app.get('/coordinator_preconfig', (req, res) => {
+
+    //res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
+
+    res.render('pages/coordinator_preconfig');
 
 });
 
@@ -398,6 +416,56 @@ app.get('/logout', (req,res) => {
 });
 
 
+app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
+
+    
+    //console.log(req.body);
+    //console.log(req.files);
+
+    let studentList = [];
+    let topicsList = [];
+
+    console.log(req.files);
+    for (let index = 0; index < req.files.length; index++) {
+
+        if (req.files[index].fieldname == "studentListInput" && 
+            isJSON("uploads/" + req.files[index].filename)) {
+
+            studentList = getJSONFile("uploads/" + req.files[index].filename);
+
+        }
+
+        if (req.files[index].fieldname == "topicsInput"  && 
+        isJSON("uploads/" + req.files[index].filename)) {
+
+            topicsList = getJSONFile("uploads/" + req.files[index].filename);
+
+        }
+
+    }
+    
+    for (let index = 0; index < studentList.length; index++) {
+
+        if (studentList[index].hasOwnProperty('name') && 
+            studentList[index].hasOwnProperty('studyNumber')) {
+
+                console.log(studentList[index]);
+
+        }
+
+    }
+    
+    console.log(req.body.nameGroupFormationInput);
+    //console.log(topicsList);
+
+    //let students = getJSONFile("uploads/" + req.file[0].studentListInput)
+
+    
+    
+
+    //res.render('pages/coordinator_start');
+
+})
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
@@ -439,6 +507,7 @@ function checkFolderName(folderName, data) {
 function getJSONFile(file) {
     
     var filepath = __dirname + '/database/' + file;
+    var filepath = __dirname + '/database/' + file;
 
     console.log(filepath)
 
@@ -446,6 +515,20 @@ function getJSONFile(file) {
 
     return JSON.parse(file);
     
+}
+
+function isJSON(file) {
+
+    var filepath = __dirname + '/database/' + file;
+
+    var file = fs.readFileSync(filepath, 'utf8');
+
+    try {
+        JSON.parse(file);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 function makeKeycode(length) {

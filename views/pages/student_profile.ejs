@@ -7,7 +7,6 @@
     <title>Student Profile</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/style_student.css">
-  
   </head>
   <body class="d-flex flex-column h-100">
 
@@ -16,10 +15,22 @@
     <div class="boks">
       <h5>You have been invited to a group formation. Input your preferences!</h5>
       <p>SW2-2023</p>
-        <form action="" method="post" id="StudentProfile">
+        <form id="StudentProfile">
           
-          <label for="override">Override code:</label>
-          <input type="text" id="override" name="override">
+          <button id="addPref" onclick="addPrefFunction(event)">Add student preference</button><br><br>
+
+          <div id="prefModal" class="modal">
+            <div id ="modalContent" class="modal-content">
+              <span class="close">&times;</span>
+              <form action="./prefSearch" method="post" id="prefForm">
+                <input type="text" id="namePreference" name="namePreference" placeholder="Search Name"><br>
+                <button id="searchPref" onclick="searchPrefFunction(event)">Search</button>
+              </form>
+              
+            </div>
+          </div>
+
+          <input type="text" id="override" name="override" placeholder="Override Code">
               
           <input type="submit" class="buttonS" value="Join Group formation">
           
