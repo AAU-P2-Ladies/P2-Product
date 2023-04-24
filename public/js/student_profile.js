@@ -117,9 +117,21 @@ function searchPrefFunction(e){
   nameSearch(theSearchedName);
 }
 
-let prefDiv = document.getElementById("divPref");
+let modalDiv = document.getElementById("modalContent");
+createDivs(3);
 
-function SearchField(myInputID,myULID) {
+function createDivs(numberOfDivs){
+
+  for(div = 1; div <= numberOfDivs; div++){
+    let divElement = document.createElement("div");
+    divElement.id = "prefDiv" + div;
+    modalDiv.append(divElement);
+    divElement.addEventListener("load", createDynamicList(divElement.id));
+  }
+  
+}
+
+function SearchField(myInputID, myULID) {
   console.log("heeeeeeeeeeeeeeeeej");
   console.log(myInputID);
   var input, filter, ul, li, i, txtValue;
@@ -129,6 +141,7 @@ function SearchField(myInputID,myULID) {
       filter = input.value.toUpperCase();
       console.log(filter);
       ul = document.getElementById(myULID);
+      console.log(ul);
       li = ul.getElementsByTagName('li');
 
   if(window.event.keyCode=='13'){
@@ -154,30 +167,20 @@ function SearchField(myInputID,myULID) {
   
 }
 
-function createDynamicList(){   
-  let dynalist = document.getElementById("MyDivUL")
-  let dynalist2 = document.getElementById("MyDivBlockedUL")
+function createDynamicList(id){   
+  let dynalist = document.getElementById(id)
   let dyn = document.createElement("ul")
-  let dyn2 = document.createElement("ul")
   
   for (let i in nameArray)
   {
       let li = document.createElement('li')
       li.innerText = nameArray[i]
       li.className = "item"
-      let li2 = document.createElement('li')
-      li2.innerText = nameArray[i]
-      li2.className = "item"
       dyn.appendChild(li)
-      dyn2.appendChild(li2)
-      
   }
+
   dyn.hidden = "hidden"
   dyn.id = "myUL" 
-  dyn2.hidden = "hidden"
-  dyn2.id = "BlockedUL"
-
-  dynalist2.appendChild(dyn2)
   dynalist.appendChild(dyn)
 }
 
@@ -186,9 +189,9 @@ function createSearchPref(number, studentList){
   for(let currentNumber = 1; currentNumber <= number; currentNumber++){
 
     let inputText = document.createElement("input");
-    inputText.setAttribute("id", currentNumber + "prio");
-    let inputTextID = inputText.id;
     inputText.setAttribute("type", "text");
+    inputText.id = currentNumber + "prio";
+    //let inputTextID = inputText.id;
     inputText.setAttribute("placeholder", "Search");
     //inputText.setAttribute("value", "");
     
@@ -196,18 +199,21 @@ function createSearchPref(number, studentList){
     let priorityText = currentNumber + ". Priority";
     let label = document.createElement("label");
     label.innerText = priorityText;
-    label.setAttribute("for", currentNumber + "prio");  
+    label.setAttribute("for", inputText.id);  
 
-    prefDiv.append(label);
-    prefDiv.append(inputText);
+    let hey = document.getElementById("prefDiv" + currentNumber);
+
+    hey.append(label);
+    hey.append(inputText);
     makeBreaks(inputText, 1);
 
-    let test = document.getElementById(inputTextID);
-
-    test.onkeyup = SearchField(inputTextID,'myUL');
+    let test = document.getElementById(currentNumber + "prio");
+    console.log(test);
     
+    test.onkeyup = SearchField(currentNumber + "prio", "myUL");
+    prefDiv.append(test);
 
-    prefDiv.addEventListener("load", createDynamicList());
+    
   }
 
 }
