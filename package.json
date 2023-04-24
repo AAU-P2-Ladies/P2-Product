@@ -5,7 +5,7 @@
   "main": "script.js",
   "live": "nodemon server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node server.js"
   },
   "repository": {
@@ -26,5 +26,8 @@
     "express-session": "^1.17.3",
     "livereload": "^0.9.3",
     "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }
