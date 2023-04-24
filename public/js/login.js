@@ -35,150 +35,158 @@ let button = loginButton.addEventListener("click", (e) => {
 
     } else {
 
-      /**
-       * Creates <option>s in <select> for Modal
-       */
-      let classesSelect = document.getElementById("classesSelect");
-      classesSelect.innerHTML = "";
+      if (data.isCoordinator == 1) {
 
-      if (data.classes != 0) {
-
-        document.getElementById("exampleModalLabel").innerText = 'Please select class or enter keycode';
-        document.getElementById("classesDiv").style.display = "block";
-
-        let element = document.createElement("option");
-        element.textContent = '- select class -';
-        element.disabled = true;
-        element.selected = true;
-        
-        classesSelect.appendChild(element);
-
-        for(var i = 0; i < data.classes.length; i++) {
-
-          let opt = data.classes[i]["class"];
-          let el = document.createElement("option");
-  
-          el.textContent = opt;
-          el.value = opt;
-          
-          classesSelect.appendChild(el);
-  
-        }
+        location.href = './coordinator_start';
 
       } else {
 
-        document.getElementById("exampleModalLabel").innerText = 'Please enter keycode';
-        document.getElementById("classesDiv").style.display = "none";
+        /**
+         * Creates <option>s in <select> for Modal
+         */
+        let classesSelect = document.getElementById("classesSelect");
+        classesSelect.innerHTML = "";
+
+        if (data.classes != 0) {
+
+          document.getElementById("exampleModalLabel").innerText = 'Please select class or enter keycode';
+          document.getElementById("classesDiv").style.display = "block";
+
+          let element = document.createElement("option");
+          element.textContent = '- select class -';
+          element.disabled = true;
+          element.selected = true;
+          
+          classesSelect.appendChild(element);
+
+          for(var i = 0; i < data.classes.length; i++) {
+
+            let opt = data.classes[i]["class"];
+            let el = document.createElement("option");
+    
+            el.textContent = opt;
+            el.value = opt;
+            
+            classesSelect.appendChild(el);
+    
+          }
+
+        } else {
+
+          document.getElementById("exampleModalLabel").innerText = 'Please enter keycode';
+          document.getElementById("classesDiv").style.display = "none";
+
+        }
+
+        /**
+         * Shows Modal for user
+         */
+        let myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        myModal.show();
+
+        /**
+         * When user selects an <option> in <select> in Modal
+         */
+        classesSelect.addEventListener("change", (e) => {
+
+          fetch('./login', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: loginUsername.value,
+                password: loginPassword.value,
+                class: classesSelect.value
+            }),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+      
+            console.log(data);
+      
+            if (data.error && !data.username) {
+      
+              alert("Invalid Username or Password"); 
+      
+            } else if (data.error && !data.password) {
+      
+              alert("Invalid Password"); 
+      
+            } else if (data.error && !data.class) {
+
+              alert("Invalid Class"); 
+      
+            } else {
+
+              location.href = './student_start';
+
+            }
+      
+          })
+          .catch((err) => {
+      
+            console.error(err);
+      
+            alert("Something went wrong!"); 
+      
+          });
+
+        });
+
+        /**
+         * When user clicks the 'Login'-button in Modal
+         */
+        loginButton2.addEventListener("click", (e) => {
+
+          fetch('./login', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: loginUsername.value,
+                password: loginPassword.value,
+                keycode: loginKeycode.value
+            }),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+      
+            console.log(data);
+      
+            if (data.error && !data.username) {
+      
+              alert("Invalid Username or Password"); 
+      
+            } else if (data.error && !data.password) {
+      
+              alert("Invalid Password"); 
+      
+            } else if (data.error && !data.keycode) {
+
+              alert("Invalid Keycode"); 
+      
+            } else {
+
+              location.href = './student_start';
+
+            }
+      
+          })
+          .catch((err) => {
+      
+            console.error(err);
+      
+            alert("Something went wrong!"); 
+      
+          });
+
+        });
 
       }
-
-      /**
-       * Shows Modal for user
-       */
-      let myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-      myModal.show();
-
-      /**
-       * When user selects an <option> in <select> in Modal
-       */
-      classesSelect.addEventListener("change", (e) => {
-
-        fetch('./login', {
-          method: "POST",
-          headers: {
-              Accept: "application/json, text/plain, */*",
-                  "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-              username: loginUsername.value,
-              password: loginPassword.value,
-              class: classesSelect.value
-          }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-    
-          console.log(data);
-    
-          if (data.error && !data.username) {
-    
-            alert("Invalid Username or Password"); 
-    
-          } else if (data.error && !data.password) {
-    
-            alert("Invalid Password"); 
-    
-          } else if (data.error && !data.class) {
-
-            alert("Invalid Class"); 
-    
-          } else {
-
-            location.href = './';
-
-          }
-    
-        })
-        .catch((err) => {
-    
-          console.error(err);
-    
-          alert("Something went wrong!"); 
-    
-        });
-
-      });
-
-      /**
-       * When user clicks the 'Login'-button in Modal
-       */
-      loginButton2.addEventListener("click", (e) => {
-
-        fetch('./login', {
-          method: "POST",
-          headers: {
-              Accept: "application/json, text/plain, */*",
-                  "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-              username: loginUsername.value,
-              password: loginPassword.value,
-              keycode: loginKeycode.value
-          }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-    
-          console.log(data);
-    
-          if (data.error && !data.username) {
-    
-            alert("Invalid Username or Password"); 
-    
-          } else if (data.error && !data.password) {
-    
-            alert("Invalid Password"); 
-    
-          } else if (data.error && !data.keycode) {
-
-            alert("Invalid Keycode"); 
-    
-          } else {
-
-            location.href = './';
-
-          }
-    
-        })
-        .catch((err) => {
-    
-          console.error(err);
-    
-          alert("Something went wrong!"); 
-    
-        });
-
-      });
 
     }
 

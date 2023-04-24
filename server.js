@@ -127,7 +127,7 @@ app.post('/login', (req, res) => {
                                 // console.log(m.username);
                                 console.log(session.class);
                                 
-                                res.json({ error: false, username: true, password: true, class: true });
+                                res.json({ error: false, username: true, password: true, class: true, isCoordinator: user.isCoordinator });
 
                                 return true;
 
@@ -208,7 +208,7 @@ app.post('/login', (req, res) => {
                 
                         });
                         
-                        res.json({ error: false, username: true, password: true, keycode: true });
+                        res.json({ error: false, username: true, password: true, keycode: true, isCoordinator: user.isCoordinator });
 
                         return true;
 
@@ -247,6 +247,13 @@ app.post('/checkUserLogin',(req, res) => {
         if (user.username == req.body.username) {
 
             if (user.password == req.body.password) {
+
+                if (user.isCoordinator == 1) {
+
+                    session = req.session;
+                    session.userid = req.body.username;
+
+                }
 
                 res.json({ error: false, username: true, password: true, classes: user.classes, isCoordinator: user.isCoordinator });
 
@@ -416,22 +423,23 @@ app.get('/logout', (req,res) => {
 });
 
 
-app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
+app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) => {
 
     
     //console.log(req.body);
     //console.log(req.files);
 
+    let groupName = ""
     let studentList = [];
     let topicsList = [];
 
-    console.log(req.files);
     for (let index = 0; index < req.files.length; index++) {
 
         if (req.files[index].fieldname == "studentListInput" && 
             isJSON("uploads/" + req.files[index].filename)) {
 
             studentList = getJSONFile("uploads/" + req.files[index].filename);
+
 
         }
 
@@ -454,8 +462,43 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
         }
 
     }
+
+    let checkGroupName = true;
+    let checkStudentFile = true;
+    let checkTopicsFile = true;
     
-    console.log(req.body.nameGroupFormationInput);
+    if (req.body.nameGroupFormationInput == "") {
+
+        checkGroupName = false;
+
+    }  
+
+    if (!studentList) {
+
+        checkStudentFile = false;
+
+    } 
+    
+    if (!topicsList) {
+        
+        checkTopicsFile = false;
+
+    } 
+    
+    if (checkGroupName && checkStudentFile && checkTopicsFile) {
+        
+        studentObjectMaker(studentList.name, req.body.nameGroupFormationInput);
+        res.json({error: false, groupName: true, studentFile: true, topicsFile: true})
+        
+    } else {
+
+        res.json({error: true, groupName: checkGroupName, studentFile: checkStudentFile, topicsFile: checkTopicsFile})
+            
+    }
+    
+
+    
+
     //console.log(topicsList);
 
     //let students = getJSONFile("uploads/" + req.file[0].studentListInput)
@@ -524,11 +567,17 @@ function isJSON(file) {
     var file = fs.readFileSync(filepath, 'utf8');
 
     try {
+
         JSON.parse(file);
+    
     } catch (e) {
+    
         return false;
+    
     }
+    
     return true;
+
 }
 
 function makeKeycode(length) {
@@ -565,7 +614,7 @@ async function studentObjectMaker(users,semester){
     
     }
 
-    fs.writeFile("./database/"+semester+"/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
+    fs.writeFile("./database/" + semester + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
 
         if (err) {
 

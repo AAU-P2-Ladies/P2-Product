@@ -13,9 +13,6 @@ let myInput = document.getElementById("myInput");
 //document.getElementById("BlockedUL").onclick=submitForm;
 
 
-
-
-
 let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
 
 
@@ -93,9 +90,40 @@ if(next_btn) {
             })
             .then((response) => response.json())
             .then((data) => {
+                
+                if(data.error) {
 
-                console.log(data);
-                window.location.href='./coordinator_config';
+                    let alertText = "Mistake in- or Missing fields; ";
+
+                    if(!data.groupName) {
+
+                        alertText += "GroupName, ";
+
+                    }
+                    
+                    if(!data.studentFile) {
+
+                        alertText += "StudentInput, "
+
+                    }
+
+                    if(!data.topicsInput) {
+
+                        alertText += "TopicsInput, ";
+
+                    }
+
+                    alertText.substring(0, alertText.length() - 2);
+
+                    alert(alertText);
+                    
+                    window.location.reload();
+                
+                } else {
+
+                    window.location.href='./coordinator_config';
+                    
+                }
 
             })
             .catch((err) => ("Error occured", err));
