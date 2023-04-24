@@ -1,6 +1,9 @@
 let topics = ["--","klima", "miljø", "energi", "simons mor"];
 let students = ["--","Sina1", "Sina2", "Signe", "Allan", "Alline"];
-    
+let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders",
+                "Adomas","Billy","Bob","Calvin","Cim","Charlotete",
+                "Cello","Cimmy","Clara","Claire","Christina","Cindy"];
+
 const list = document.getElementById("StudentProfile");
 
 function createDropDown (id, array){
@@ -114,33 +117,28 @@ function searchPrefFunction(e){
   nameSearch(theSearchedName);
 }
 
+let prefForm = document.getElementById("prefForm");
+
+function createSearchPref(number, studentList){
+  let inputText = document.createElement("")
+
+}
+
+createSearchPref(3, nameArray);
+
 let override_textbox = document.getElementById("override");
 makeBreaks(override_textbox, 2);
 
 /*
-function SearchField(myInputID,myULID) {
-  if(window.event.keyCode=='13'){
-  // Declare variables
-  var input, filter, ul, li, a, i, txtValue;
-  input = document.getElementById(myInputID); // Her @Skjodt
-  filter = input.value.toUpperCase();
-  ul = document.getElementById(myULID);
-  li = ul.getElementsByTagName('li');
-  blockedUL.style.display = "block";
-  //Måske optimer koden, så den kun tager 'input' ind som parameter
-  let count = 0;
-  // Loop through all list items, and hide those who don't match the search query
-  for (i = 0; li.length > i;i++) {
-    a = li[i].getElementsByTagName("a")[0];
-    txtValue = a.textContent || a.innerText;
-    if ((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10) {
-      li[i].style.display = "";
-      count++;
-    } else {
-      li[i].style.display = "none";
-    }
-  }
-  } 
+<label> eller placeholder
+<input type="text" id="namePreference" name="namePreference" placeholder="Search Name"><br>
 
-}
+
+
+<button id="searchPref" onclick="searchPrefFunction(event)">Search</button>
+
+
+søgefelt for pref for hvert anatal coordinator indtaster.
+skriv præferencerne ud
+
 */
