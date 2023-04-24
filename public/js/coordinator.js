@@ -12,11 +12,36 @@ let myInput = document.getElementById("myInput");
 //let ULItems = blockedUL.getElementsByTagName("li");
 //document.getElementById("BlockedUL").onclick=submitForm;
 
+var nameArray = [];
 
+nameArray = await fetch('./search', {
+    method: "POST",
+    headers: {
+        Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        className: 'SW2',
+        name: '',
+    }),
+})
+.then((response) => response.json())
+.then((data) => {
 
+    return data.students;
 
+})
+.catch((err) => {
 
-let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
+  console.error(err);
+
+  alert("Something went wrong!"); 
+
+});
+
+console.log(nameArray);
+nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
+let blocked = [["Nadia","Tania"],["Tina","Thomas"],["Adomas","Trine"],["Simon","Tobias"],["Carmen","Daniel"],["Jonas","Nicolaj"],["Cathrine","Kamilla"],["Simon","Allan"],["Andreas","Adomas"],["Sina","Merete"]];
 
 
 function createDynamicList(){   
@@ -147,6 +172,7 @@ function SearchField(myInputID,myULID) {
 if(window.location.pathname == "/coordinator_config"){
   
 document.getElementById("proeveDiv").addEventListener("load",createDynamicList())
+document.getElementById("MyblockedTable").addEventListener("load",createDynamicList2())
 
   document.getElementById("myUL").addEventListener("click", function(e) {
     if (e.target && e.target.matches("li")) {
@@ -163,4 +189,47 @@ document.getElementById("BlockedUL").addEventListener("click", function(e) {
     }
   });
   
+}
+function addPrefFunction(e){
+    e.preventDefault();
+  
+    console.log("bib");
+    modal.style.display = "block";
+
+
+    onclick="myFunction(event)"
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+
+function createDynamicList2(){   
+    let myInput = document.getElementById("myInput")
+    let BlockedInput = document.getElementById("BlockedInput")
+    let dyn3 = document.createElement("tr")
+    let table = document.getElementById("MyBlockedTable")
+    for (let i in blocked.length)
+    {
+        let td = document.createElement('td')
+        td.innerText = blocked[i][0]
+        let td2 = document.createElement('td')
+        td2.innerText = blocked[i][1]
+        let td3 = document.createElement('input')
+        td3.type = "checkbox";
+        td3.id = "blocked_pairs";
+        td3.name = "blocked_pairs";
+        td3.checked = checked;
+        console.log(td)
+        dyn3.appendChild(td)
+        console.log(dyn3)
+    }
+    table.appendChild(dyn3)
 }

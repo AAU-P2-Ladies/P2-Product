@@ -306,16 +306,28 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
     }
     
     console.log(req.body.nameGroupFormationInput);
-    //console.log(topicsList);
 
-    //let students = getJSONFile("uploads/" + req.file[0].studentListInput)
+});
 
-    
-    
+app.post('/search', (req, res) => {
 
-    //res.render('pages/coordinator_start');
+    let students = getJSONFile('SW2/students.json');
+    let studentsArray = [];
 
-})
+    students.map(({navn, email}) => navn);
+
+    for (let i in students) {
+
+        studentsArray.push(students[i]['navn']);
+
+    }
+
+    res.json({students: studentsArray});
+
+    return res.end();
+
+});
+
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
