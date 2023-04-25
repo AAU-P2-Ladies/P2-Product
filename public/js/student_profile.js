@@ -66,11 +66,8 @@ let span = document.getElementsByClassName("close")[0];
 
 function addPrefFunction(e){
     e.preventDefault();
-  
-    console.log("bib");
+
     modal.style.display = "block";
-
-
     onclick="myFunction(event)"
 }
 
@@ -84,6 +81,7 @@ window.onclick = function(event) {
   }
 }
 
+/*
 function fufufu(name){
 
   console.log("yooyoyoy" + name);
@@ -116,9 +114,9 @@ function searchPrefFunction(e){
   console.log(theSearchedName);
   nameSearch(theSearchedName);
 }
+*/
 
-let modalDiv = document.getElementById("modalContent");
-createDivs(3);
+
 
 function createDivs(numberOfDivs){
 
@@ -126,65 +124,69 @@ function createDivs(numberOfDivs){
     let divElement = document.createElement("div");
     divElement.id = "prefDiv" + div;
     modalDiv.append(divElement);
-    divElement.addEventListener("load", createDynamicList(divElement.id));
+    divElement.addEventListener("load", createDynamicList(divElement.id, div));
   }
   
 }
 
 function SearchField(myInputID, myULID) {
-  console.log("heeeeeeeeeeeeeeeeej");
-  console.log(myInputID);
-  var input, filter, ul, li, i, txtValue;
-      input = document.getElementById(myInputID); // Her @Skjodt
-      console.log(input);
-      console.log("yoy");
-      filter = input.value.toUpperCase();
-      console.log(filter);
-      ul = document.getElementById(myULID);
-      console.log(ul);
-      li = ul.getElementsByTagName('li');
+  //console.log("heeeeeeeeeeeeeeeeej");
+  //console.log(myInputID);
+  let input, filter, ul, li, i, txtValue;
+  input = document.getElementById(myInputID); // Her @Skjodt
+  //console.log(input);
+  //console.log("yoy");
+  filter = input.value.toUpperCase();
+  console.log(filter + "yo");
+  ul = document.getElementById(myULID);
+  //console.log(ul);
+  li = ul.getElementsByTagName('li');
 
   if(window.event.keyCode=='13'){
-      // Declare variables    
+    // Declare variables    
       
-      ul.hidden = "";
-      //Måske optimer koden, så den kun tager 'input' ind som parameter
-      let count = 0;
-      // Loop through all list items, and hide those who don't match the search query
-      for (i = 0; li.length > i;i++) {
-      txtValue = li[i].textContent || li[i].innerText;
-      console.log(txtValue)
+    ul.hidden = "";
+    //Måske optimer koden, så den kun tager 'input' ind som parameter
+    let count = 0;
+    // Loop through all list items, and hide those who don't match the search query
+    for (let i = 0; li.length > i; i++) {
+      console.log(i);
+      txtValue = li[i].innerText;
+      //console.log(txtValue)
       if ((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10) {
-          li[i].style.display = "";
-          count++;
+        console.log(count + "vist");
+        li[i].style.display = "block";
+        count++;
       } else {
+          console.log(count + "IKKE");
           li[i].style.display = "none";
       }
-      }
-  } else if (input.value == "") {
+    }
+    
+  } /*else if (input.value == "") {
       ul.hidden = "hidden";
   }
-  
+  */
 }
 
 function createDynamicList(id){   
-  let dynalist = document.getElementById(id)
-  let dyn = document.createElement("ul")
+  let divForList = document.getElementById(id);
+  let list = document.createElement("ul");
   
   for (let i in nameArray)
   {
-      let li = document.createElement('li')
-      li.innerText = nameArray[i]
-      li.className = "item"
-      dyn.appendChild(li)
+      let li = document.createElement('li');
+      li.innerText = nameArray[i];
+      li.className = "item";
+      list.appendChild(li);
   }
 
-  dyn.hidden = "hidden"
-  dyn.id = "myUL" 
-  dynalist.appendChild(dyn)
+  list.hidden = "";
+  list.id = "myUL" + div; 
+  divForList.append(list);
 }
 
-function createSearchPref(number, studentList){
+function createSearchPref(number){
 
   for(let currentNumber = 1; currentNumber <= number; currentNumber++){
 
@@ -202,23 +204,35 @@ function createSearchPref(number, studentList){
     label.setAttribute("for", inputText.id);  
 
     let hey = document.getElementById("prefDiv" + currentNumber);
-
-    hey.append(label);
-    hey.append(inputText);
+    //console.log(hey);
+    hey.prepend(inputText);
+    hey.prepend(label);
     makeBreaks(inputText, 1);
 
-    let test = document.getElementById(currentNumber + "prio");
-    console.log(test);
-    
-    test.onkeyup = SearchField(currentNumber + "prio", "myUL");
-    prefDiv.append(test);
-
-    
+    //let test = document.getElementById(inputText.id);
+    //console.log(test);
+    //let searchId = currentNumber + "prio";
+    //test.onkeyup = SearchField(searchId, "myUL");
+    //console.log(test);
+    //hey.append(test);
+  
   }
 
 }
 
-createSearchPref(3, nameArray);
+let modalDiv = document.getElementById("modalContent");
+
+createDivs(3);
+
+createSearchPref(3);
+
+for(let i = 1; i <= 3; i++){
+  let test = document.getElementById(i + "prio");
+  test.addEventListener("keyup", SearchField(test.id, "myUL" + i));
+}
+
+
+
 
 
 let override_textbox = document.getElementById("override");
