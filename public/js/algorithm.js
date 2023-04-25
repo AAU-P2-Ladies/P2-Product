@@ -396,6 +396,8 @@ function findMinDiversity(students, groupSize){
 //It loops through the algorithm until max seconds has been reached
 //Meanwhile, it compares each result and in the end returns the one with the highest diversity and satisfaction percentage
 function algorithmCalls(students, groupSize, maxSeconds){
+    helper.indexStudents(students);
+    let matrix = preferenceMatrix(students);
     let minDiversity = findMinDiversity(students, groupSize)
     let time = Date.now();
     let bestAvgPref = 0;
@@ -407,8 +409,6 @@ function algorithmCalls(students, groupSize, maxSeconds){
             student.groupNr = -1;
         }
         helper.shuffleArray(students);
-        helper.indexStudents(students);
-        let matrix = preferenceMatrix(students);
         let groups = prefGroups(students, matrix, groupSize);
         groups = masterAlgorithm(students, groups, minDiversity, matrix, maxIterations)
         //Loops through the groups and finds their total preference percentage and diversity percentage
@@ -439,7 +439,7 @@ function algorithmCalls(students, groupSize, maxSeconds){
 * Only purpose is to randomize the students preference to eachother
 * Can be deleted
 */
-/*
+
 function getRandomInts(max,block,numbers){
     let array = []
     while (array.length < numbers){
@@ -460,6 +460,7 @@ function getRandomInts(max,block,numbers){
 
 
 //Initilize the student arrays with StudentNum amount of students 
+
 /*
 let students = [];
 for (let s = 0;s<StudentNum;s++) {
@@ -475,7 +476,7 @@ console.log("Trying for 15 sec")
 algorithmCalls(students, groupSize, 15)
 console.log("Trying for 30 sec")
 algorithmCalls(students, groupSize, 30)
-
+*/
 /*
 
 //Calculate whether the group member size adds up (groups can be made
@@ -533,3 +534,5 @@ for(let i in groups){
 console.log(totalPercent/Math.ceil(StudentNum/groupSize))
 console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
 */
+
+module.exports = {Student, Group, preferenceMatrix}
