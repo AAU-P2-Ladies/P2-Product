@@ -40,14 +40,14 @@ for (let i = 0; i < numStudents; i++) {
 }
 
 //Loops through all rows in the matrix
-row_loop:
+rowLoop:
 for (let row = 0; row < numStudents; row++) {
     //A students preference to theirselves is set to 0
     preferenceMatrix[row][row] = 0;
 
     //Loops through all colums starting from the
     //calculations that have not been calculated yet 
-    column_loop:
+    columnLoop:
     for (let col = row+1; col < numStudents; col++) {
         let prefScore = 0;
         //Calculate the prefScore, consisting of: 
@@ -61,7 +61,7 @@ for (let row = 0; row < numStudents; row++) {
  */
 
 
-        let = commonTopics = true
+        let commonTopics = true
         //Loops through student A's topics and checking for a match with student B.
         //If a match occur, they have at least 1 common topic and the loop stops
         if(students[row].topics.length > 0 && students[col].topics.length > 0){
@@ -330,7 +330,7 @@ function findMinDiversity(students, groupSize){
     if(students.length % groupSize != 0){
         smallerGroups = groupSize - (students.length % groupSize)
      }
-    //small_group_size = ceiling(smallerGroups/groupNumber)
+    //smallGroupSize = ceiling(smallerGroups/groupNumber)
         while(smallerGroups > groupNumber){
             groupSize -= Math.floor(smallerGroups/groupNumber)
             smallerGroups = groupSize - (students.length % groupSize)
@@ -344,19 +344,19 @@ function findMinDiversity(students, groupSize){
     //The first student in the first group, since order does not matter
     groups[0].students[0] = students[0];
     //Looping through each student to put them into groups, labelling loops to be able to break loops properly
-    student_loop: for(let student = 1; student < students.length; student++){
+    studentLoop: for(let student = 1; student < students.length; student++){
         //Looping through the groups to compare to current student 
-        group_loop: for(let i in groups){
+        groupLoop: for(let i in groups){
             if(groups[i].students.length == 0){
                 groups[i].students.push(students[student]);
-                continue student_loop;
+                continue studentLoop;
             }
             if(groups[i].isFull == true){
                 overlap[i] = -1;
                 continue;
             }
             overlap[i] = 0;
-            compare_loop: for(let j in groups[i].students){
+            compareLoop: for(let j in groups[i].students){
                 //Calculate the overlap between current student and group until a space is empty
                 overlap[i] += helper.roleCheck(students[student], groups[i].students[j])
                     if(groups[i].students.length < j){
@@ -365,7 +365,7 @@ function findMinDiversity(students, groupSize){
                         //Else, break so that the next loop is checked
                         if(overlap[i] == 0){
                             groups[i].push(students[student]);
-                            break group_loop;
+                            break groupLoop;
                         }
                         break;
                     }

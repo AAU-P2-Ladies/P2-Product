@@ -22,7 +22,7 @@ function findPrefSum (student1, student2, matrix) {
 
 
 //This function checks two students preference for each other, if not blocked and no preference for each other it sets it to number of students divided by 2
-function prefCheck (student1, student2, student_number) {
+function prefCheck (student1, student2, studentNumber) {
     let preferenceIndex = student1.prefs.indexOf(student2.index);
     if (preferenceIndex >= 0) {
         return preferenceIndex + 1;
@@ -30,9 +30,9 @@ function prefCheck (student1, student2, student_number) {
     
     let blockIndex = student1.blocks.indexOf(student2.index);
     if (blockIndex >= 0) {
-        return student_number
+        return studentNumber
     } else {
-        return Math.ceil((student_number)/2)
+        return Math.ceil((studentNumber)/2)
     }
 }
 
@@ -123,11 +123,11 @@ function checkRoleDiversity(students, roleNumber){
 //This function takes a student and a group as input
 //It iterates through the group and sums up the preference numbers between student and 
 function groupPrefAvg(student, group, matrix){
-    pref_sum = 0;
-    for (let other_student of group.students){
-        pref_sum += findPrefSum(student, other_student, matrix);
+    let prefSum = 0;
+    for (let otherStudent of group.students){
+        prefSum += findPrefSum(student, otherStudent, matrix);
     }
-    return pref_sum/group.students.length;
+    return prefSum/group.students.length;
 }
 
 
