@@ -142,7 +142,7 @@ function SearchField(myInputID, myULID) {
   //console.log(ul);
   li = ul.getElementsByTagName('li');
 
-  if(window.event.keyCode=='13'){
+  
     // Declare variables    
       
     ul.hidden = "";
@@ -160,13 +160,13 @@ function SearchField(myInputID, myULID) {
       } else {
           console.log(count + "IKKE");
           li[i].style.display = "none";
-      }
-    }
+      }}
+  
     
-  } /*else if (input.value == "") {
+  if (input.value == "") {
       ul.hidden = "hidden";
   }
-  */
+  
 }
 
 function createDynamicList(id){   
@@ -196,12 +196,13 @@ function createSearchPref(number){
     //let inputTextID = inputText.id;
     inputText.setAttribute("placeholder", "Search");
     //inputText.setAttribute("value", "");
-    
+    inputText.setAttribute("onkeyup","SearchField('"+inputText.id+"','myUL"+currentNumber+"')") 
   
     let priorityText = currentNumber + ". Priority";
     let label = document.createElement("label");
     label.innerText = priorityText;
-    label.setAttribute("for", inputText.id);  
+    label.setAttribute("for", inputText.id); 
+    
 
     let hey = document.getElementById("prefDiv" + currentNumber);
     //console.log(hey);
