@@ -21,9 +21,40 @@
         <button type="button" id="new_session_btn">New group formation</button>
         <button type="button" id="edit_btn">Edit current group formation</button>
         <button type="button" id="view_btn">View groups from current group formation</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="make_stud_login">Get keycodes for Students</button>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formKeycodes" enctype="multipart/form-data" method="post" action="./coordinator_studentId">
+              <div class="mb-3">
+                <label for="student-amount" class="col-form-label">Student Amount:</label>
+                <input type="number" min="0" max class="form-control" name="studentAmount" id="student-amount">
+              </div>
+              <div class="mb-3">
+                <label for="group-name" class="col-form-label">Group name:</label>
+                <input type="text" class="form-control" name="groupName" id="group-name">
+              </div>
+              <div>
+                <input type="file" id="student_list" name="file">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="submit-class" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('formKeycodes').submit();event.preventDefault();">Get keycodes</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <%- include('../partials/footer'); %>
-  
+
   </body>
 </html>

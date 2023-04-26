@@ -41,7 +41,7 @@ function getRandomInts(max,block,numbers){
   
 //Define values that should be given by the website
 let min = 0;
-let StudentNum = 150;
+let StudentNum = 50;
 let group_size = 7;
 
 //Initilize the student arrays with StudentNum amount of students 
@@ -91,7 +91,7 @@ for (let row = 0; row < numStudents; row++) {
     //Loops through all colums starting from the
     //calculations that have not been calculated yet 
     column_loop:
-    for (let col = row; col < numStudents; col++) {
+    for (let col = row+1; col < numStudents; col++) {
         let pref_score = 0;
         //Calculate the pref_score, consisting of: 
         //  student A's preference to student B  and 

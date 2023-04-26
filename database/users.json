@@ -1,0 +1,40 @@
+[
+    {
+        "username": "test",
+        "password": "test",
+        "classes": [],
+        "isCoordinator": 1
+    },
+    {
+        "username": "456",
+        "password": "456",
+        "classes": [
+            {
+                "class": "SW2"
+            },
+            {
+                "class": "DAT2"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "789",
+        "password": "789",
+        "classes": [],
+        "isCoordinator": 0
+    },
+    {
+        "username": "123",
+        "password": "123",
+        "classes": [
+            {
+                "class": "SW2"
+            },
+            {
+                "class": "DAT2"
+            }
+        ],
+        "isCoordinator": 0
+    }
+]

@@ -1,49 +1,223 @@
 const loginForm = document.getElementById("login-form");
 const loginUsername = document.getElementById("login-username");
 const loginPassword = document.getElementById("login-password");
-const loginButton = document.getElementById("login-submit");
+const loginButton = document.getElementById("login-modal");
+const loginButton2 = document.getElementById("login-submit");
+const loginKeycode = document.getElementById("keycode");
 
 let button = loginButton.addEventListener("click", (e) => {
 
-  e.preventDefault();
+  e.preventDefault();  
 
-    fetch('./login', {
-        method: "POST",
-        headers: {
-            Accept: "application/json, text/plain, */*",
-                "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            username: loginUsername.value,
-            password: loginPassword.value,
-        }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
+  fetch('./checkUserLogin', {
+    method: "POST",
+    headers: {
+        Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        username: loginUsername.value,
+        password: loginPassword.value,
+    }),
+  })
+  .then((response) => response.json())
+  .then((data) => {
 
-      console.log(data);
+    console.log(data);
 
-      if (data.error && !data.username) {
+    if (data.error && !data.username) {
 
-        alert("Invalid Username or Password"); 
+      alert("Invalid Username or Password"); 
 
-      } else if (data.error && !data.password) {
+    } else if (data.error && !data.password) {
 
-        alert("Invalid Password"); 
+      alert("Invalid Password"); 
+
+    } else {
+
+      if (data.isCoordinator == 1) {
+
+        location.href = './coordinator_start';
 
       } else {
 
-        location.href = './';
+        /**
+         * Creates <option>s in <select> for Modal
+         */
+        let classesSelect = document.getElementById("classesSelect");
+        classesSelect.innerHTML = "";
+
+        if (data.classes != 0) {
+
+          document.getElementById("exampleModalLabel").innerText = 'Please select class or enter keycode';
+          document.getElementById("classesDiv").style.display = "block";
+
+          let element = document.createElement("option");
+          element.textContent = '- select class -';
+          element.disabled = true;
+          element.selected = true;
+          
+          classesSelect.appendChild(element);
+
+          for(var i = 0; i < data.classes.length; i++) {
+
+            let opt = data.classes[i]["class"];
+            let el = document.createElement("option");
+    
+            el.textContent = opt;
+            el.value = opt;
+            
+            classesSelect.appendChild(el);
+    
+          }
+
+        } else {
+
+          document.getElementById("exampleModalLabel").innerText = 'Please enter keycode';
+          document.getElementById("classesDiv").style.display = "none";
+
+        }
+
+        /**
+         * Shows Modal for user
+         */
+        let myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        myModal.show();
+
+        /**
+         * When user selects an <option> in <select> in Modal
+         */
+        classesSelect.addEventListener("change", (e) => {
+
+          fetch('./login', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: loginUsername.value,
+                password: loginPassword.value,
+                class: classesSelect.value
+            }),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+      
+            console.log(data);
+      
+            if (data.error && !data.username) {
+      
+              alert("Invalid Username or Password"); 
+      
+            } else if (data.error && !data.password) {
+      
+              alert("Invalid Password"); 
+      
+            } else if (data.error && !data.class) {
+
+              alert("Invalid Class"); 
+      
+            } else {
+
+              location.href = './student_start';
+
+            }
+      
+          })
+          .catch((err) => {
+      
+            console.error(err);
+      
+            alert("Something went wrong!"); 
+      
+          });
+
+        });
+
+        /**
+         * When user clicks the 'Login'-button in Modal
+         */
+        loginButton2.addEventListener("click", (e) => {
+
+          fetch('./login', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: loginUsername.value,
+                password: loginPassword.value,
+                keycode: loginKeycode.value
+            }),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+      
+            console.log(data);
+      
+            if (data.error && !data.username) {
+      
+              alert("Invalid Username or Password"); 
+      
+            } else if (data.error && !data.password) {
+      
+              alert("Invalid Password"); 
+      
+            } else if (data.error && !data.keycode) {
+
+              alert("Invalid Keycode"); 
+      
+            } else {
+
+              location.href = './student_start';
+
+            }
+      
+          })
+          .catch((err) => {
+      
+            console.error(err);
+      
+            alert("Something went wrong!"); 
+      
+          });
+
+        });
 
       }
 
-    })
-    .catch((err) => {
+    }
 
-      console.error(err);
+  })
+  .catch((err) => {
 
-      alert("Something went wrong!"); 
+    console.error(err);
 
-    });
+    alert("Something went wrong!"); 
+
+  });
+
+  /*
+
+  const exampleModal = document.getElementById('exampleModal')
+  if (exampleModal) {
+      exampleModal.addEventListener('show.bs.modal', event => {
+      // Button that triggered the modal
+      const button = event.relatedTarget
+
+      // Update the modal's content.
+      const modalTitle = exampleModal.querySelector('.modal-title')
+      const modalBodyInput = exampleModal.querySelector('.modal-body input')
+      })
+  }
+
+  */
 
 });
+
+/* "groups": [
+    {"class": "SW2", "keycode": "Merete"}, 
+    {"class": "DAT2", "keycode": "Merete2"}
+],*/
