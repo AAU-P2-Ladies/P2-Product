@@ -461,7 +461,7 @@ function getRandomInts(max,block,numbers){
 
 //Initilize the student arrays with StudentNum amount of students 
 
-/*
+
 let students = [];
 for (let s = 0;s<StudentNum;s++) {
     let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
@@ -476,7 +476,7 @@ console.log("Trying for 15 sec")
 algorithmCalls(students, groupSize, 15)
 console.log("Trying for 30 sec")
 algorithmCalls(students, groupSize, 30)
-*/
+
 /*
 
 //Calculate whether the group member size adds up (groups can be made
