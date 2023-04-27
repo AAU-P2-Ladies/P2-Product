@@ -7,6 +7,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 var fs = require('fs'), json;
+var session;
 
 const app = express();
 const port = 3080;
@@ -22,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const oneDay = 1000 * 60 * 60 * 24;
 
-//MULTER CONFIG: to get file photos to temp server storage
+//MULTER CONFIG: to get file to temp server storage
 const multerConfig = {
     
     storage: multer.diskStorage({
@@ -47,10 +48,6 @@ const multerConfig = {
          next(null, true)
     }
 };
-
-
-
-var session;
 
 app.use(sessions({
 
@@ -90,43 +87,49 @@ app.get('/', (req, res) => {
 
 })
 
- 
+/**
+ * Server listens to a post to '/login'
+ * Takes Request (req) and Response (res) into account for the function
+ */
 app.post('/login', (req, res) => {
 
-    //console.log(req.body);
-
+    // Loads the 'users.json'-file as 'users'
     let users = getJSONFile('users.json');
     
+    // Searches through the 'users', where 'checkUser' is a boolean
     let checkUser = users.some((user) => {
 
-        // console.log(user);
-
+        // Checks if the username inputted by the user matches the users in the database...
         if (user.username == req.body.username) {
 
+            // ... checks if the password is correct 
             if (user.password == req.body.password) {
 
+                // Checks if 'class' is part of the Request sent by the user.
                 if (req.body.class) {
 
+                    // Checks if the user has any classes attached to them.
                     if (user.classes.length == 0) {
 
+                        // Sends a JSON-response back, that the user is currently not a part of a class
                         res.json({ error: true, username: true, password: true, class: false });
 
                         return true;
 
                     } else {
 
+                        // Loops through all the users different classes that they are a part of, if any.
                         for (let index = 0; index < user.classes.length; index++) {
 
+                            // Checks if a class that the user is assigned to matches the inputted class.
                             if (user.classes[index]["class"] == req.body.class) {
 
+                                // Creates session for the user (now they are logged in)
                                 session = req.session;
                                 session.userid = req.body.username;
                                 session.class = req.body.class;
                                 
-                                // console.log(req.session);
-                                // console.log(m.username);
-                                console.log(session.class);
-                                
+                                // Sends a JSON-response back, telling that that there was no errors
                                 res.json({ error: false, username: true, password: true, class: true, isCoordinator: user.isCoordinator });
 
                                 return true;
@@ -135,25 +138,29 @@ app.post('/login', (req, res) => {
 
                         }
 
+                        // Sends a JSON-response back, that the user is currently not a part of a class
                         res.json({ error: true, username: true, password: true, class: false });
 
                         return true;
 
                     }
 
-                } else if (req.body.keycode) {
+                } else if (req.body.keycode) { // If the user has inputted a keycode instead of a class
 
+                    // Loads the 'keycodes.json'-file as 'keycodes'
                     let keycodes = getJSONFile('keycodes.json');
 
+                    // Sets 'keycode' and 'class1' has empty string
                     let keycode = "";
                     let class1 = "";
 
+                    // Loops through all the keycodes, if any.
                     for (let index = 0; index < keycodes.length; index++) {
 
+                        // Checks if the user has inputted a keycode that matches a class
                         if (keycodes[index]["keycode"] == req.body.keycode) {
 
-                            console.log('hej ' + req.body.keycode);
-
+                            // Assigns 'keycode' and 'class1' to their respective value
                             keycode = keycodes[index]["keycode"];
                             class1 = keycodes[index]["class"];
 
@@ -163,22 +170,28 @@ app.post('/login', (req, res) => {
 
                     }
 
+                    // If 'keycode' and 'class1' is empty...
                     if (keycode == "" && class1 == "") {
 
+                        // ... sends a JSON-response back, that the keycode is invalid 
                         res.json({ error: true, username: true, password: true, keycode: false });
 
                         return true;
 
-                    } else {
+                    } else { // Else...
 
+                        // ... log the user in to the inputted class
                         session = req.session;
                         session.userid = req.body.username;
                         session.class = class1;
 
+                        // Assigns 'duplicateClass' to 0
                         let duplicateClass = 0;
 
+                        // Loops through all the users different classes that they are a part of, if any.
                         for (let index = 0; index < user.classes.length; index++) {
 
+                            // Checks if the user is already part of the class with the inputted keycode
                             if (user.classes[index]["class"] == class1) {
 
                                 duplicateClass = 1;
@@ -188,26 +201,25 @@ app.post('/login', (req, res) => {
 
                         }
 
+                        // If the user is not part of the inputted class, then add the class to their user
                         if (duplicateClass == 0) {
 
                             user.classes.push({ class: class1 });
 
+                            // Update the users file, taking into account that the user is now part of the class
+                            fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
+
+                                if (err) {
+                    
+                                    console.error(err);
+                    
+                                } 
+                    
+                            });
+
                         }
                         
-                        // console.log(req.session);
-                        // console.log(m.username);
-                        console.log(user);
-
-                        fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
-
-                            if (err) {
-                
-                                console.error(err);
-                
-                            } 
-                
-                        });
-                        
+                        // Sends a JSON-response back that there was no errors and the user is now logged in
                         res.json({ error: false, username: true, password: true, keycode: true, isCoordinator: user.isCoordinator });
 
                         return true;
@@ -218,6 +230,7 @@ app.post('/login', (req, res) => {
 
             } else {
 
+                // Sends a JSON-response back that the inputted password is not correct
                 res.json({ error: true, username: true, password: false });
 
                 return true;
@@ -228,39 +241,54 @@ app.post('/login', (req, res) => {
 
     });
 
+    // If the inputted username is not in the database
     if (!checkUser) {
 
+        // Sends a JSON-response back that the inputted username is not correct
         res.json({ error: true, username: false, password: false }); 
 
     }
 
+    // Ends the Response back to the user.
     return res.end();
 
 })
 
-app.post('/checkUserLogin',(req, res) => {
+/**
+ * Server listens to a post to '/checkUserLogin'
+ * Takes Request (req) and Response (res) into account for the function
+ */
+app.post('/checkUserLogin', (req, res) => {
     
+    // Loads the 'users.json'-file as 'users'
     let users = getJSONFile('users.json');
 
+    // Searches through the 'users', where 'checkUser' is a boolean
     let checkUser = users.some((user) => {
 
+        // Checks if the username inputted by the user matches the users in the database...
         if (user.username == req.body.username) {
 
+            // ... checks if the password is correct
             if (user.password == req.body.password) {
 
+                // Checks if the user is a coordinator
                 if (user.isCoordinator == 1) {
 
+                    // Logs the user in
                     session = req.session;
                     session.userid = req.body.username;
 
                 }
 
+                // Sends a JSON-response back that the user is logged in and is a coordinator 
                 res.json({ error: false, username: true, password: true, classes: user.classes, isCoordinator: user.isCoordinator });
 
                 return true;
 
             } else {
 
+                // Sends a JSON-response back that the inputted password is not correct
                 res.json({ error: true, username: true, password: false });
     
                 return true;
@@ -271,49 +299,62 @@ app.post('/checkUserLogin',(req, res) => {
 
     });
 
+    // If the inputted username is not in the database
     if (!checkUser) {
 
+        // Sends a JSON-response back that the inputted username is not correct
         res.json({ error: true, username: false, password: false }); 
 
     }
 
+    // Ends the Response back to the user.
     return res.end();
 
 });
 
-app.post('/register',(req, res) => {
+/**
+ * Server listens to a post to '/register'
+ * Takes Request (req) and Response (res) into account for the function
+ */
+app.post('/register', (req, res) => {
     
+    // Loads the 'users.json'-file as 'users'
     let users = getJSONFile('users.json');
 
-    console.log(users);
-
+    // Searches through the 'users', where 'checkUser' is a boolean
     let checkUser = users.some((user) => {
 
+        // Checks if the inputted username already exists
         if (user.username == req.body.username) {
 
+            // Returns true
             return true;
                
         }
 
     });
 
+    // If 'checkUser' is true
     if (checkUser) {
         
+        // Sends a JSON-response back that the username is already taken
         return res.json({ error: true, username: false, password: false }); 
 
-    } else {
+    } else { // Else...
 
+        // Assigns 'registerUser' to the "Request.body"-object
         let registerUser = req.body;
 
+        // Assigns 'groups' and 'isCoordinator' to an empty array and 0 respectively
         Object.assign(registerUser, {
             groups: [],
             isCoordinator: 0
         });
         
+        // Adds 'registerUser' to the 'users'-database
         users.push(registerUser);
 
-        console.log(users)
-
+        // Update the users file, taking into account that the user is now registered as a student
         fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
 
             if (err) {
@@ -324,8 +365,10 @@ app.post('/register',(req, res) => {
 
         });
 
-        res.json({error: false, keycode: req.body.keycode});
+        // Sends a JSON-response back that there was no errors and the user is now registered
+        res.json({ error: false, username: false, password: false });
 
+        // Ends the Response back to the user.
         return res.end();
 
     }
@@ -514,8 +557,12 @@ app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 
 });
-
-function checkFolderName(folderName, data) {
+/**
+ * Checks if a folder with a student.json exist
+ * @param {*} folderName 
+ * @returns 
+ */
+function checkFolderName(folderName) {
 
     if (!fs.existsSync('./database/' + folderName)) {
 
@@ -533,6 +580,8 @@ function checkFolderName(folderName, data) {
 
     }
 
+    /*
+
     if(!fs.existsSync('./database/' + folderName + '/keycode.json')) {
 
         fs.writeFileSync('./database/' + folderName + '/keycode.json', data, { flag: 'w+' }, err => {
@@ -542,24 +591,36 @@ function checkFolderName(folderName, data) {
         });
 
     }
+
+    */
     
     return getJSONFile(folderName + "/keycode.json");
     
 }
-    
+/**
+ * This function openes a json file
+ * @param {Takes a name of a file} file 
+ * @returns the content the file parsed as an object
+ */    
 function getJSONFile(file) {
     
-    var filepath = __dirname + '/database/' + file;
+    //Makes the path to the file
     var filepath = __dirname + '/database/' + file;
 
     console.log(filepath)
-
+    
+    //Reads content and saves it
     var file = fs.readFileSync(filepath, 'utf8');
 
     return JSON.parse(file);
     
 }
 
+/**
+ * Checks to see if a files content is in the Json format  
+ * @param {Takes a name of file} file 
+ * @returns the state of the file is Json or not (True xor False)
+ */
 function isJSON(file) {
 
     var filepath = __dirname + '/database/' + file;
@@ -579,14 +640,20 @@ function isJSON(file) {
     return true;
 
 }
-
+/**
+ * This function semi-randomliy picks a char from a string to make a keycode 
+ * @param {Takes wanted length of a keycode} length 
+ * @returns a keycode in the form of a string 
+ */
 function makeKeycode(length) {
 
     let result = '';
+    //String of chars that will be used in the wanted keycode
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
     let counter = 0;
     
+    //Makes the keycode
     while (counter < length) {
       
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -597,13 +664,18 @@ function makeKeycode(length) {
     return result;
 
 }
-
-async function studentObjectMaker(users,semester){
+/**
+ * This function makes an list of objects and writes a files with the students names, a specific code,
+ * and a boolean function to check if they have registered
+ * @param {This parameter takes names of the students uploaded by the coordinator} users 
+ * @param {This to takes semester name inputted by coordinator to open its folder} semester 
+ */
+async function studentObjectMaker(users, semester){
 
 
     let students = [];
 
-
+    //Makes an object with a name, code, and boolean, for every student sent by the coordinator
     for (let i in users) {
         
          students[i] = {
@@ -613,6 +685,8 @@ async function studentObjectMaker(users,semester){
         }
     
     }
+
+    await checkFolderName(semester);
 
     fs.writeFile("./database/" + semester + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
 

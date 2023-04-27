@@ -5,10 +5,12 @@ const loginButton = document.getElementById("login-modal");
 const loginButton2 = document.getElementById("login-submit");
 const loginKeycode = document.getElementById("keycode");
 
+//Event, activated when login button on the main page is pressed
 let button = loginButton.addEventListener("click", (e) => {
 
   e.preventDefault();  
 
+  // Posts to '/checkUserLogin' with username and password
   fetch('./checkUserLogin', {
     method: "POST",
     headers: {
@@ -21,9 +23,7 @@ let button = loginButton.addEventListener("click", (e) => {
     }),
   })
   .then((response) => response.json())
-  .then((data) => {
-
-    console.log(data);
+  .then((data) => {//Checks login data for mistakes 
 
     if (data.error && !data.username) {
 
@@ -34,7 +34,8 @@ let button = loginButton.addEventListener("click", (e) => {
       alert("Invalid Password"); 
 
     } else {
-
+      //Checks to see if the user logging in is a Coordinator
+      //If the user is, then they will be sent to Coordinator page
       if (data.isCoordinator == 1) {
 
         location.href = './coordinator_start';
@@ -42,7 +43,7 @@ let button = loginButton.addEventListener("click", (e) => {
       } else {
 
         /**
-         * Creates <option>s in <select> for Modal
+         * Creates <option>'s in <select> for Modal
          */
         let classesSelect = document.getElementById("classesSelect");
         classesSelect.innerHTML = "";
@@ -176,7 +177,7 @@ let button = loginButton.addEventListener("click", (e) => {
             }
       
           })
-          .catch((err) => {
+          .catch((err) => {//Cathes any errors sent by the promises or the data sent from the server
       
             console.error(err);
       
@@ -191,7 +192,7 @@ let button = loginButton.addEventListener("click", (e) => {
     }
 
   })
-  .catch((err) => {
+  .catch((err) => {//Cathes any errors sent by the promises or the data sent from the server
 
     console.error(err);
 

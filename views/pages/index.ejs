@@ -4,17 +4,18 @@
 
       <%- include('../partials/head'); %>
 
-      <title>Welcome to your amazing group formation helper!👯‍♂️</title>
+      <title>Welcome to your amazing group formation helper!</title>
       <link rel="stylesheet" href="./css/style.css">
       
   </head>
   <body class="d-flex flex-column h-100">
 
     <%- include('../partials/navbar'); %>
-
+    <!--Box that holds the form for login-->
     <div class="outer"> 
         <div class="middle">
             <div class="inner">
+              <!--Form that checks the users input for logging in-->
               <form id="login-form">
                 <div class="form-group">
                   <label for="username">Username</label>
@@ -29,7 +30,7 @@
             </div>
         </div>
     </div> 
-
+    <!--If user is a student then a modal box will be shown to either use a keycode or choose their semster group-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

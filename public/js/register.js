@@ -4,10 +4,15 @@ const registerUsername = document.getElementById("register-username");
 const registerPassword = document.getElementById("register-password");
 const registerButton = document.getElementById("register-submit");
 
+/**
+ * Event that is active when the register button is clicked
+ */
 let button = registerButton.addEventListener("click", (e) => {
 
   e.preventDefault();
-
+    /**
+     * Sends data to the server to be checked 
+     */
     fetch('./register', {
         method: "POST",
         headers: {
@@ -21,16 +26,23 @@ let button = registerButton.addEventListener("click", (e) => {
     })
     .then((response) => response.json())
     .then((data) => {
-
+      /**
+       * Checks the data sent by the server
+       */
       console.log(data);
 
       if (!data) {
-
+        
+        /**
+         * Alerts user if data is wrong
+         */
         alert("Invalid data"); 
         location.href = './register';
 
       } else  {
-
+        /**
+         * Sends user back to the login page if nothing is wrong
+         */
         location.href = './';
 
       }
