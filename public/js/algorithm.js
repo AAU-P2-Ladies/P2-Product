@@ -177,26 +177,6 @@ function prefGroups (students, matrix, groupSize) {
             groups[groupNum].isFull = true;
         }
     }
-
-
-    /**
-     * Only purpose is to print the groups for debugging.
-     * Can be deleted
-     */
-    /*
-    for (let i = 0; i < 1; i++) {
-        console.log(" Initial group:",i)
-        for (let j = 0; j < groupSize; j++) {
-            if (groups[i].students[j] != undefined) {
-                console.log(groups[i].students[j].firstName,groups[i].students[j].groupNr)
-            }
-        }    
-    }
-    */
-     /**
-     * 
-     */
-
     return groups
 }
 
@@ -290,7 +270,6 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
                     let originGroup = groups[groups.indexOf(homogenousGroups[i])]
                     let target = students[targetPosition]
                     let targetGroup = groups[target.groupNr];
-                    //console.log("div swap: swapped student " + groups[i].students[j].index + " with " + target.index)
                     helper.swapStudents(originGroup, j, targetGroup, targetGroup.students.indexOf(target));
                 }
             }
@@ -302,9 +281,6 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
     //Keep looping until not a single improving swap can be made
     //max iterations will be some variable that makes the program terminate in case it runs too long
     while(swapped == true && iterations <= maxIterations){
-        //console.log("went through " + iterations +  " iterations")
-        console.log("went through " + iterations + " iterations")
-        //console.log("entered while loop")
         swapped = false;
         iterations++;
         for(let i in groups){
@@ -313,7 +289,6 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
                 if(targetIndex > 0){
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
-                    //console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
                     helper.swapStudents(groups[i], j, targetGroup, targetGroup.students.indexOf(target));
                     swapped = true;
                 }
@@ -388,7 +363,6 @@ function findMinDiversity(students, groupSize){
             diversityMin = diversity
         }
     }
-    //EDIT HERE TO CHANGE MINIMUM DIVERSITY CALCULATIONS
     return diversityMin;
 }
 
@@ -420,9 +394,7 @@ function masterAlgorithm(students, groupSize, maxSeconds){
         students = helper.indexStudents(students);
         let matrix = preferenceMatrix(students);
         let groups = prefGroups(students, matrix, groupSize);
-        console.log("made preference groups")
         groups = hillClimb(students, groups, minDiversity, matrix, maxIterations)
-        console.log("ran up that hill")
         //Loops through the groups and finds their total preference percentage and diversity percentage
         let totalDiverse = 0
         let totalPercent = 0
@@ -441,102 +413,7 @@ function masterAlgorithm(students, groupSize, maxSeconds){
             bestAvgPref = avgPref;
         }
     }
-    console.log("best possible pref percentage: " + bestAvgPref)
     return finalGroups
 }
-
-//Below here is only for testing
-/**
-* For debugging
-* Only purpose is to randomize the students preference to eachother
-* Can be deleted
-*/
-function getRandomInts(max,block,numbers){
-    let array = []
-    while (array.length < numbers){
-        let a = Math.floor(Math.random() * (max-1))
-        if (a >= block){
-            a++
-        }
-        if (array.indexOf(a) == -1){
-            array.push(a)
-        }
-    }
-    return array
-}
-/**
- * 
- */
-  
-
-
-//Initilize the student arrays with StudentNum amount of students 
-
-
-
-let students = [];
-for (let s = 0;s<StudentNum;s++) {
-    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
-    students.push(student0)
-}
-
-masterAlgorithm(students, groupSize, 1)
-console.log("Trying for 5 sec")
-masterAlgorithm(students, groupSize, 5)
-console.log("Trying for 15 sec")
-masterAlgorithm(students, groupSize, 15)
-console.log("Trying for 30 sec")
-masterAlgorithm(students, groupSize, 30)
-
-
-//Calculate whether the group member size adds up (groups can be made
-// with the group member size but some groups may have one less group member)  
-/*
-
-//Updates the student array so each student have their index
-helper.indexStudents(students);
-
-//Returns the preferenceMatrix
-let matrix = preferenceMatrix(students);
-
-//Returns the created groups
-let groups = prefGroups(students, matrix, groupSize);
-
-let minDiversity = findMinDiversity(students, groupSize);
-
-let totalPercent = 0;
-let totalDiverse = 0
-for(let i in groups){
-    let prefSum = helper.groupPrefSum(groups[i].students, matrix);
-    let percent = helper.prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length)
-    totalDiverse += helper.groupDiversityCheck(groups[i], minDiversity)
-    totalPercent += percent;
-    console.log("Pref satisfaction of group" + i + ": " + percent);
-}
-console.log(totalPercent/Math.ceil(StudentNum/groupSize))
-console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
-
-console.log(hillClimb(students, groups, minDiversity, matrix, maxIterations))
-
-for (let i = 0; i < 1; i++) {
-    for (let j = 0; j < groupSize; j++) {
-        if (groups[i].students[j] != undefined) {
-            console.log(groups[i].students[j].firstName,groups[i].students[j].groupNr);
-        }
-    }    
-}
-
-totalPercent = 0;
-totalDiverse = 0;
-for(let i in groups){
-    let prefSum = helper.groupPrefSum(groups[i].students, matrix);
-    let percent = helper.prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length);
-    totalDiverse += helper.groupDiversityCheck(groups[i],minDiversity)
-    totalPercent += percent;
-    console.log("Pref satisfaction of group" + i + ": " + percent);
-}
-console.log(totalPercent/Math.ceil(StudentNum/groupSize))
-console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
-*/
 
 module.exports = {Student, Group, preferenceMatrix, prefGroups, hillClimb}
