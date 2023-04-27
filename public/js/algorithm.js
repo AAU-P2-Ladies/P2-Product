@@ -6,7 +6,7 @@ let min = 0;
 let StudentNum = 100;
 let groupSize = 7;
 const roleNumber = 9
-const maxIterations = 100
+const maxIterations = 1000
 //const minDiversity = 0.75
 
 //Creates the object Student
@@ -277,7 +277,7 @@ function swapCheck(origin, groups, minDiversity, matrix){
 //Then, it continuously calls swapCheck to ensure minDiversity is reached as far as possible
 //Then, it continues to call swapCheck until no improving swaps can be made
 //It also terminates after a large number of iterations
-function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
+function hillClimb(students, groups, minDiversity, matrix, maxIterations){
     let homogenousGroups = helper.checkMinDiversity(groups, minDiversity);
     //If there exist groups that do not fulfill min diversity, start with those
     if (homogenousGroups.length > 0){
@@ -302,6 +302,7 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
     //Keep looping until not a single improving swap can be made
     //max iterations will be some variable that makes the program terminate in case it runs too long
     while(swapped == true && iterations <= maxIterations){
+        console.log("went through " + iterations + " iterations")
         //console.log("entered while loop")
         swapped = false;
         iterations++;
@@ -395,14 +396,20 @@ function findMinDiversity(students, groupSize){
 //It takes an array of student objects and a desired group size
 //It loops through the algorithm until max seconds has been reached
 //Meanwhile, it compares each result and in the end returns the one with the highest diversity and satisfaction percentage
-function algorithmCalls(students, groupSize, maxSeconds){
+function masterAlgorithm(students, groupSize, maxSeconds){
     helper.indexStudents(students);
     let matrix = preferenceMatrix(students);
-    let minDiversity = findMinDiversity(students, groupSize)
+    let minDiversity = findMinDiversity(students, groupSize);
+    /*if(roleNumber > 0){
+        minDiversity = findMinDiversity(students, groupSize);
+    }
+    else{
+         minDiversity = 0;
+    }*/
     let time = Date.now();
     let bestAvgPref = 0;
     let bestAvgDiversity = 0;
-    let finalGroups = []
+    let finalGroups = [];
     while(Date.now() - time < maxSeconds*1000){
         //Each students groupNr has to be reset for each new group formation since prefGroups assumes students are not in a group
         for(let student of students){
@@ -410,7 +417,9 @@ function algorithmCalls(students, groupSize, maxSeconds){
         }
         helper.shuffleArray(students);
         let groups = prefGroups(students, matrix, groupSize);
-        groups = masterAlgorithm(students, groups, minDiversity, matrix, maxIterations)
+        console.log("made preference groups")
+        groups = hillClimb(students, groups, minDiversity, matrix, maxIterations)
+        console.log("ran up that hill")
         //Loops through the groups and finds their total preference percentage and diversity percentage
         let totalDiverse = 0
         let totalPercent = 0
@@ -439,7 +448,6 @@ function algorithmCalls(students, groupSize, maxSeconds){
 * Only purpose is to randomize the students preference to eachother
 * Can be deleted
 */
-
 function getRandomInts(max,block,numbers){
     let array = []
     while (array.length < numbers){
@@ -461,22 +469,22 @@ function getRandomInts(max,block,numbers){
 
 //Initilize the student arrays with StudentNum amount of students 
 
-/*
+
+
 let students = [];
 for (let s = 0;s<StudentNum;s++) {
     let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
     students.push(student0)
 }
 
-console.log("Trying for 1 sec")
-algorithmCalls(students, groupSize, 1)
+masterAlgorithm(students, groupSize, 1)
 console.log("Trying for 5 sec")
-algorithmCalls(students, groupSize, 5)
+masterAlgorithm(students, groupSize, 5)
 console.log("Trying for 15 sec")
-algorithmCalls(students, groupSize, 15)
+masterAlgorithm(students, groupSize, 15)
 console.log("Trying for 30 sec")
-algorithmCalls(students, groupSize, 30)
-*/
+masterAlgorithm(students, groupSize, 30)
+
 /*
 
 //Calculate whether the group member size adds up (groups can be made
@@ -512,7 +520,7 @@ for(let i in groups){
 console.log(totalPercent/Math.ceil(StudentNum/groupSize))
 console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
 
-console.log(masterAlgorithm(students, groups, minDiversity, matrix, maxIterations))
+console.log(hillClimb(students, groups, minDiversity, matrix, maxIterations))
 
 for (let i = 0; i < 1; i++) {
     for (let j = 0; j < groupSize; j++) {
@@ -535,4 +543,4 @@ console.log(totalPercent/Math.ceil(StudentNum/groupSize))
 console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
 */
 
-module.exports = {Student, Group, preferenceMatrix}
+module.exports = {Student, Group, preferenceMatrix, prefGroups, hillClimb}
