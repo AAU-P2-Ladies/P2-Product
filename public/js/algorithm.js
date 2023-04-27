@@ -206,7 +206,7 @@ function prefGroups (students, matrix, groupSize) {
 //If certain swaps make the number of groups above minimum diversity bigger, make one of those swaps
 //Else, make the swap that doesn't decrease the diversity while still lowering the pref number as much as possible
 //Returns the group and index of the person that should be swapped
-function swapCheck(origin, groups, minDiversity, matrix){
+function swapCheck(origin, groups, minDiversity, students, matrix){
     let originGroup = groups[origin.groupNr];
     let originIndex = originGroup.students.indexOf(origin);
     let prefDelta = new Array(students.length);
@@ -284,11 +284,11 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
         //Call swapCheck on each student in these groups
         for(let i in homogenousGroups){
             for(let j in homogenousGroups[i].students){
-                let targetIndex = swapCheck(homogenousGroups[i].students[j], groups, minDiversity, matrix);
+                let targetPosition = swapCheck(homogenousGroups[i].students[j], groups, minDiversity, students, matrix);
                 //Only swap if there is a valid target
-                if(targetIndex > 0){
+                if(targetPosition > 0){
                     let originGroup = groups[groups.indexOf(homogenousGroups[i])]
-                    let target = students[targetIndex]
+                    let target = students[targetPosition]
                     let targetGroup = groups[target.groupNr];
                     //console.log("div swap: swapped student " + groups[i].students[j].index + " with " + target.index)
                     helper.swapStudents(originGroup, j, targetGroup, targetGroup.students.indexOf(target));
@@ -302,16 +302,17 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
     //Keep looping until not a single improving swap can be made
     //max iterations will be some variable that makes the program terminate in case it runs too long
     while(swapped == true && iterations <= maxIterations){
+        //console.log("went through " + iterations +  " iterations")
         //console.log("entered while loop")
         swapped = false;
         iterations++;
         for(let i in groups){
             for(let j in groups[i].students){
-                let targetIndex = swapCheck(groups[i].students[j], groups, minDiversity, matrix)
+                let targetIndex = swapCheck(groups[i].students[j], groups, minDiversity, students, matrix)
                 if(targetIndex > 0){
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
-                        //console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
+                    //console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
                     helper.swapStudents(groups[i], j, targetGroup, targetGroup.students.indexOf(target));
                     swapped = true;
                 }
@@ -396,7 +397,6 @@ function findMinDiversity(students, groupSize){
 //It loops through the algorithm until max seconds has been reached
 //Meanwhile, it compares each result and in the end returns the one with the highest diversity and satisfaction percentage
 function algorithmCalls(students, groupSize, maxSeconds){
-    helper.indexStudents(students);
     let matrix = preferenceMatrix(students);
     let minDiversity = findMinDiversity(students, groupSize)
     let time = Date.now();
@@ -409,6 +409,8 @@ function algorithmCalls(students, groupSize, maxSeconds){
             student.groupNr = -1;
         }
         helper.shuffleArray(students);
+        students = helper.indexStudents(students);
+        let matrix = preferenceMatrix(students);
         let groups = prefGroups(students, matrix, groupSize);
         groups = masterAlgorithm(students, groups, minDiversity, matrix, maxIterations)
         //Loops through the groups and finds their total preference percentage and diversity percentage
@@ -468,6 +470,9 @@ for (let s = 0;s<StudentNum;s++) {
     students.push(student0)
 }
 
+
+
+
 console.log("Trying for 1 sec")
 algorithmCalls(students, groupSize, 1)
 console.log("Trying for 5 sec")
@@ -477,17 +482,10 @@ algorithmCalls(students, groupSize, 15)
 console.log("Trying for 30 sec")
 algorithmCalls(students, groupSize, 30)
 
-/*
 
 //Calculate whether the group member size adds up (groups can be made
 // with the group member size but some groups may have one less group member)  
-amountOfStudents = students.length;
-updatedGroupSize = Math.ceil(amountOfStudents/Math.ceil(amountOfStudents/groupSize));
-
-//If it adds up. updatedGroupSize will be the same as groupSize
-if (updatedGroupSize != groupSize) {
-    console.log("The group size does not add up. The new size is: ", updatedGroupSize)
-}
+/*
 
 //Updates the student array so each student have their index
 helper.indexStudents(students);
@@ -496,7 +494,7 @@ helper.indexStudents(students);
 let matrix = preferenceMatrix(students);
 
 //Returns the created groups
-let groups = prefGroups(students, matrix, updatedGroupSize);
+let groups = prefGroups(students, matrix, groupSize);
 
 let minDiversity = findMinDiversity(students, groupSize);
 

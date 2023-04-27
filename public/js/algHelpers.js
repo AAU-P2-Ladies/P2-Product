@@ -1,6 +1,6 @@
 function indexStudents (students) {
     //Loops through all students assigning their index number
-    for (let indexNum = 1; indexNum < students.length; indexNum++) {
+    for (let indexNum = 0; indexNum < students.length; indexNum++) {
         students[indexNum].index = indexNum;
     }
     return students;
