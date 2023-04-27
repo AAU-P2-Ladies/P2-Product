@@ -158,11 +158,11 @@ app.post('/login', (req, res) => {
                     for (let index = 0; index < keycodes.length; index++) {
 
                         // Checks if the user has inputted a keycode that matches a class
-                        if (keycodes[index]["keycode"] == req.body.keycode) {
+                        if (keycodes[index].keycode == req.body.keycode) {
 
                             // Assigns 'keycode' and 'class1' to their respective value
-                            keycode = keycodes[index]["keycode"];
-                            class1 = keycodes[index]["class"];
+                            keycode = keycodes[index].keycode;
+                            class1 = keycodes[index].class;
 
                             break;
 

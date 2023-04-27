@@ -21,7 +21,11 @@
     {
         "username": "789",
         "password": "789",
-        "classes": [],
+        "classes": [
+            {
+                "class": "SW2"
+            }
+        ],
         "isCoordinator": 0
     },
     {
