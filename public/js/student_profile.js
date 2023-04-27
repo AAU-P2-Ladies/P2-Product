@@ -4,6 +4,8 @@ let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders",
                 "Adomas","Billy","Bob","Calvin","Cim","Charlotete",
                 "Cello","Cimmy","Clara","Claire","Christina","Cindy"];
 
+
+let numberOfStudentPreferences = 3;
 const list = document.getElementById("StudentProfile");
 
 function createDropDown (id, array){
@@ -40,7 +42,6 @@ function priorities (number, data, name_id, div_name){
     nameLabel.appendChild(text);
     div_name.prepend(nameLabel);
     makeBreaks(current_selection, 1);
-    console.log(i);
   }
   let headingE = document.createElement("h1");
   let textz = document.createTextNode(name_id + " Preferences");
@@ -51,7 +52,7 @@ function priorities (number, data, name_id, div_name){
 let newDiv = document.createElement("div");
 newDiv.id = "newDivOne";
 list.prepend(newDiv);
-priorities(3, topics, "Topic", newDiv);
+priorities(numberOfStudentPreferences, topics, "Topic", newDiv);
 
 let btn = document.getElementById("addPref");
 let modal = document.getElementById("prefModal");
@@ -74,6 +75,45 @@ window.onclick = function(event) {
   }
 }
 
+function saveStudentPreferences(e){
+  e.preventDefault();
+
+    for (let priority = numberOfStudentPreferences; priority > 0; priority--){
+    
+      if(document.getElementById("p" + priority) === null){
+        let text = document.createElement("p");
+        text.id = "p" + priority;
+        let name = document.getElementById(priority + "prio");
+        text.innerText = priority + ". Priority: " + name.value;
+        let button = document.getElementById("addPref");
+        button.after(text);
+
+        btn.innerText = "Change student preference";
+        modal.style.display = "none";
+
+      }else{
+        let text = document.getElementById("p" + priority);
+
+        let name = document.getElementById(priority + "prio");
+        console.log(name.value);
+        text.innerText = priority + ". Priority: " + name.value;
+        
+        btn.innerText = "Change student preference";
+        modal.style.display = "none";
+      }
+    }
+}
+
+function createSaveButton(){
+  let saveButton = document.createElement("button");
+  saveButton.id = "SaveStudentPreferencesButton";
+  saveButton.innerText = "Save";
+  modalDiv.append(saveButton);
+
+  saveButton.setAttribute("onclick","saveStudentPreferences(event)"); 
+  
+}
+
 function createDivs(numberOfDivs){
 
   for(div = 1; div <= numberOfDivs; div++){
@@ -89,7 +129,6 @@ function SearchField(myInputID, myULID) {
   let input, filter, ul, li, txtValue;
   input = document.getElementById(myInputID);
   filter = input.value.toUpperCase();
-  console.log(filter + "yo");
   ul = document.getElementById(myULID);
   li = ul.getElementsByTagName('li');
   ul.hidden = "";
@@ -97,7 +136,6 @@ function SearchField(myInputID, myULID) {
   let count = 0;
     
   for (let i = 0; li.length > i; i++) {
-    console.log(i);
     txtValue = li[i].innerText;
       
     if ((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10) {
@@ -117,8 +155,7 @@ function createDynamicList(id){
   let divForList = document.getElementById(id);
   let list = document.createElement("ul");
   
-  for (let i in nameArray)
-  {
+  for (let i in nameArray){
     let li = document.createElement('li');
     li.innerText = nameArray[i];
     li.className = "item";
@@ -128,7 +165,7 @@ function createDynamicList(id){
   list.hidden = "";
   list.id = "myUL" + div; 
   divForList.append(list);
-  
+
 }
 
 function createSearchPref(number){
@@ -153,17 +190,32 @@ function createSearchPref(number){
     makeBreaks(inputText, 1);
 
   }
+
 }
 
 let modalDiv = document.getElementById("modalContent");
 
-createDivs(3);
-createSearchPref(3);
+createDivs(numberOfStudentPreferences);
+createSearchPref(numberOfStudentPreferences);
 
-for(let i = 1; i <= 3; i++){
+for(let i = 1; i <= numberOfStudentPreferences; i++){
   let test = document.getElementById(i + "prio");
   test.addEventListener("keyup", SearchField(test.id, "myUL" + i));
 }
+
+for(let input = 1; input <= numberOfStudentPreferences; input++){
+  document.getElementById("myUL" + input).addEventListener("click", function(e) {
+    if (e.target && e.target.matches("li")) {
+      let myInput = document.getElementById(input + "prio");
+      myInput.value = e.target.innerText;
+      document.getElementById("myUL" + input).hidden = "hidden";
+    }
+  
+  });
+}
+
+createSaveButton();
+
 
 let override_textbox = document.getElementById("override");
 makeBreaks(override_textbox, 2);
