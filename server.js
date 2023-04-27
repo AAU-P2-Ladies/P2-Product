@@ -386,7 +386,6 @@ app.post('/prefSearch',(req, res) => {
 
 app.get('/register',(req, res) =>{
 
-    // res.sendFile(path.join(__dirname, '/public/html/register.html'));
 
     res.render('pages/register');
 
@@ -394,7 +393,6 @@ app.get('/register',(req, res) =>{
 
 app.get('/coordinator_start', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
 
     res.render('pages/coordinator_start');
 
@@ -402,7 +400,6 @@ app.get('/coordinator_start', (req, res) => {
 
 app.get('/coordinator_config', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/coordinator_preconfig.html'));
 
     res.render('pages/coordinator_config');
 
@@ -410,7 +407,6 @@ app.get('/coordinator_config', (req, res) => {
 
 app.get('/coordinator_preconfig', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/coordinator_config.html'));
 
     res.render('pages/coordinator_preconfig');
 
@@ -419,7 +415,6 @@ app.get('/coordinator_preconfig', (req, res) => {
 app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, res) =>{
 
     
-    //console.log(req.file.filename);
 
     let students = getJSONFile("uploads/"+req.file.filename)
 
@@ -435,7 +430,6 @@ app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, re
 
 app.get('/student_start', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/student_start.html'));
 
     res.render('pages/student_start');
 
@@ -443,7 +437,6 @@ app.get('/student_start', (req, res) => {
 
 app.get('/student_group', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/student_group.html'));
 
     res.render('pages/student_group');
 
@@ -451,7 +444,6 @@ app.get('/student_group', (req, res) => {
 
 app.get('/student_profile', (req, res) => {
 
-    //res.sendFile(path.join(__dirname, '/public/html/student_profile.html'));
 
     res.render('pages/student_profile');
 
@@ -465,12 +457,10 @@ app.get('/logout', (req,res) => {
 
 });
 
-
+/**
+ * Uploads the file sent from /coordinator_preconfig
+ */
 app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) => {
-
-    
-    //console.log(req.body);
-    //console.log(req.files);
 
     let groupName = ""
     let studentList = [];
@@ -540,8 +530,6 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) => {
     }
     
 
-    
-
     //console.log(topicsList);
 
     //let students = getJSONFile("uploads/" + req.file[0].studentListInput)
@@ -552,15 +540,19 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) => {
     //res.render('pages/coordinator_start');
 
 })
+
+/**
+ * Logs the servers url
+ */
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
 
 });
 /**
- * Checks if a folder with a student.json exist
- * @param {*} folderName 
- * @returns 
+ * Checks if a folder with a given name with a student.json exist, if not, it will make the folder and file 
+ * @param {The folder that is in need of being checked} folderName 
+ * @returns true when finished with checking
  */
 function checkFolderName(folderName) {
 
@@ -594,7 +586,7 @@ function checkFolderName(folderName) {
 
     */
     
-    return getJSONFile(folderName + "/keycode.json");
+    return true
     
 }
 /**
