@@ -302,6 +302,7 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
     //Keep looping until not a single improving swap can be made
     //max iterations will be some variable that makes the program terminate in case it runs too long
     while(swapped == true && iterations <= maxIterations){
+        console.log("went through " + iterations + " iterations")
         //console.log("entered while loop")
         swapped = false;
         iterations++;
@@ -416,7 +417,9 @@ function masterAlgorithm(students, groupSize, maxSeconds){
         }
         helper.shuffleArray(students);
         let groups = prefGroups(students, matrix, groupSize);
+        console.log("made preference groups")
         groups = hillClimb(students, groups, minDiversity, matrix, maxIterations)
+        console.log("ran up that hill")
         //Loops through the groups and finds their total preference percentage and diversity percentage
         let totalDiverse = 0
         let totalPercent = 0
@@ -474,7 +477,6 @@ for (let s = 0;s<StudentNum;s++) {
     students.push(student0)
 }
 
-console.log("Trying for 1 sec")
 masterAlgorithm(students, groupSize, 1)
 console.log("Trying for 5 sec")
 masterAlgorithm(students, groupSize, 5)
