@@ -24,6 +24,11 @@ groups[2].students[1] = student5;
 describe('indexStudents', () => {
     test('should give index to students object', () => {
 
+        expect(helper.indexStudents(students)[0].index).toEqual(0);
+        expect(helper.indexStudents(students)[1].index).toEqual(1);
+        expect(helper.indexStudents(students)[2].index).toEqual(2);
+        expect(helper.indexStudents(students)[3].index).toEqual(3);
+        expect(helper.indexStudents(students)[4].index).toEqual(4);
         expect(helper.indexStudents(students)[5].index).toEqual(5);
 
     })
@@ -89,3 +94,14 @@ describe('checkRoleDiversity', () => {
         expect(helper.checkRoleDiversity(groups[2].students, 9)).toEqual(6/6);
     })
 })
+
+/*
+describe('masterAlgorithm', () => {
+    test('The groups outputted by the algorithm need to have a larger or equal preference average than those inputtet', () => {
+        let matrix = main.preferenceMatrix(students)
+        let groups = main.prefGroups(students, matrix, 2)
+        new_groups = main.masterAlgorithm(students, groups, 0.75, matrix, 1000)
+        expect(helper.groupPrefAvg(new_groups)).toBeLessThanOrEqual(helper.groupPrefAvg(groups))
+    })
+})
+*/
