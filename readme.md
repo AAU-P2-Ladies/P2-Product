@@ -20,6 +20,3 @@ var camelCase;
 * Comments above each function defining input, output and general purpose
 * Comments within function when necessary above the line/loop/statement that is being explained
 * Else on its own line
-* Kamilla and Sina can use snake case if they want to
-
-
