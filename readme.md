@@ -16,7 +16,7 @@ var camelCase;
 * Two empty lines between function declarations
 * No space between declarations like functions and parentheses
 * Logical statements can omit "== true" when possible
-* Comments with //
+* Comments with //, use the /** for the explanation of functions and their params and return value
 * Comments above each function defining input, output and general purpose
 * Comments within function when necessary above the line/loop/statement that is being explained
 * Else on its own line

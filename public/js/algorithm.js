@@ -26,11 +26,12 @@ function Student(first, index, prefs = [], blocks = [], roles = [], groupNr, top
     this.isFull = isFull;
 }
 
-
 /**
-* Creates a preferenceMatrix consisting of
-* Each student's preference for the other students
-*/
+ * Creates a preferenceMatrix consisting of
+ * each student's preference for the other students
+ * @param {*} students 
+ * @returns a 2D-array (effectively a matrix) of the students preferences 
+ */
 function preferenceMatrix (students) {
 //initilize step of the function
 const numStudents = students.length;
@@ -42,10 +43,10 @@ for (let i = 0; i < numStudents; i++) {
 //Loops through all rows in the matrix
 rowLoop:
 for (let row = 0; row < numStudents; row++) {
-    //A students preference to theirselves is set to 0
+    //A students preference to themselves is set to 0
     preferenceMatrix[row][row] = 0;
 
-    //Loops through all colums starting from the
+    //Loops through all columns starting from the
     //calculations that have not been calculated yet 
     columnLoop:
     for (let col = row+1; col < numStudents; col++) {
@@ -54,13 +55,8 @@ for (let row = 0; row < numStudents; row++) {
         //  student A's preference to student B  and 
         //  student B's preference to student A 
         prefScore = helper.prefCheck(students[row], students[col], numStudents) + helper.prefCheck(students[col], students[row], numStudents)
-            
-
-/**
- * Check for topics
- */
-
-
+         
+        //Check for topics
         let commonTopics = true
         //Loops through student A's topics and checking for a match with student B.
         //If a match occur, they have at least 1 common topic and the loop stops
