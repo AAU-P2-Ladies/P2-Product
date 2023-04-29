@@ -16,7 +16,7 @@ let myInput = document.getElementById("myInput");
 
 nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
 let blocked = [["Nadia","Tania"],["Tina","Thomas"],["Adomas","Trine"],["Simon","Tobias"],["Carmen","Daniel"],["Jonas","Nicolaj"],["Cathrine","Kamilla"],["Simon","Allan"],["Andreas","Adomas"],["Sina","Merete"]];
-
+let roles = ["Coordinator","Secretar","Leder"];
 
 function createDynamicList(){   
     let dynalist = document.getElementById("MyDivUL")
@@ -207,3 +207,19 @@ function createDynamicList2(){
         cell3.append(checkbox)
     }
 }
+
+function addelement() {
+    // let counter=["Ana","Camelia","fish"] ;
+     let checkBox=document.getElementById("include_roles");
+ let completelist= document.getElementById("thelist");
+ completelist.innerHTML = "";
+ for(let i=0;i<roles.length;i++){
+ completelist.innerHTML += "<li>" + roles[i] + "</li>";
+ }
+ if (checkBox.checked == true){
+     document.getElementById("thelist").style.display = "block";
+   } else {
+     document.getElementById("thelist").style.display= "none";
+ 
+ }
+ }
