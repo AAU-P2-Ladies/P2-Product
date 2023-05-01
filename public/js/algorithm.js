@@ -116,7 +116,7 @@ function prefGroups (students, matrix, groupSize) {
         }
         groups[groupNum].students[0] = students[j];
         students[j].groupNr = groupNum;
-        //Creates an array without references in order to sort preference values
+        //Clones the array instead of creating a reference
         let sortedStudentToStudentsPrefs = matrix[j].slice();
         //Sorts preference values in increasing order
         sortedStudentToStudentsPrefs.sort((a, b) =>(a - b)); 
@@ -266,7 +266,7 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
             for(let j in homogenousGroups[i].students){
                 let targetPosition = swapCheck(homogenousGroups[i].students[j], groups, minDiversity, students, matrix);
                 //Only swap if there is a valid target
-                if(targetPosition > 0){
+                if(targetPosition >= 0){
                     let originGroup = groups[groups.indexOf(homogenousGroups[i])]
                     let target = students[targetPosition]
                     let targetGroup = groups[target.groupNr];
@@ -286,7 +286,7 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
         for(let i in groups){
             for(let j in groups[i].students){
                 let targetIndex = swapCheck(groups[i].students[j], groups, minDiversity, students, matrix)
-                if(targetIndex > 0){
+                if(targetIndex >= 0){
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
                     helper.swapStudents(groups[i], j, targetGroup, targetGroup.students.indexOf(target));
@@ -415,5 +415,6 @@ function masterAlgorithm(students, groupSize, maxSeconds){
     }
     return finalGroups
 }
+
 
 module.exports = {Student, Group, preferenceMatrix, prefGroups, hillClimb}

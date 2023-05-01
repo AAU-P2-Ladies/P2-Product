@@ -6,7 +6,7 @@ const loginButton2 = document.getElementById("login-submit");
 const loginKeycode = document.getElementById("keycode");
 
 //Event, activated when login button on the main page is pressed
-let button = loginButton.addEventListener("click", (e) => {
+loginButton.addEventListener("click", (e) => {
 
   e.preventDefault();  
 

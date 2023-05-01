@@ -183,11 +183,13 @@ function findMin(array){
     return key;
 }
 
-//This helper function finds the swap that does not inflict minimum diversity of groups if such a swap exists
+//This function finds the minimum in an array while excluding certain indexes
 //As input, it takes an array and another array containing booleans
+//It excludes every index in the array where the boolean is false
 //It returns the minimum from the first array, but only if the corresponding booleans is true
+//It can be used to find the swap that does not inflict minimum diversity of groups if such a swap exists
 function findMinSpace(array, boolean){
-    let i = 1;
+    let i = 0;
     let key = -1;
     while(key == -1){
         if(boolean[i] == true)
@@ -195,7 +197,7 @@ function findMinSpace(array, boolean){
         i++;
     }
     for(i in array){
-        if(groups[i] < array[key] && boolean[i] == true)
+        if(array[i] < array[key] && boolean[i] == true)
         key = i;
     }
     return key;

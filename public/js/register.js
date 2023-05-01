@@ -7,7 +7,7 @@ const registerButton = document.getElementById("register-submit");
 /**
  * Event that is active when the register button is clicked
  */
-let button = registerButton.addEventListener("click", (e) => {
+registerButton.addEventListener("click", (e) => {
 
   e.preventDefault();
     /**
@@ -36,7 +36,7 @@ let button = registerButton.addEventListener("click", (e) => {
         /**
          * Alerts user if data is wrong
          */
-        alert("Invalid data"); 
+        alert("Please input all the necessary information! 😫"); 
         location.href = './register';
 
       } else  {

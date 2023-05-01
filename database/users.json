@@ -40,5 +40,11 @@
             }
         ],
         "isCoordinator": 0
+    },
+    {
+        "username": "pee",
+        "password": "poo",
+        "groups": [],
+        "isCoordinator": 0
     }
 ]
