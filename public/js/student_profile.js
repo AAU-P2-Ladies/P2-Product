@@ -1,5 +1,11 @@
 let topics = ["--","klima", "miljø", "energi", "simons mor"];
+
+let roles = ["Resource Investigator", "Teamworker", "Co-ordinator", 
+              "Plant", "Monitor Evaluator", "Specialist", "Shaper", 
+                "Implementer", "Completer Finisher"];
+
 let students = ["--","Sina1", "Sina2", "Signe", "Allan", "Alline"];
+
 let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders",
                 "Adomas","Billy","Bob","Calvin","Cim","Charlotete",
                 "Cello","Cimmy","Clara","Claire","Christina","Cindy"];
@@ -7,46 +13,80 @@ let nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders",
 
 let numberOfStudentPreferences = 3;
 const list = document.getElementById("StudentProfile");
+let modalDiv = document.getElementById("modalContent");
+let roleTable = document.getElementById("rolesTable");
+let rolesIncluded = true;
 
-function createDropDown (id, array){
-    const selection = document.createElement("select");
-    selection.id = id;
-    selection.className = "selectt";
-    for (let i of array){
-      const options = document.createElement("option");
-      const text = document.createTextNode(i);
-      options.appendChild(text);
-      options.value = i;
-      selection.append(options);
-    }
-    return selection;
+if(rolesIncluded){
+  roleTable.style.display = "";
+}else{
+  roleTable.style.display = "none";
 }
 
-function makeBreaks (element, number){
+/*
+if(rolesIncluded){
+  createRolesTable();
+}
+
+function createRolesTable(){
+
+  let tableRowFirst = document.createElement("tr");
+  roleTable.append(tableRowFirst);
+  let tableHeading = document.createElement("th");
+  tableHeading.innerText = "Belbin Roles";
+  tableRowFirst.append(tableHeading);
+
+  for(let i = 1; i <= roles.length; i++){
+    let tableRow = document.createElement("tr");
+    let tableElement = document.createElement("td");
+    tableElement.innerText = roles[i];
+    roleTable.append(tableRow);
+    tableRow.append(tableElement);
+
+  }
+  roleTable.style.display = "";
+}
+*/
+
+function createDropDown(id, array){
+  const selection = document.createElement("select");
+  selection.id = id;
+  selection.className = "selectt";
+  for(let i of array){
+    const options = document.createElement("option");
+    const text = document.createTextNode(i);
+    options.appendChild(text);
+    options.value = i;
+    selection.append(options);
+  }
+  return selection;
+}
+
+function makeBreaks(element, number){
   let i = 0;
-  while (i < number){
+  while(i < number){
     const breaks = document.createElement("br");
     element.after(breaks);
     i++;
   }
 }
 
-function priorities (number, data, name_id, div_name){
-  for (let i = number; i > 0; i--){
-    let selectionTopics = createDropDown((name_id+"Priority"+i), data);
-    div_name.prepend(selectionTopics);
-    let current_selection = document.getElementById(name_id+"Priority"+i);
+function priorities(number, data, nameId, divName){
+  for(let i = number; i > 0; i--){
+    let selectionTopics = createDropDown((nameId+"Priority"+i), data);
+    divName.prepend(selectionTopics);
+    let currentSelection = document.getElementById(nameId+"Priority"+i);
     const nameLabel = document.createElement("label");
     let prio = "Priority";
     const text = document.createTextNode(i + ". " + prio);
     nameLabel.appendChild(text);
-    div_name.prepend(nameLabel);
-    makeBreaks(current_selection, 1);
+    divName.prepend(nameLabel);
+    makeBreaks(currentSelection, 1);
   }
   let headingE = document.createElement("h1");
-  let textz = document.createTextNode(name_id + " Preferences");
+  let textz = document.createTextNode(nameId + " Preferences");
   headingE.appendChild(textz);
-  div_name.prepend(headingE);
+  divName.prepend(headingE);
 }
 
 let newDiv = document.createElement("div");
@@ -59,18 +99,18 @@ let modal = document.getElementById("prefModal");
 let span = document.getElementsByClassName("close")[0];
 
 function addPrefFunction(e){
-    e.preventDefault();
+  e.preventDefault();
 
-    modal.style.display = "block";
-    onclick="myFunction(event)";
+  modal.style.display = "block";
+  onclick="myFunction(event)";
 }
 
-span.onclick = function() {
+span.onclick = function(){
   modal.style.display = "none";
 }
-
-window.onclick = function(event) {
-  if (event.target == modal) {
+//den her virker ikke
+window.onclick = function(event){
+  if(event.target == modal){
     modal.style.display = "none";
   }
 }
@@ -78,7 +118,7 @@ window.onclick = function(event) {
 function saveStudentPreferences(e){
   e.preventDefault();
 
-    for (let priority = numberOfStudentPreferences; priority > 0; priority--){
+    for(let priority = numberOfStudentPreferences; priority > 0; priority--){
     
       if(document.getElementById("p" + priority) === null){
         let text = document.createElement("p");
@@ -125,7 +165,7 @@ function createDivs(numberOfDivs){
   
 }
 
-function SearchField(myInputID, myULID) {
+function SearchField(myInputID, myULID){
   let input, filter, ul, li, txtValue;
   input = document.getElementById(myInputID);
   filter = input.value.toUpperCase();
@@ -135,18 +175,18 @@ function SearchField(myInputID, myULID) {
   
   let count = 0;
     
-  for (let i = 0; li.length > i; i++) {
+  for(let i = 0; li.length > i; i++){
     txtValue = li[i].innerText;
       
-    if ((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10) {
+    if((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10){
       li[i].style.display = "block";
       count++;
-    } else {
+    }else{
         li[i].style.display = "none";
     }
   }
    
-  if (input.value == "") {
+  if(input.value == ""){
     ul.hidden = "hidden";
   }
 }
@@ -155,7 +195,7 @@ function createDynamicList(id){
   let divForList = document.getElementById(id);
   let list = document.createElement("ul");
   
-  for (let i in nameArray){
+  for(let i in nameArray){
     let li = document.createElement('li');
     li.innerText = nameArray[i];
     li.className = "item";
@@ -193,8 +233,6 @@ function createSearchPref(number){
 
 }
 
-let modalDiv = document.getElementById("modalContent");
-
 createDivs(numberOfStudentPreferences);
 createSearchPref(numberOfStudentPreferences);
 
@@ -217,14 +255,15 @@ for(let input = 1; input <= numberOfStudentPreferences; input++){
 createSaveButton();
 
 
-let override_textbox = document.getElementById("override");
-makeBreaks(override_textbox, 2);
+let overrideTextbox = document.getElementById("override");
+makeBreaks(overrideTextbox, 2);
 
 
 
 /*
 
-søgefelt for pref for hvert anatal coordinator indtaster.
-skriv præferencerne ud
+roller i tabel. krydse af. - maks 3. 
+
+hidden hvis coordinator ikke har krydset af.
 
 */
