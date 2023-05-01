@@ -2,49 +2,128 @@ let back_btn = document.getElementById("back_btn");
 let next_btn = document.getElementById("next_btn");
 let unlock_btn = document.getElementById("unlock_btn");
 let start_new_btn = document.getElementById("new_session_btn");
+let save_btn = document.getElementById("save_btn");
 
 let nameGroupFormationInput = document.getElementById("name_group_formation");
 let studentListInput = document.getElementById("student_list");
 let topicsInput = document.getElementById("topics");
 let blockedUL = document.getElementById("BlockedUL");
-let BlockedInput = document.getElementById("BlockedInput");
-let myInput = document.getElementById("myInput");
+//let BlockedInput = document.getElementById("BlockedInput");
+//let myInput = document.getElementById("myInput");
 //let ULItems = blockedUL.getElementsByTagName("li");
 //document.getElementById("BlockedUL").onclick=submitForm;
 
 
 
-nameArray = ["Adele","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
-let blocked = [["Nadia","Tania"],["Tina","Thomas"],["Adomas","Trine"],["Simon","Tobias"],["Carmen","Daniel"],["Jonas","Nicolaj"],["Cathrine","Kamilla"],["Simon","Allan"],["Andreas","Adomas"],["Sina","Merete"]];
+// nameArray = ["Adele Adele Adle","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
+//let blocked1 = [["Nadia","Tania"],["Tina","Thomas"],["Adomas","Trine"],["Simon","Tobias"],["Carmen","Daniel"],["Jonas","Nicolaj"],["Cathrine","Kamilla"],["Simon","Allan"],["Andreas","Adomas"],["Sina","Merete"]];
+let blocked = [];
 
 
-function createDynamicList(){   
-    let dynalist = document.getElementById("MyDivUL")
-    let dynalist2 = document.getElementById("MyDivBlockedUL")
-    let dyn = document.createElement("ul")
-    let dyn2 = document.createElement("ul")
+function createDynamicList(input) {
+
+    fetch('./search', {
+        method: "POST",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            className: 'SW2',
+            name: input.value
+        }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+
+        let nameArray = data.students;
+
+        if (input.id == 'myInput') {
+
+            let dynalist = document.getElementById("MyDivUL");
+
+            if (dynalist.getElementsByTagName('ul')[0]) {
+
+                dynalist.getElementsByTagName('ul')[0].remove();
     
-    for (let i in nameArray)
-    {
-        let li = document.createElement('li')
-        li.innerText = nameArray[i]
-        li.className = "item"
-        let li2 = document.createElement('li')
-        li2.innerText = nameArray[i]
-        li2.className = "item"
-        dyn.appendChild(li)
-        dyn2.appendChild(li2)
+            }
+
+            if (input.value != "") {
+
+                let dyn = createElement('ul', {id: 'myUL'});
+
+                for (let i in nameArray) {
+
+                    let li = createElement('li', {class: 'item', innerText: nameArray[i]});
+
+                    dyn.appendChild(li);
+
+                }
+
+                dynalist.appendChild(dyn);
+
+                document.getElementById("myUL").addEventListener("click", function(e) {
+                    if (e.target && e.target.matches("li")) {
+                        document.getElementById("myInput").value = e.target.innerText; // new class name here
+                        document.getElementById("myInput").setAttribute("Placeholder","Selected")
+                      //alert("clicked " + e.target.innerText);
+                    }
+                
+                  });
+                
+                
+
+            }
+
+        } else if (input.id == 'BlockedInput') {
+
+            let dynalist2 = document.getElementById("MyDivBlockedUL");
+
+            if (dynalist2.getElementsByTagName('ul')[0]) {
+
+                dynalist2.getElementsByTagName('ul')[0].remove();
+
+            }
+
+            if (input.value != "") {
+
+                let dyn2 = createElement('ul', {id: 'BlockedUL'});
         
-    }
-    dyn.hidden = "hidden"
-    dyn.id = "myUL" 
-    dyn2.hidden = "hidden"
-    dyn2.id = "BlockedUL"
+                for (let i in nameArray) {
 
-    dynalist2.appendChild(dyn2)
-    dynalist.appendChild(dyn)
+                    let li2 = createElement('li', {class: 'item', innerText: nameArray[i]});
+            
+                    dyn2.appendChild(li2);
+            
+                }
+
+                dynalist2.appendChild(dyn2);
+
+                document.getElementById("BlockedUL").addEventListener("click", function(e) {
+                    if (e.target && e.target.matches("li")) {
+                        document.getElementById("BlockedInput").value = e.target.innerText; // new class name here
+                        document.getElementById("BlockedInput").setAttribute("Placeholder","Selected")
+                      //alert("clicked " + e.target.innerText);
+                    }
+                  });
+
+            }
+
+        }
+    
+        
+        
+    });
+
+    
+    //dyn.hidden = "hidden"
+    //dyn.id = "myUL"
+    //dyn2.hidden = "hidden"
+    //dyn2.id = "BlockedUL"
+
+    
+    
 }
-
 
 
 if(back_btn){
@@ -115,14 +194,13 @@ if(start_new_btn){
 
 
 function SearchField(myInputID,myULID) {
-    var input, filter, ul, li, a, i, txtValue;
+    let input, filter, ul, li, a, i, txtValue;
         input = document.getElementById(myInputID); // Her @Skjodt
         filter = input.value.toUpperCase();
         ul = document.getElementById(myULID);
         li = ul.getElementsByTagName('li');
-    if(window.event.keyCode=='13'){
         // Declare variables    
-        
+        input.setAttribute("Placeholder","Search for names..")
         ul.hidden = "";
         //Måske optimer koden, så den kun tager 'input' ind som parameter
         let count = 0;
@@ -137,32 +215,30 @@ function SearchField(myInputID,myULID) {
             li[i].style.display = "none";
         }
         }
-    } else if (input.value == "") {
+    if (input.value == "") {
         ul.hidden = "hidden";
     }
     
   }
 
-if(window.location.pathname == "/coordinator_config"){
-  
-document.getElementById("proeveDiv").addEventListener("load",createDynamicList())
-document.getElementById("TableDivId").addEventListener("load",createDynamicList2())
+if(window.location.pathname == "/coordinator_config") {
 
-  document.getElementById("myUL").addEventListener("click", function(e) {
-    if (e.target && e.target.matches("li")) {
-      myInput.value = e.target.innerText; // new class name here
-      //alert("clicked " + e.target.innerText);
+    document.querySelectorAll("#myInput, #BlockedInput").forEach(function(element) {
+
+        element.addEventListener("input", function() {
+        
+            createDynamicList(this);
+        
+        });
+    
+    });
+/*
+    if(document.getElementById("myInput").innerHTML != "")
+    {
+    document.getElementById("proeveDiv").addEventListener("load",createDynamicList());
+    //document.getElementById("TableDivId").addEventListener("load",createDynamicList2());
     }
-
-  });
-
-document.getElementById("BlockedUL").addEventListener("click", function(e) {
-    if (e.target && e.target.matches("li")) {
-      BlockedInput.value = e.target.innerText; // new class name here
-      //alert("clicked " + e.target.innerText);
-    }
-  });
-  
+  */
 }
 
 /*
@@ -185,25 +261,158 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }*/
+function BlockedList(StudentA, StudentB){
+let blockedPair = [];
+blockedPair = new Array(2);
+blockedPair[0] = document.getElementById(StudentA).value;
+blockedPair[1] = document.getElementById(StudentB).value;
+console.log(document.getElementById(StudentA).ariaPlaceholder)
 
+if(document.getElementById(StudentA).placeholder != "Selected" || document.getElementById(StudentB).placeholder != "Selected")
+{
+    return (alert("You have to choose 2 Students!"))
+}
 
-function createDynamicList2(){   
-    let table = document.getElementById("MyBlockedTable")
-   console.log(blocked.length)
-   
-    for (let i in blocked)
-    {
-        let row = table.insertRow(1)
-        let cell1 = row.insertCell(0)
-        let cell2 = row.insertCell(1)
-        let cell3 = row.insertCell(2)
-        cell1.innerHTML = blocked[i][0]
-        cell2.innerHTML = blocked[i][1]
-        checkbox = document.createElement("input")
-        checkbox.type = "checkbox";
-        checkbox.id = "blocked_pairs";
-        checkbox.name = "blocked_pairs";
-        checkbox.checked = true;
-        cell3.append(checkbox)
+if(blockedPair[0] == blockedPair[1])
+{
+    return(alert("You cannot block the same student"))
+}
+
+for (let i=0;blocked.length > i;i++)
+{
+    if(blockedPair[0] == blocked[i][0] || blockedPair[0] == blocked[i][1]){
+        if(blockedPair[1] == blocked[i][0] || blockedPair[1] == blocked[i][1]){
+            return(alert("Pair already exists"))
+        }
     }
+}
+
+
+
+
+
+
+
+blocked.push(blockedPair)
+createDynamicList2(blockedPair)
+}
+
+function createDynamicList2(blockedArray){   
+    let table = document.getElementById('MyBlockedTable').getElementsByTagName('tbody')[0]
+    
+    /*
+        let tr = document.createElement('tr'); //column
+        let th1 = document.createElement('th');
+        let th2 = document.createElement("th");
+        let th3 = document.createElement('th');
+        th1.innerText = "Student A"
+        th2.innerText = "Student B"
+        th3.innerText = "Blocked"
+        tr.appendChild(th1)
+        tr.appendChild(th2)
+        tr.appendChild(th3)
+        table.appendChild(tr)
+    */
+
+        console.log(blockedArray);
+    
+    let row = table.insertRow(0);
+    let cell1 = row.insertCell(0)
+    let cell2 = row.insertCell(1)
+    let cell3 = row.insertCell(2)
+    checkbox = document.createElement("input")
+    checkbox.type = "checkbox";
+    checkbox.id = "blocked_pairs";
+    checkbox.name = "blocked_pairs";
+    checkbox.checked = true;
+    cell1.innerHTML = blockedArray[0]
+    cell2.innerHTML = blockedArray[1]
+    cell3.append(checkbox)
+    
+}
+
+function createElement(type, props) {
+
+    let element = document.createElement(type);
+
+    for (let prop in props) {
+
+        switch(prop) {
+
+            case 'innerText': 
+                element.innerText = props[prop];
+                break;
+            case 'innerHTML':
+                element.innerHTML = props[prop];
+                break;
+            default:
+                element.setAttribute(prop, props[prop]);
+
+        }
+    
+    }
+
+    return element;
+    
+}
+
+if (save_btn) {
+
+    save_btn.addEventListener("click", function() {
+
+        let array = tableToArray(document.querySelector("table > tbody"));
+
+        console.log(array);
+
+        fetch('./addBlockedPairs', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                className: 'SW2',
+                array: array
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+
+        
+        });
+
+    });
+
+}
+
+function tableToArray(table) { // https://stackoverflow.com/a/34349548
+
+    let array = [];
+
+    let rows = table.children;
+
+    for (let i = 0; i < rows.length; i++) {
+        
+        if (rows[i].children[2].getElementsByTagName('input')[0].checked == "0") {
+
+            continue;
+        
+        } 
+        
+        let fields = rows[i].children;
+    
+        let rowArray = [];
+    
+        for (let j = 0; j < fields.length - 1; j++) {
+
+            rowArray.push(fields[j].innerText);
+            
+        }
+            
+    array.push(rowArray);
+
+    }
+
+    return array;
+
 }

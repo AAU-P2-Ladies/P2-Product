@@ -1,7 +1,12 @@
 [
     {
         "navn": "Abedullah Kamalzada",
-        "email": "akama22@student.aau.dk"
+        "email": "akama22@student.aau.dk",
+        "prefs": ["hej2", "hej3"],
+        "blocks": ["hej", "hej1"],
+        "roles": ["hej4", "hej5"],
+        "topics": ["hej6", "hej7"],
+        "keycode": "92uth92hg9g"
     },
     {
         "navn": "Adam Kuzniewski",

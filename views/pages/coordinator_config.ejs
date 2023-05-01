@@ -39,48 +39,21 @@
                         <button id="addPref" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Block Pairs</button><br><br>
         
                     
-                           <div class="table-data">
-                            <table>
-                             <tr>
-                                <th>Student 1</th>
-                                <th>Student 2</th>
-                                <th>Blocked</th>
-                             </tr>
-                             <tr>
-                              <td>Sina</td><td>Merete</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr> 
-                             <tr>
-                              <td>Andreas</td> <td>Adomas</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             <tr>
-                              <td>Simon</td> <td> Allan</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             <tr>
-                              <td>Cathrine</td><td>Kamilla</td><td><input type="checkbox" id="blocked_pairs" name="include_roles" checked></td>
-                             </tr>
-                             <tr>
-                              <td>Jonas</td><td>Nicolaj</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             <tr>
-                              <td>Carmen</td> <td>Daniel</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             <tr>
-                              <td>Tobias</td><td>Simon</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             <tr>
-                              <td>Adomas</td><td>Trine</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             <tr>
-                              <td>Tina</td><td>Thomas</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             <tr>
-                             <td>Nadia</td><td>Tania</td><td><input type="checkbox" id="blocked_pairs" name="blocked_pairs" checked></td>
-                             </tr>
-                             </table>
-                            </div>
-                           </td>
-                          </tr>
-                        </table>
+                        <div class="table-data" id="TableDivId">
+                        
+                            <table id="MyBlockedTable">
+                              <thead>
+                                <tr>
+                                  <th>Student A</th>
+                                  <th>Student B</th>
+                                  <th>Blocked</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                
+                              </tbody>
+                            </table>
+                        
                        
                        </div>
                    
@@ -117,26 +90,22 @@
             <div class="modal-body">
               <form>
                 <div class="div1" id="MyDivUL">
-                    <input type="text" id="myInput" onkeyup="SearchField('myInput','myUL')" placeholder="Search for names..">
+                    <input type="text" id="myInput" onkeyup="SearchField('myInput','myUL')" placeholder="Search for names.." required>
                     </div>
 
                 <div class="div2" id="MyDivBlockedUL"> 
-                    <input type="text" id="BlockedInput" onkeyup="SearchField('BlockedInput','BlockedUL')" placeholder="Search for names..">        
+                    <input type="text" id="BlockedInput" onkeyup="SearchField('BlockedInput','BlockedUL')" placeholder="Search for names.." class="selected">        
                 </div>
 
-                <div class="table-data" id="TableDivId">
-                    <table id="MyBlockedTable">
-                     <tr>
-                        <th>Student 1</th>
-                        <th>Student 2</th>
-                        <th>Blocked</th>
-                     </tr>
-                    </table>
+                <div class="div3" id="BlockThePairs">
+                  <input type="button" id="BlockedButton" value="Add Blocked Pair" onclick="BlockedList('myInput', 'BlockedInput')">
+                </div>
+
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Send message</button>
+              <button type="button" class="btn btn-primary" onclick="">Send message</button>
             </div>
           </div>
         </div>

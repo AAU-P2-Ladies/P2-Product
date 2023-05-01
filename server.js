@@ -311,7 +311,10 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
 app.post('/search', (req, res) => {
 
-    let students = getJSONFile('SW2/students.json');
+    const queryName = req.body.name;
+    const className = req.body.className;
+
+    let students = getJSONFile(className + '/students.json');
     let studentsArray = [];
 
     students.map(({navn, email}) => navn);
@@ -322,7 +325,41 @@ app.post('/search', (req, res) => {
 
     }
 
+    let stringToMatch = queryName;
+
+    if (stringToMatch != "") {
+
+        studentsArray = studentsArray.filter(function(p) {
+
+            let studentArray = p.split('');
+            let studentToMatch = [];
+            
+            for(var i = 0; i < stringToMatch.length; i++) {
+            
+                studentToMatch.push(studentArray[i]);
+            
+            }
+            
+            return stringToMatch.toLowerCase() == studentToMatch.join('').toLowerCase();
+        
+        })
+
+    }
+
     res.json({students: studentsArray});
+
+    return res.end();
+
+});
+
+app.post('/addBlockedPairs', (req, res) => {
+
+    const array = req.body.array;
+    const className = req.body.className;
+
+    let students = getJSONFile(className + '/students.json');
+    
+    console.log(array);
 
     return res.end();
 
