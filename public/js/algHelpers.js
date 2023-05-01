@@ -187,7 +187,7 @@ function findMin(array){
 //As input, it takes an array and another array containing booleans
 //It returns the minimum from the first array, but only if the corresponding booleans is true
 function findMinSpace(array, boolean){
-    let i = 1;
+    let i = 0;
     let key = -1;
     while(key == -1){
         if(boolean[i] == true)
@@ -195,8 +195,8 @@ function findMinSpace(array, boolean){
         i++;
     }
     for(i in array){
-        if(groups[i] < array[key] && boolean[i] == true)
-        key = i;
+        if(array[i] < array[key] && boolean[i] == true)
+            key = i;
     }
     return key;
 }
