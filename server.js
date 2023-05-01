@@ -354,12 +354,54 @@ app.post('/search', (req, res) => {
 
 app.post('/addBlockedPairs', (req, res) => {
 
-    const array = req.body.array;
+    const objectArray = req.body.array;
     const className = req.body.className;
 
+    //console.log(array);
+
+    let blockedArray = [];
+
+    for (let key in objectArray) {
+
+        blockedArray.push(objectArray[key].name);
+
+    }
+
     let students = getJSONFile(className + '/students.json');
+
+    students.forEach(element => {
+
+        //console.log(firstBlockedPair.indexOf(element.navn));
+
+        if (blockedArray.includes(element.navn)) {
+
+            objectArray.filter(object => {
+
+                if (element.navn === object.name) {
+
+                    element.blocks = object.blocks;
+
+                }
+            
+            });
+
+        }
     
-    console.log(array);
+    });
+
+    fs.writeFile("./database/" + className + "/students.json", JSON.stringify(students, null, 4), err => {
+
+        if (err) {
+
+            console.error(err);
+
+        } 
+    
+    });
+
+    console.log(students);
+
+    res.json({ error: false});
 
     return res.end();
 
