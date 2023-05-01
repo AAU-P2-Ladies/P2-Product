@@ -416,3 +416,19 @@ function tableToArray(table) { // https://stackoverflow.com/a/34349548
     return array;
 
 }
+
+function addelement() {
+    // let counter=["Ana","Camelia","fish"] ;
+     let checkBox=document.getElementById("include_roles");
+ let completelist= document.getElementById("thelist");
+ completelist.innerHTML = "";
+ for(let i=0;i<roles.length;i++){
+ completelist.innerHTML += "<li>" + roles[i] + "</li>";
+ }
+ if (checkBox.checked == true){
+     document.getElementById("thelist").style.display = "block";
+   } else {
+     document.getElementById("thelist").style.display= "none";
+ 
+ }
+ }
