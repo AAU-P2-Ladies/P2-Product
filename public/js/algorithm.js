@@ -9,7 +9,16 @@ const roleNumber = 9
 const maxIterations = 1000
 //const minDiversity = 0.75
 
-//Creates the object Student
+/**
+ * Creates the object Student
+ * @param {*} first 
+ * @param {*} index 
+ * @param {*} prefs 
+ * @param {*} blocks 
+ * @param {*} roles 
+ * @param {*} groupNr 
+ * @param {*} topics 
+ */
 function Student(first, index, prefs = [], blocks = [], roles = [], groupNr, topics = []) {
     this.firstName = first;
     this.index = index;
@@ -20,7 +29,11 @@ function Student(first, index, prefs = [], blocks = [], roles = [], groupNr, top
     this.topics = topics;
 }
 
-//Creates the object Group
+/**
+ * Creates the object Group
+ * @param {*} students 
+ * @param {*} isFull 
+ */
   function Group(students = [], isFull) {
     this.students = students;
     this.isFull = isFull;
@@ -176,12 +189,19 @@ function prefGroups (students, matrix, groupSize) {
     return groups
 }
 
-
-//This function takes a student (the origin) and finds the best possible swap between a set of groups
-//It compares the student to every other student in every other group
-//If certain swaps make the number of groups above minimum diversity bigger, make one of those swaps
-//Else, make the swap that doesn't decrease the diversity while still lowering the pref number as much as possible
-//Returns the group and index of the person that should be swapped
+/**
+ * This function takes a student (the origin) and finds the best possible swap between a set of groups
+ * It compares the student to every other student in every other group
+ * If certain swaps make the number of groups above minimum diversity bigger, make one of those swaps
+ * If certain swaps make the number of groups above minimum diversity bigger, make one of those swaps
+ * Else, make the swap that doesn't decrease the diversity while still lowering the pref number as much as possible
+ * @param {*} origin 
+ * @param {*} groups 
+ * @param {*} minDiversity 
+ * @param {*} students 
+ * @param {*} matrix 
+ * @returns the group and index of the person that should be swapped
+ */
 function swapCheck(origin, groups, minDiversity, students, matrix){
     let originGroup = groups[origin.groupNr];
     let originIndex = originGroup.students.indexOf(origin);
@@ -253,6 +273,15 @@ function swapCheck(origin, groups, minDiversity, students, matrix){
 //Then, it continuously calls swapCheck to ensure minDiversity is reached as far as possible
 //Then, it continues to call swapCheck until no improving swaps can be made
 //It also terminates after a large number of iterations
+/**
+ * This hill climbing algorithm takes the following input
+ * @param {*} students 
+ * @param {*} groups 
+ * @param {*} minDiversity 
+ * @param {*} matrix 
+ * @param {*} maxIterations 
+ * @returns 
+ */
 function hillClimb(students, groups, minDiversity, matrix, maxIterations){
     let homogenousGroups = helper.checkMinDiversity(groups, minDiversity);
     //If there exist groups that do not fulfill min diversity, start with those
@@ -294,8 +323,12 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
     return groups
 }
 
-
-//This function will return an array of arrays of groups, with maximized role diversity
+/**
+ * This function will return an array of arrays of groups, with maximized role diversity
+ * @param {*} students 
+ * @param {*} groupSize 
+ * @returns 
+ */
 function findMinDiversity(students, groupSize){
     let groupNumber = Math.ceil(students.length/groupSize);
     //If the students cannot be evenly divided, there have to be a number of smaller groups
@@ -367,6 +400,13 @@ function findMinDiversity(students, groupSize){
 //It takes an array of student objects and a desired group size
 //It loops through the algorithm until max seconds has been reached
 //Meanwhile, it compares each result and in the end returns the one with the highest diversity and satisfaction percentage
+/**
+ * This function calls the parts of the algorithm in the correct order to generate groups from students
+ * @param {*} students 
+ * @param {*} groupSize 
+ * @param {*} maxSeconds 
+ * @returns 
+ */
 function masterAlgorithm(students, groupSize, maxSeconds){
     helper.indexStudents(students);
     let matrix = preferenceMatrix(students);
