@@ -24,6 +24,10 @@
         "classes": [
             {
                 "class": "SW2"
+            },
+            {
+                "class": "DAT2",
+                "keycode": "EasY5kgU7w"
             }
         ],
         "isCoordinator": 0

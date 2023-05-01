@@ -1,6 +1,17 @@
 let group = {groupName: "SW2023-09", members: ["Sina1", "Nikolaj", "Sina2", "Sina3"] , topic: "Miljø"};
 
-function create_table(group){
+function getUser(){
+    fetch('./checkUserLogin', {
+      }).then(response => response.json()).then(data => {
+
+      })
+}
+
+function readGroups(groupFile){
+
+}
+
+function createTable(group){
     let boksenn = document.getElementById("divBoks");
 
     let groupTable = document.createElement("table");
@@ -32,4 +43,4 @@ function create_table(group){
     }
 }
 
-create_table(group);
+createTable(group);

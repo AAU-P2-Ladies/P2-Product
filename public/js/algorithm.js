@@ -381,7 +381,7 @@ function masterAlgorithm(students, groupSize, maxSeconds){
     let bestAvgPref = 0;
     let bestAvgDiversity = 0;
     let finalGroups = [];
-    while(Date.now() - time < maxSeconds*1000){
+    while(Date.now() - time < maxSeconds * 1000){
         //Each students groupNr has to be reset for each new group formation since prefGroups assumes students are not in a group
         for(let student of students){
             student.groupNr = -1;

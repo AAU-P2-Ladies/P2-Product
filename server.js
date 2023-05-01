@@ -204,8 +204,28 @@ app.post('/login', (req, res) => {
                         // If the user is not part of the inputted class, then add the class to their user
                         if (duplicateClass == 0) {
 
-                            user.classes.push({ class: class1 });
+                            user.classes.push({ class: class1, keycode: keycode});
 
+                            classFileName = (class1 + "/students.json");
+                            classFile = getJSONFile(classFileName);
+
+                            classFile.some((userKey) => {
+
+                                if (userKey.Keycodes == keycode){
+                                    userKey.isRegistered = 1;
+                                    
+
+                                }
+                            })
+                            fs.writeFile("./database/" + classFileName, JSON.stringify(classFile, null, 4), JSON.stringify(json, null, 4), err => {
+
+                                if (err) {
+                    
+                                    console.error(err);
+                    
+                                } 
+                    
+                            });
                             // Update the users file, taking into account that the user is now part of the class
                             fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
 
@@ -216,7 +236,23 @@ app.post('/login', (req, res) => {
                                 } 
                     
                             });
+                            
+                            //loop to remove the current keycode
+                            for(let i in keycodes){
+                                if (keycodes[i].keycode == keycode){
+                                    keycodes.splice(i, 1);
+                                    break;
+                                }
+                            }
+                            fs.writeFile("./database/keycodes.json", JSON.stringify(keycodes, null, 4), JSON.stringify(json, null, 4), err => {
 
+                                if (err) {
+                    
+                                    console.error(err);
+                    
+                                } 
+                    
+                            });
                         }
                         
                         // Sends a JSON-response back that there was no errors and the user is now logged in
@@ -666,9 +702,20 @@ async function studentObjectMaker(users, semester){
 
 
     let students = [];
+    let keycodeFile = await getJSONFile("keycodes.json");
+    let keycode = "";
+    let tmpKeycode = "";
 
     //Makes an object with a name, code, and boolean, for every student sent by the coordinator
     for (let i in users) {
+
+        keycode = keycodeFile.some(user =>{
+            tmpKeycode = makeKeycode(10);
+
+            if (tmpKeycode == user.keycode){
+                return 0;
+            }else return tempKeyCode
+        })
         
          students[i] = {
             Name: users[i],
@@ -680,6 +727,9 @@ async function studentObjectMaker(users, semester){
 
     await checkFolderName(semester);
 
+    
+    
+
     fs.writeFile("./database/" + semester + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
 
         if (err) {
@@ -690,7 +740,14 @@ async function studentObjectMaker(users, semester){
 
     });
 
+
 }
+
+app.get('./getGroup', (req, res) => {
+    let fileName = session.class + "/groups.json";
+    let groupFile = getJSONFile(fileName);
+
+})
 
 //These error middelware have to stay at the bottom
 
