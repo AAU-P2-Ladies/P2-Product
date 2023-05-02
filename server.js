@@ -4,7 +4,6 @@ const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const { exit } = require('process');
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 
 var fs = require('fs'), json;
 var session;
