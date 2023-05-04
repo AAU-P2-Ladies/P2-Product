@@ -124,24 +124,24 @@ function topic_choice(number, data, nameId, divName){
 
 
 
-let newDiv = document.createElement("div");
-newDiv.id = "newDivOne";
+let newDivv = document.createElement("div");
+newDivv.id = "newDivOne";
 
 let headingE = document.createElement("h1");
   let textz = document.createTextNode("Topic");
   headingE.appendChild(textz);
-  newDiv.prepend(headingE);
+  newDivv.prepend(headingE);
 
 let x= document.createElement("input");
 x.type= "checkbox";
 x.id= "topics";
-newDiv.prepend(x);
+newDivv.prepend(x);
 
 
 
 
 
-list.prepend(newDiv);
+list.prepend(newDivv);
 
 
 
@@ -187,9 +187,9 @@ check_topics("Topic",topics);*/
 
 
 let btn = document.getElementById("addPref");
-let modal = document.getElementById("prefModal");
-let span = document.getElementsByClassName("close")[0];
 
+
+function addPrefFunction(e){
   e.preventDefault();
 
   modal.style.display = "block";
@@ -388,7 +388,6 @@ let newDiv = document.createElement("div");
 newDiv.id = "newDivOne";
 list.prepend(newDiv);
 
-priorities(numberOfStudentPreferences, topics, "Topic", newDiv);
 
 createSaveButton();
 
