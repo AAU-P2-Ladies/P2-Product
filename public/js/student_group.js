@@ -1,11 +1,14 @@
-let group = {groupName: "SW2023-09", members: ["Sina1", "Nikolaj", "Sina2", "Sina3"] , topic: "Miljø"};
+//let group = {groupName: "SW2023-09", members: ["Sina1", "Nikolaj", "Sina2", "Sina3"] , topic: "Miljø"};
 
-function getUser(){
-    fetch('./checkUserLogin', {
-      }).then(response => response.json()).then(data => {
 
-      })
-}
+window.onload = fetch('./getGroup', {
+    }).then((response) => response.json()).then((data) => {
+        console.log(data)
+        createTable(JSON.parse(data))
+    })
+
+
+
 
 function readGroups(groupFile){
 
@@ -31,7 +34,7 @@ function createTable(group){
     tableCell.appendChild(text);
     rowTwo.append(tableCell);
 
-    for (let i of group.members){
+    for (let i of group.students){
         let row = document.createElement("tr");
         groupTable.append(row);
         let tableCell = document.createElement("td");
@@ -43,4 +46,4 @@ function createTable(group){
     }
 }
 
-createTable(group);
+//createTable(group);

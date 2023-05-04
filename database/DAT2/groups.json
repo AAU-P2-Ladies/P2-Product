@@ -1,5 +1,6 @@
 [
     {
+        "groupName": "Group 1",
         "students": [
             "Allan",
             "Nicolaj",
@@ -9,6 +10,7 @@
         "topic": "Group formation"
     },
     {
+        "groupName": "Group 2",
         "students": [
             "Merete",
             "Simon",
