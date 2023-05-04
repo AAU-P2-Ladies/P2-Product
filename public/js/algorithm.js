@@ -4,9 +4,8 @@ const helper = require('./algHelpers.js');
 //Define values that should be given by the website
 let min = 0;
 let StudentNum = 100;
-let groupSize = 7;
 const roleNumber = 9
-const maxIterations = 100
+const maxIterations = 100;
 //const minDiversity = 0.75
 
 //Creates the object Student
@@ -419,20 +418,19 @@ function algorithmCalls(students, groupSize, maxSeconds){
         //This loop computes the variables to be compared in order to find the optimal values for this run
         for(let i in groups){
             let prefSum = helper.groupPrefSum(groups[i].students, matrix);
-            let percent = helper.prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length);
+            let percent = helper.prefSatisfactionPercent(prefSum, students.length, groups[i].students.length);
             totalDiverse += helper.groupDiversityCheck(groups[i],minDiversity)
             totalPercent += percent;
         }
-        let avgPref = totalPercent/Math.ceil(StudentNum/groupSize);
-        let avgDiversity = totalDiverse/Math.ceil(StudentNum/groupSize);
+        let avgPref = totalPercent/Math.ceil(students.length/groupSize);
+        let avgDiversity = totalDiverse/Math.ceil(students.length/groupSize);
         if(avgDiversity >= bestAvgDiversity && avgPref >= bestAvgPref){
             finalGroups = groups;
             bestAvgDiversity = avgDiversity;
             bestAvgPref = avgPref;
         }
     }
-    console.log("best possible pref percentage: " + bestAvgPref)
-    return finalGroups
+    return [bestAvgPref, bestAvgDiversity]
 }
 
 //Below here is only for testing
@@ -462,7 +460,7 @@ function getRandomInts(max,block,numbers){
 
 
 //Initilize the student arrays with StudentNum amount of students 
-
+/*
 
 let students = [];
 for (let s = 0;s<StudentNum;s++) {
@@ -475,13 +473,7 @@ for (let s = 0;s<StudentNum;s++) {
 
 console.log("Trying for 1 sec")
 algorithmCalls(students, groupSize, 1)
-console.log("Trying for 5 sec")
-algorithmCalls(students, groupSize, 5)
-console.log("Trying for 15 sec")
-algorithmCalls(students, groupSize, 15)
-console.log("Trying for 30 sec")
-algorithmCalls(students, groupSize, 30)
-
+*/
 
 //Calculate whether the group member size adds up (groups can be made
 // with the group member size but some groups may have one less group member)  
@@ -532,5 +524,56 @@ for(let i in groups){
 console.log(totalPercent/Math.ceil(StudentNum/groupSize))
 console.log(totalDiverse/Math.ceil(StudentNum/groupSize))
 */
+
+
+function findTime(n, calls, g){
+    let timeSum = 0
+    let prefSum = 0
+    let divSum = 0
+    for(let i = 0; i < calls; i++){
+        let students = [];
+        for (let s = 0;s<n;s++) {
+            let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
+            students.push(student0)
+        }
+        let startTime = Date.now()
+        let results = algorithmCalls(students, g, 0.05)
+        timeSum += Date.now() - startTime
+        prefSum += results[0]
+        divSum += results[1]
+    }
+    console.log("average time for " + n + " students with group size " + g + ":" + (timeSum/calls/1000))
+    console.log("average pref satisfaction for " + n + " students with group size " + g + ":" + (prefSum/calls))
+    console.log("average role satisfaction for " + n + " students with group size " + g + ":" + (divSum/calls))
+
+}
+
+function findEfficiency(n, calls, g, time){
+    let timeSum = 0
+    let prefSum = 0
+    let divSum = 0
+    for(let i = 0; i < calls; i++){
+        let students = [];
+        for (let s = 0;s<n;s++) {
+            let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
+            students.push(student0)
+        }
+        let startTime = Date.now()
+        let results = algorithmCalls(students, g, time)
+        timeSum += Date.now() - startTime
+        prefSum += results[0]
+        divSum += results[1]
+    }
+    console.log("After " + time + " seconds")
+    console.log("average pref satisfaction for " + n + " students with group size " + g + ":" + (prefSum/calls))
+    console.log("average role satisfaction for " + n + " students with group size " + g + ":" + (divSum/calls))
+
+}
+
+findEfficiency(100, 10, 6, 1)
+
+for(let i = 5; i <= 30; i+=5){
+    findEfficiency(100, 10, 6, i)
+}
 
 module.exports = {Student, Group, preferenceMatrix}
