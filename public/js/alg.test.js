@@ -95,6 +95,12 @@ describe('checkRoleDiversity', () => {
     })
 })
 
+describe('findCommonTopic', () => {
+    test('should return one of the topics with most occurences in a group', () =>{
+        expect(helper.findCommonTopic(groups[0])).toEqual(5);
+    })
+})
+
 /*
 describe('masterAlgorithm', () => {
     test('The groups outputted by the algorithm need to have a larger or equal preference average than those inputtet', () => {
