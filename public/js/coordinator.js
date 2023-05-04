@@ -248,6 +248,7 @@ if (window.location.pathname == "/coordinator_config") {
         //document.getElementById("TableDivId").addEventListener("load",createDynamicList2());
         }
       */
+
 }
 
 /*
@@ -337,6 +338,82 @@ function createDynamicList2(blockedArray) {
 
 }
 
+if (save_btn) {
+
+    save_btn.addEventListener("click", function () {
+
+        let amountOfGroupMembers = document.getElementById("amountOfGroupMembers");
+        let studentPreferences = document.getElementById("studentPreferences");
+        let previousMembers = document.getElementById("previousMembers");
+
+        let blockedPairArray = tableToArray(document.querySelector("table > tbody"));
+
+        fetch('./updateClassConfig', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                className: 'SW2',
+                amountOfGroupMembers: amountOfGroupMembers.value,
+                studentPreferences: studentPreferences.value,
+                previousMembers: previousMembers.value,
+                blockedPairArray: blockedPairArray
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+
+                console.log(data);
+
+            });
+
+    });
+
+}
+
+if (unlock_btn) {
+
+    unlock_btn.addEventListener("click", function () {
+
+        fetch('./unlockClass', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                className: 'SW2'
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+
+                console.log(data);
+
+            });
+
+    });
+
+}
+
+function addelement() {
+    // let counter=["Ana","Camelia","fish"] ;
+    let checkBox = document.getElementById("include_roles");
+    let completelist = document.getElementById("thelist");
+    completelist.innerHTML = "";
+    for (let i = 0; i < roles.length; i++) {
+        completelist.innerHTML += "<li>" + roles[i] + "</li>";
+    }
+    if (checkBox.checked == true) {
+        document.getElementById("thelist").style.display = "block";
+    } else {
+        document.getElementById("thelist").style.display = "none";
+
+    }
+}
+
 function createElement(type, props) {
 
     let element = document.createElement(type);
@@ -359,35 +436,6 @@ function createElement(type, props) {
     }
 
     return element;
-
-}
-
-if (save_btn) {
-
-    save_btn.addEventListener("click", function () {
-
-        let array = tableToArray(document.querySelector("table > tbody"));
-
-        console.log(array);
-        
-        fetch('./addBlockedPairs', {
-            method: "POST",
-            headers: {
-                Accept: "application/json, text/plain, */*",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                className: 'SW2',
-                array: array
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-
-
-            });
-
-    });
 
 }
 
@@ -482,20 +530,4 @@ function tableToArray(table) { // https://stackoverflow.com/a/34349548
 
     return array;
 
-}
-
-function addelement() {
-    // let counter=["Ana","Camelia","fish"] ;
-    let checkBox = document.getElementById("include_roles");
-    let completelist = document.getElementById("thelist");
-    completelist.innerHTML = "";
-    for (let i = 0; i < roles.length; i++) {
-        completelist.innerHTML += "<li>" + roles[i] + "</li>";
-    }
-    if (checkBox.checked == true) {
-        document.getElementById("thelist").style.display = "block";
-    } else {
-        document.getElementById("thelist").style.display = "none";
-
-    }
 }

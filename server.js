@@ -407,10 +407,29 @@ app.post('/search', (req, res) => {
 
 });
 
-app.post('/addBlockedPairs', (req, res) => {
+app.post('/updateClassConfig', (req, res) => {
 
-    const objectArray = req.body.array;
     const className = req.body.className;
+    const amountOfGroupMembers = req.body.amountOfGroupMembers;
+    const studentPreferences = req.body.studentPreferences;
+    const previousMembers = req.body.previousMembers;
+    const objectArray = req.body.blockedPairArray;
+
+    let config = {
+        amountOfGroupMembers: amountOfGroupMembers,
+        studentPreferences: studentPreferences,
+        previousMembers: previousMembers
+    };
+
+    fs.writeFile("./database/" + className + "/config.json", JSON.stringify(config, null, 4), err => {
+
+        if (err) {
+
+            console.error(err);
+
+        } 
+    
+    });
 
     let blockedArray = [];
 
@@ -456,6 +475,18 @@ app.post('/addBlockedPairs', (req, res) => {
 
 });
 
+app.post('/unlockClass', (req, res) => {
+
+    const className = req.body.className;
+    
+    // kør studentObjectMaker
+
+    res.json({ error: false});
+
+    return res.end();
+
+});
+
 app.listen(port, () => {
 
     console.log(`Server listening at http://localhost:${port}`);
@@ -491,7 +522,6 @@ function moveFile(oldPath, newPath) { // https://stackoverflow.com/a/21431865
         fs.writeFile(newPath, data, function(err) {
             fs.unlink(oldPath, function(){
                 if(err) throw err;
-                res.send("File uploaded to: " + newPath);
             });
         }); 
     }); 
