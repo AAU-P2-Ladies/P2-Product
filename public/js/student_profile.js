@@ -92,30 +92,103 @@ function makeBreaks(element, number) {
 
 }
 
-function priorities(number, data, nameId, divName) {
+function topic_choice(number, data, nameId, divName){
 
-  for (let i = number; i > 0; i--) {
 
-    let selectionTopics = createDropDown((nameId+"Priority"+i), data);
+  /*let headingE = document.createElement("h1");
+  let textz = document.createTextNode(nameId);
+  headingE.appendChild(textz);
+  divName.prepend(headingE);*/
+  
+  //document.getElementById(nameId).addEventListener("click",check_topics);*/
+
+  for(let i = number; i > 0; i--){
+    let selectionTopics = createDropDown((nameId), data);
     divName.prepend(selectionTopics);
-    let currentSelection = document.getElementById(nameId+"Priority"+i);
+    let currentSelection = document.getElementById(nameId);
     const nameLabel = document.createElement("label");
-    let prio = "Priority";
-    const text = document.createTextNode(i + ". " + prio);
+    const text = document.createTextNode("*");
     nameLabel.appendChild(text);
     divName.prepend(nameLabel);
+    //document.getElementById(nameId).addEventListener("click",check_topics);
     makeBreaks(currentSelection, 1);
 
   }
+  
+ 
 
-  let headingE = document.createElement("h1");
-  let textz = document.createTextNode(nameId + " Preferences");
-  headingE.appendChild(textz);
-  divName.prepend(headingE);
-
+  //document.getElementById(nameId).addEventListener("click",check_topics);
 }
 
-function addPrefFunction(e) {
+
+
+
+
+let newDiv = document.createElement("div");
+newDiv.id = "newDivOne";
+
+let headingE = document.createElement("h1");
+  let textz = document.createTextNode("Topic");
+  headingE.appendChild(textz);
+  newDiv.prepend(headingE);
+
+let x= document.createElement("input");
+x.type= "checkbox";
+x.id= "topics";
+newDiv.prepend(x);
+
+
+
+
+
+list.prepend(newDiv);
+
+
+
+document.getElementById("topics").addEventListener("change", (e) => {
+
+  if (!document.getElementById("Topic")) {
+
+    let newNewDiv = document.createElement("div");
+    newNewDiv.id = "newNewDivOne";
+    newDiv.prepend(newNewDiv);
+
+    topic_choice(numberOfStudentPreferences, topics, "Topic", newNewDiv);
+
+  } else {
+
+    document.getElementById("newNewDivOne").remove();
+
+  }
+
+  
+
+});
+
+//topic_choice(numberOfStudentPreferences, topics, "Topic", newDiv);
+
+
+/*function check_topics(name_Id,data1){
+  /*let x= document.getElementsByTagName("input");
+  x.type= "checkbox";
+  //x.id= id1;
+  let selectionTopics = createDropDown((name_Id), data1);
+  let checkBox=document.getElementsByTagName(name_Id);  
+  //document.getElementById("newDivOne").addEventListener("click",topic_choice);
+
+  if (checkBox.checked == true){
+    document.getElementById(name_Id).style.display = "block";
+  } else {
+    document.getElementById(name_Id).style.display= "none";
+
+}
+}
+check_topics("Topic",topics);*/
+
+
+let btn = document.getElementById("addPref");
+let modal = document.getElementById("prefModal");
+let span = document.getElementsByClassName("close")[0];
 
   e.preventDefault();
 
