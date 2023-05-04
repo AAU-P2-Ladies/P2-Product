@@ -246,7 +246,6 @@ function findCommonTopic(group){
         }
     }
     if(topics){
-        console.log(topics)
         return findMostOccuring(topics);
     }
     else{

@@ -455,12 +455,4 @@ function masterAlgorithm(students, groupSize, maxSeconds){
     return finalGroups
 }
 
-let students = [];
-for (let s = 0;s<StudentNum;s++) {
-    let student0 = new Student(["Student "+s], 0, getRandomInts(StudentNum,s,14), [], getRandomInts(8,-1,3), -1, [])
-    students.push(student0)
-}
-
-masterAlgorithm(students, groupSize, 5)
-
 module.exports = {Student, Group, preferenceMatrix, prefGroups, hillClimb}
