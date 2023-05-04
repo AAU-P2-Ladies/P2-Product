@@ -228,7 +228,7 @@ app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, re
     let students = getJSONFile("uploads/"+req.file.filename)
 
 
-    
+    studentObject
 
     //res.render('pages/coordinator_start');
 
@@ -268,27 +268,59 @@ app.get('/logout', (req,res) => {
 
 app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
-    
-    //console.log(req.body);
-    //console.log(req.files);
-
+    let groupFormationName = req.body.nameGroupFormationInput;
     let studentList = [];
     let topicsList = [];
 
-    console.log(req.files);
+    if (fs.existsSync("database/" + groupFormationName)) {
+
+        res.json({ error: true, groupFormationName: false, studentList: false, topicsList: false, studentListJSON: false, topicsListJSON: false });
+
+        return res.end();
+
+    }
+    
+    fs.mkdirSync("database/" + groupFormationName);
+
     for (let index = 0; index < req.files.length; index++) {
 
-        if (req.files[index].fieldname == "studentListInput" && 
-            isJSON("uploads/" + req.files[index].filename)) {
+        if (req.files[index].fieldname == "studentListInput") {
 
-            studentList = getJSONFile("uploads/" + req.files[index].filename);
+            if (isJSON("uploads/" + req.files[index].filename)) {
+
+                studentList = getJSONFile("uploads/" + req.files[index].filename);
+
+                moveFile("./database/uploads/" + req.files[index].filename, 
+                         "./database/" + groupFormationName + "/students.json"
+                );
+
+            } else {
+
+                res.json({ error: true, groupFormationName: true, studentList: false, topicsList: false, studentListJSON: false, topicsListJSON: false });
+
+                return res.end();
+
+            }
 
         }
 
-        if (req.files[index].fieldname == "topicsInput"  && 
-        isJSON("uploads/" + req.files[index].filename)) {
+        if (req.files[index].fieldname == "topicsInput") {
 
-            topicsList = getJSONFile("uploads/" + req.files[index].filename);
+            if (isJSON("uploads/" + req.files[index].filename)) {
+
+                topicsList = getJSONFile("uploads/" + req.files[index].filename);
+
+                moveFile("./database/uploads/" + req.files[index].filename, 
+                         "./database/" + groupFormationName + "/topics.json"
+                );
+
+            } else {
+
+                res.json({ error: true, groupFormationName: true, studentList: true, topicsList: false, studentListJSON: false, topicsListJSON: false });
+
+                return res.end();
+
+            } 
 
         }
 
@@ -296,16 +328,39 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
     
     for (let index = 0; index < studentList.length; index++) {
 
-        if (studentList[index].hasOwnProperty('name') && 
-            studentList[index].hasOwnProperty('studyNumber')) {
+        if (studentList[index].hasOwnProperty('name')) {
 
-                console.log(studentList[index]);
+            console.log(studentList[index]);
+
+        } else {
+
+            res.json({ error: true, groupFormationName: true, studentList: true, topicsList: true, studentListJSON: false, topicsListJSON: false });
+
+            return res.end();
 
         }
 
     }
-    
-    console.log(req.body.nameGroupFormationInput);
+
+    for (let index = 0; index < topicsList.length; index++) {
+
+        if (topicsList[index].hasOwnProperty('topic')) {
+
+            console.log(topicsList[index]);
+
+        } else {
+
+            res.json({ error: true, groupFormationName: true, studentList: true, topicsList: true, studentListJSON: true, topicsListJSON: false });
+
+            return res.end();
+
+        }
+
+    }
+
+    res.json({ error: false, groupFormationName: true, studentList: true, topicsList: true, studentListJSON: true, topicsListJSON: true });
+
+    return res.end();
 
 });
 
@@ -357,8 +412,6 @@ app.post('/addBlockedPairs', (req, res) => {
     const objectArray = req.body.array;
     const className = req.body.className;
 
-    //console.log(array);
-
     let blockedArray = [];
 
     for (let key in objectArray) {
@@ -370,8 +423,6 @@ app.post('/addBlockedPairs', (req, res) => {
     let students = getJSONFile(className + '/students.json');
 
     students.forEach(element => {
-
-        //console.log(firstBlockedPair.indexOf(element.navn));
 
         if (blockedArray.includes(element.navn)) {
 
@@ -398,8 +449,6 @@ app.post('/addBlockedPairs', (req, res) => {
         } 
     
     });
-
-    console.log(students);
 
     res.json({ error: false});
 
@@ -435,4 +484,15 @@ function isJSON(file) {
         return false;
     }
     return true;
+}
+
+function moveFile(oldPath, newPath) { // https://stackoverflow.com/a/21431865
+    fs.readFile(oldPath , function(err, data) {
+        fs.writeFile(newPath, data, function(err) {
+            fs.unlink(oldPath, function(){
+                if(err) throw err;
+                res.send("File uploaded to: " + newPath);
+            });
+        }); 
+    }); 
 }
