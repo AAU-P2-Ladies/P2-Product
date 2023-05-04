@@ -8,6 +8,10 @@ let nameGroupFormationInput = document.getElementById("name_group_formation");
 let studentListInput = document.getElementById("student_list");
 let topicsInput = document.getElementById("topics");
 let blockedUL = document.getElementById("BlockedUL");
+
+let AmountOfGroupMembers = document.getElementById("amountOfGroupMembers");
+let AmountOfStudentPreferences = document.getElementById("studentPreferences");
+let AmountOfPreviousGroupMembers = document.getElementById("previousMembers");
 //let BlockedInput = document.getElementById("BlockedInput");
 //let myInput = document.getElementById("myInput");
 //let ULItems = blockedUL.getElementsByTagName("li");
@@ -33,95 +37,83 @@ function createDynamicList(input) {
             name: input.value
         }),
     })
-        .then((response) => response.json())
-        .then((data) => {
+    .then((response) => response.json())
+    .then((data) => {
 
-            let nameArray = data.students;
+        let nameArray = data.students;
 
-            if (input.id == 'myInput') {
+        if (input.id == 'myInput') {
 
-                let dynalist = document.getElementById("MyDivUL");
+            let dynalist = document.getElementById("MyDivUL");
 
-                if (dynalist.getElementsByTagName('ul')[0]) {
+            if (dynalist.getElementsByTagName('ul')[0]) {
 
-                    dynalist.getElementsByTagName('ul')[0].remove();
-
-                }
-
-                if (input.value != "") {
-
-                    let dyn = createElement('ul', { id: 'myUL' });
-
-                    for (let i in nameArray) {
-
-                        let li = createElement('li', { class: 'item', innerText: nameArray[i] });
-
-                        dyn.appendChild(li);
-
-                    }
-
-                    dynalist.appendChild(dyn);
-
-                    document.getElementById("myUL").addEventListener("click", function (e) {
-                        if (e.target && e.target.matches("li")) {
-                            document.getElementById("myInput").value = e.target.innerText; // new class name here
-                            document.getElementById("myInput").setAttribute("Placeholder", "Selected")
-                            //alert("clicked " + e.target.innerText);
-                        }
-
-                    });
-
-
-
-                }
-
-            } else if (input.id == 'BlockedInput') {
-
-                let dynalist2 = document.getElementById("MyDivBlockedUL");
-
-                if (dynalist2.getElementsByTagName('ul')[0]) {
-
-                    dynalist2.getElementsByTagName('ul')[0].remove();
-
-                }
-
-                if (input.value != "") {
-
-                    let dyn2 = createElement('ul', { id: 'BlockedUL' });
-
-                    for (let i in nameArray) {
-
-                        let li2 = createElement('li', { class: 'item', innerText: nameArray[i] });
-
-                        dyn2.appendChild(li2);
-
-                    }
-
-                    dynalist2.appendChild(dyn2);
-
-                    document.getElementById("BlockedUL").addEventListener("click", function (e) {
-                        if (e.target && e.target.matches("li")) {
-                            document.getElementById("BlockedInput").value = e.target.innerText; // new class name here
-                            document.getElementById("BlockedInput").setAttribute("Placeholder", "Selected")
-                            //alert("clicked " + e.target.innerText);
-                        }
-                    });
-
-                }
+                dynalist.getElementsByTagName('ul')[0].remove();
 
             }
 
+            if (input.value != "") {
 
+                let dyn = createElement('ul', { id: 'myUL' });
 
-        });
+                for (let i in nameArray) {
 
+                    let li = createElement('li', { class: 'item', innerText: nameArray[i] });
 
-    //dyn.hidden = "hidden"
-    //dyn.id = "myUL"
-    //dyn2.hidden = "hidden"
-    //dyn2.id = "BlockedUL"
+                    dyn.appendChild(li);
 
+                }
 
+                dynalist.appendChild(dyn);
+
+                document.getElementById("myUL").addEventListener("click", function (e) {
+                    if (e.target && e.target.matches("li")) {
+                        document.getElementById("myInput").value = e.target.innerText; // new class name here
+                        document.getElementById("myInput").setAttribute("Placeholder", "Selected")
+                        //alert("clicked " + e.target.innerText);
+                    }
+
+                });
+                
+            }
+
+        } else if (input.id == 'BlockedInput') {
+
+            let dynalist2 = document.getElementById("MyDivBlockedUL");
+
+            if (dynalist2.getElementsByTagName('ul')[0]) {
+
+                dynalist2.getElementsByTagName('ul')[0].remove();
+
+            }
+
+            if (input.value != "") {
+
+                let dyn2 = createElement('ul', { id: 'BlockedUL' });
+
+                for (let i in nameArray) {
+
+                    let li2 = createElement('li', { class: 'item', innerText: nameArray[i] });
+
+                    dyn2.appendChild(li2);
+
+                }
+
+                dynalist2.appendChild(dyn2);
+
+                document.getElementById("BlockedUL").addEventListener("click", function (e) {
+                    if (e.target && e.target.matches("li")) {
+                        document.getElementById("BlockedInput").value = e.target.innerText; // new class name here
+                        document.getElementById("BlockedInput").setAttribute("Placeholder", "Selected")
+                        //alert("clicked " + e.target.innerText);
+                    }
+                });
+
+            }
+
+        }
+        
+    });
 
 }
 
@@ -157,29 +149,46 @@ if (next_btn) {
             formData.append("studentListInput", studentListInput.files[0]);
             formData.append("topicsInput", topicsInput.files[0]);
 
-            //formData.append("files", studentListInput.files[0]);
-            //formData.append("files", topicsInput.files[0]);
-
-            console.log(nameGroupFormationInput.value)
-            for (var pair of formData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
-
             fetch('./fileGroupUpload', {
                 method: "POST",
                 body: formData
             })
-                .then((response) => response.json())
-                .then((data) => {
+            .then((response) => response.json())
+            .then((data) => {
 
-                    console.log(data);
+                if (data.error && !data.groupFormationName) {
+
+                    alert('The inputted group formation name already exists!');
+
+                } else if (data.error && !data.studentList) {
+
+                    alert('The uploaded student list is not a valid JSON-file!');
+
+                } else if (data.error && !data.topicsList) {
+
+                    alert('The uploaded topics list is not a valid JSON-file!');
+
+                } else if (data.error && !data.studentListJSON) {
+
+                    alert('The student list is not the right format!');
+
+                } else if (data.error && !data.topicsListJSON) {
+
+                    alert('The topics list is not the right format!');
+
+                } else {
+
                     window.location.href = './coordinator_config';
 
-                })
-                .catch((err) => ("Error occured", err));
+                }
+
+            })
+            .catch((err) => ("Error occured", err));
 
         } else {
-            alert("Mandatory field not filled!")
+
+            alert("Mandatory field(s) not filled!")
+
         }
     })
 }
@@ -360,7 +369,7 @@ if (save_btn) {
         let array = tableToArray(document.querySelector("table > tbody"));
 
         console.log(array);
-
+        
         fetch('./addBlockedPairs', {
             method: "POST",
             headers: {
