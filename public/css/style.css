@@ -2,14 +2,6 @@
     cursor: pointer;
 }
 
-
-.selected{
-    border: 2px 
-    solid red;
-    border-radius: 8px;
-    padding:5px;
-}
-
 .boks{
     margin-left: auto;
     margin-right: auto;
