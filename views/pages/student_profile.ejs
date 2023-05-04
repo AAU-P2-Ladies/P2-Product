@@ -16,13 +16,29 @@
       <h5>You have been invited to a group formation. Input your preferences!</h5>
       <p>SW2-2023</p>
       <form id="StudentProfile">
-        
+
+      <div id="topicDiv" class="topics">
+        <label> Does topic matter to you?</label>
+        <input type="checkbox" id="DoesTopicMatterID" name="DoesTopicMatter">
+        <table id="MyTopicTable">
+          <thead>
+            <tr>
+              <th>Topics</th>
+              <th>Apply</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </div>
+
         <button id="addPref" onclick="addPrefFunction(event)">Add student preference</button><br><br>
 
         <div id="prefModal" class="modal">
           <div id ="modalContent" class="modal-content">
             <span class="close">&times;</span>
-
+            
           </div>
         </div>
 

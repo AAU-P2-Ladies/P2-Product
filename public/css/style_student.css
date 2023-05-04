@@ -143,7 +143,9 @@ p {
     text-align: center;
 }
 
-#rolesTable{
+
+
+#rolesTable, #MyTopicTable{
   
     border-collapse: collapse;
     margin: 25px 0;
