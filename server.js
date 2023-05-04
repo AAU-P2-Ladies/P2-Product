@@ -457,9 +457,7 @@ app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, re
    
     studentObjectMaker(students.names, req.body.groupName);
 
-    
-
-    res.render('pages/coordinator_start');
+    //res.render('pages/coordinator_start');
 
 })
 
@@ -492,29 +490,62 @@ app.get('/logout', (req,res) => {
 
 });
 
-/**
- * Uploads the file sent from /coordinator_preconfig
- */
-app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) => {
+app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
-    let groupName = ""
+    let groupFormationName = req.body.nameGroupFormationInput;
     let studentList = [];
     let topicsList = [];
 
+    if (fs.existsSync("database/" + groupFormationName)) {
+
+        res.json({ error: true, groupFormationName: false, studentList: false, topicsList: false, studentListJSON: false, topicsListJSON: false });
+
+        return res.end();
+
+    }
+    
+    fs.mkdirSync("database/" + groupFormationName);
+
     for (let index = 0; index < req.files.length; index++) {
 
-        if (req.files[index].fieldname == "studentListInput" && 
-            isJSON("uploads/" + req.files[index].filename)) {
+        if (req.files[index].fieldname == "studentListInput") {
 
-            studentList = getJSONFile("uploads/" + req.files[index].filename);
+            if (isJSON("uploads/" + req.files[index].filename)) {
+
+                studentList = getJSONFile("uploads/" + req.files[index].filename);
+
+                moveFile("./database/uploads/" + req.files[index].filename, 
+                         "./database/" + groupFormationName + "/students.json"
+                );
+
+            } else {
+
+                res.json({ error: true, groupFormationName: true, studentList: false, topicsList: false, studentListJSON: false, topicsListJSON: false });
+
+                return res.end();
+
+            }
 
 
         }
 
-        if (req.files[index].fieldname == "topicsInput"  && 
-        isJSON("uploads/" + req.files[index].filename)) {
+        if (req.files[index].fieldname == "topicsInput") {
 
-            topicsList = getJSONFile("uploads/" + req.files[index].filename);
+            if (isJSON("uploads/" + req.files[index].filename)) {
+
+                topicsList = getJSONFile("uploads/" + req.files[index].filename);
+
+                moveFile("./database/uploads/" + req.files[index].filename, 
+                         "./database/" + groupFormationName + "/topics.json"
+                );
+
+            } else {
+
+                res.json({ error: true, groupFormationName: true, studentList: true, topicsList: false, studentListJSON: false, topicsListJSON: false });
+
+                return res.end();
+
+            } 
 
         }
 
@@ -522,10 +553,15 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) => {
     
     for (let index = 0; index < studentList.length; index++) {
 
-        if (studentList[index].hasOwnProperty('name') && 
-            studentList[index].hasOwnProperty('studyNumber')) {
+        if (studentList[index].hasOwnProperty('name')) {
 
-                console.log(studentList[index]);
+            console.log(studentList[index]);
+
+        } else {
+
+            res.json({ error: true, groupFormationName: true, studentList: true, topicsList: true, studentListJSON: false, topicsListJSON: false });
+
+            return res.end();
 
         }
 
@@ -566,15 +602,150 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) => {
     
 
     //console.log(topicsList);
+    for (let index = 0; index < topicsList.length; index++) {
 
-    //let students = getJSONFile("uploads/" + req.file[0].studentListInput)
+        if (topicsList[index].hasOwnProperty('topic')) {
 
+            console.log(topicsList[index]);
+
+        } else {
+
+            res.json({ error: true, groupFormationName: true, studentList: true, topicsList: true, studentListJSON: true, topicsListJSON: false });
+
+            return res.end();
+
+        }
+
+    }
+
+    res.json({ error: false, groupFormationName: true, studentList: true, topicsList: true, studentListJSON: true, topicsListJSON: true });
+
+    return res.end();
+
+});
+
+app.post('/search', (req, res) => {
+
+    const queryName = req.body.name;
+    const className = req.body.className;
+
+    let students = getJSONFile(className + '/students.json');
+    let studentsArray = [];
+
+    students.map(({navn, email}) => navn);
+
+    for (let i in students) {
+
+        studentsArray.push(students[i]['navn']);
+
+    }
+
+    let stringToMatch = queryName;
+
+    if (stringToMatch != "") {
+
+        studentsArray = studentsArray.filter(function(p) {
+
+            let studentArray = p.split('');
+            let studentToMatch = [];
+            
+            for(var i = 0; i < stringToMatch.length; i++) {
+            
+                studentToMatch.push(studentArray[i]);
+            
+            }
+            
+            return stringToMatch.toLowerCase() == studentToMatch.join('').toLowerCase();
+        
+        })
+
+    }
+
+    res.json({students: studentsArray});
+
+    return res.end();
+
+});
+
+app.post('/updateClassConfig', (req, res) => {
+
+    const className = req.body.className;
+    const amountOfGroupMembers = req.body.amountOfGroupMembers;
+    const studentPreferences = req.body.studentPreferences;
+    const previousMembers = req.body.previousMembers;
+    const objectArray = req.body.blockedPairArray;
+
+    let config = {
+        amountOfGroupMembers: amountOfGroupMembers,
+        studentPreferences: studentPreferences,
+        previousMembers: previousMembers
+    };
+
+    fs.writeFile("./database/" + className + "/config.json", JSON.stringify(config, null, 4), err => {
+
+        if (err) {
+
+            console.error(err);
+
+        } 
     
+    });
+
+    let blockedArray = [];
+
+    for (let key in objectArray) {
+
+        blockedArray.push(objectArray[key].name);
+
+    }
+
+    let students = getJSONFile(className + '/students.json');
+
+    students.forEach(element => {
+
+        if (blockedArray.includes(element.navn)) {
+
+            objectArray.filter(object => {
+
+                if (element.navn === object.name) {
+
+                    element.blocks = object.blocks;
+
+                }
+            
+            });
+
+        }
     
+    });
 
-    //res.render('pages/coordinator_start');
+    fs.writeFile("./database/" + className + "/students.json", JSON.stringify(students, null, 4), err => {
 
-})
+        if (err) {
+
+            console.error(err);
+
+        } 
+    
+    });
+
+    res.json({ error: false});
+
+    return res.end();
+
+});
+
+app.post('/unlockClass', (req, res) => {
+
+    const className = req.body.className;
+    
+    // kør studentObjectMaker
+
+    res.json({ error: false});
+
+    return res.end();
+
+});
 
 /**
  * Logs the servers url
@@ -758,3 +929,13 @@ app.use((err, req, res, next) => {
 app.use((req, res, next) => {
     res.status(404).send("Sorry can't find that!")
   })
+
+function moveFile(oldPath, newPath) { // https://stackoverflow.com/a/21431865
+    fs.readFile(oldPath , function(err, data) {
+        fs.writeFile(newPath, data, function(err) {
+            fs.unlink(oldPath, function(){
+                if(err) throw err;
+            });
+        }); 
+    }); 
+}
