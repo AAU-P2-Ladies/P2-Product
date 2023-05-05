@@ -157,13 +157,13 @@ function prefGroups (students, matrix, groupSize) {
         //finally to find the index of the group with the lowest preference score among the groups that are not full
         let a = 0;
 
-        //initialize studentToGroupsPref to keep track of currents students preference score tot he current group
+        //initialize studentToGroupsPref to keep track of currents students preference score to the current group
         studentToGroupsPref = new Array(groupNumber);
 
         for (groupNum; groupNum < groupNumber; groupNum++) {
             if (groups[groupNum].isFull) {
                 studentToGroupsPref[groupNum] = 0;
-                a++
+                a++;
                 continue;
             }
             
@@ -193,7 +193,7 @@ function prefGroups (students, matrix, groupSize) {
             groups[groupNum].isFull = true;
         }
     }
-    return groups
+    return groups;
 }
 
 /**
@@ -331,10 +331,10 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
 }
 
 /**
- * This function will return an array of arrays of groups, with maximized role diversity
- * @param {*} students 
- * @param {*} groupSize 
- * @returns 
+ * This function will return a float representing the minimum diversity for this group formation
+ * @param {students } 
+ * @param {groupSize } 
+ * @returns diversityMin
  */
 function findMinDiversity(students, groupSize){
     let groupNumber = Math.ceil(students.length/groupSize);
