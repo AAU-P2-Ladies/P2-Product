@@ -89,7 +89,7 @@ for (let row = 0; row < numStudents; row++) {
             prefScore += numStudents;
         }
 
-        //The prefScore is assigned to both indexes in the matrix
+      //The prefScore is assigned to both indexes in the matrix
         preferenceMatrix[row][col] = prefScore;
         preferenceMatrix[col][row] = prefScore;
     }
@@ -130,21 +130,21 @@ function prefGroups (students, matrix, groupSize) {
         //Sorts preference values in increasing order
         sortedStudentToStudentsPrefs.sort((a, b) =>(a - b)); 
         
-        let a = 1
-        let matrixIndex = -1
+        let a = 1;
+        let matrixIndex = -1;
         do {            
             if (sortedStudentToStudentsPrefs[a] != sortedStudentToStudentsPrefs[a-1]) {
-                matrixIndex = -1
+                matrixIndex = -1;
             }
-            //k gets assigned the indexOf the lowest preference value.
+            //a gets assigned the indexOf the lowest preference value.
             //If the student is in a group the IndexOf searches for the next value
-            //k + 1 allows to find the next student with same preference value in the matrix[j]
+            //a + 1 allows to find the next student with same preference value in the matrix[j]
             matrixIndex = matrix[j].indexOf(sortedStudentToStudentsPrefs[a], matrixIndex + 1);            
-            a++
+            a++;
         } while (students[matrixIndex].groupNr != -1)
         
-        groups[groupNum].students[1] = students[matrixIndex]
-        students[matrixIndex].groupNr = groupNum
+        groups[groupNum].students[1] = students[matrixIndex];
+        students[matrixIndex].groupNr = groupNum;
     }
 
     let studentToGroupsPref = [];
@@ -152,9 +152,11 @@ function prefGroups (students, matrix, groupSize) {
         if (students[x].groupNr != -1) {
             continue;
         }
-        let groupNum = 0
-        let a = 0
-        studentToGroupsPref = new Array(groupNumber)
+        let groupNum = 0;
+        let a = 0;
+
+        //initialize studentToGroupsPref to keep track of currents students preference score tot he current group
+        studentToGroupsPref = new Array(groupNumber);
 
         for (groupNum; groupNum < groupNumber; groupNum++) {
             if (groups[groupNum].isFull) {
@@ -172,12 +174,15 @@ function prefGroups (students, matrix, groupSize) {
                 }
                 studentToGroupsPref[groupNum] += helper.findPrefSum(students[x], groups[groupNum].students[j], matrix);
             }
+            //divide by number of students in order to calculate the average preference score
             studentToGroupsPref[groupNum] /= j;
         } 
         //Creates an array without references in order to sort preference values
         let sortedStudentToGroupsPref = studentToGroupsPref.slice();
         //Sorts preference values in increasing order
         sortedStudentToGroupsPref.sort((a, b) =>(a - b)); 
+        //sets the desired groupNum for the current student to the group with least preference score
+        //meaning this group is the one for this student where they have better preference for each other
         groupNum = studentToGroupsPref.indexOf(sortedStudentToGroupsPref[a]);
 
         groups[groupNum].students.push(students[x]);
