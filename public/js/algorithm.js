@@ -153,6 +153,8 @@ function prefGroups (students, matrix, groupSize) {
             continue;
         }
         let groupNum = 0;
+        //variable a is used to keep track of number of full groups encountered during loop and
+        //finally to find the index of the group with the lowest preference score among the groups that are not full
         let a = 0;
 
         //initialize studentToGroupsPref to keep track of currents students preference score tot he current group
