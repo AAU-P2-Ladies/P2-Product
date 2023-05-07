@@ -26,26 +26,37 @@ const oneDay = 1000 * 60 * 60 * 24;
 const multerConfig = {
     
     storage: multer.diskStorage({
-     //Setup where the user's file will go
-     destination: function(req, file, next){
-       next(null, './database/uploads');
-       },   
+        
+        //Setup where the user's file will go
+        destination: function(req, file, next) {
+        
+            next(null, './database/uploads');
+        
+        },   
         
         //Then give the file a unique name
-        filename: function(req, file, next){
-            console.log(file);
+        filename: function(req, file, next) {
+
             const ext = file.mimetype.split('/')[1];
+            
             next(null, file.fieldname + '-' + Date.now() + '.'+ext);
-          }
+          
+        }
+    
     }),   
         
-        //A means of ensuring only images are uploaded. 
-    fileFilter: function(req, file, next){
+    fileFilter: function(req, file, next) {
+        
         if (file.mimetype != 'application/json') {
-             return next(new Error('Wrong file type'));
+            
+            return next(new Error('Wrong file type'));
+        
         }
-         next(null, true)
+        
+        next(null, true)
+    
     }
+
 };
 
 app.use(sessions({
@@ -62,25 +73,28 @@ app.use(cookieParser());
 app.use(function(req, res, next) {
 
     res.locals.isLoggedIn = req.session.userid ? 1 : 0;
+    res.locals.isCoordinator = req.session.isCoordinator ? 1 : 0;
     next();
 
 });
 
 app.get('/', (req, res) => {
 
-    if (req.session.userid) {
-    
-        //res.sendFile(path.join(__dirname, '/public/html/coordinator_start.html'));
+    if (!req.session.userid) {
 
-        res.render('pages/coordinator_start')
+        res.render('pages/index');
     
     } else {
 
-        res.render('pages/index')
+        if (req.session.isCoordinator == 0) {
 
-        /* res.render('pages/index', {
-            isLoggedIn: session.userid ? 1 : 0
-        }); */
+            res.render('pages/student_start');
+
+        } else if (req.session.isCoordinator == 1) {
+
+            res.render('pages/coordinator_start');
+
+        }
 
     }
 
@@ -127,6 +141,7 @@ app.post('/login', (req, res) => {
                                 session = req.session;
                                 session.userid = req.body.username;
                                 session.class = req.body.class;
+                                session.isCoordinator = user.isCoordinator;
                                 
                                 // Sends a JSON-response back, telling that that there was no errors
                                 res.json({ error: false, username: true, password: true, class: true, isCoordinator: user.isCoordinator });
@@ -211,11 +226,13 @@ app.post('/login', (req, res) => {
                             classFile.some((userKey) => {
 
                                 if (userKey.Keycodes == keycode){
+
                                     userKey.isRegistered = 1;
                                     
-
                                 }
+
                             })
+
                             fs.writeFile("./database/" + classFileName, JSON.stringify(classFile, null, 4), JSON.stringify(json, null, 4), err => {
 
                                 if (err) {
@@ -225,6 +242,7 @@ app.post('/login', (req, res) => {
                                 } 
                     
                             });
+
                             // Update the users file, taking into account that the user is now part of the class
                             fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
 
@@ -236,13 +254,19 @@ app.post('/login', (req, res) => {
                     
                             });
                             
-                            //loop to remove the current keycode
-                            for(let i in keycodes){
+                            // Loop to remove the current keycode
+                            for(let i in keycodes) {
+
                                 if (keycodes[i].keycode == keycode){
+                                
                                     keycodes.splice(i, 1);
+                                
                                     break;
+                                
                                 }
+                            
                             }
+                            
                             fs.writeFile("./database/keycodes.json", JSON.stringify(keycodes, null, 4), JSON.stringify(json, null, 4), err => {
 
                                 if (err) {
@@ -419,37 +443,63 @@ app.post('/prefSearch',(req, res) => {
 });
 */
 
-app.get('/register',(req, res) =>{
+app.get('/register', (req, res) => {
 
+    if (session.userid) {
 
-    res.render('pages/register');
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/register');
+
+    }
 
 });
 
 app.get('/coordinator_start', (req, res) => {
 
+    if (!session.userid || session.isCoordinator != 1) {
 
-    res.render('pages/coordinator_start');
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/coordinator_start');
+
+    }
 
 });
 
 app.get('/coordinator_config', (req, res) => {
 
+    if (!session.userid || session.isCoordinator != 1) {
 
-    res.render('pages/coordinator_config');
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/coordinator_config');
+
+    }
 
 });
 
 app.get('/coordinator_preconfig', (req, res) => {
 
+    if (!session.userid || session.isCoordinator != 1) {
 
-    res.render('pages/coordinator_preconfig');
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/coordinator_preconfig');
+
+    }
 
 });
 
 app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, res) =>{
-
-    
 
     let students = getJSONFile("uploads/"+req.file.filename)
 
@@ -463,22 +513,43 @@ app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, re
 
 app.get('/student_start', (req, res) => {
 
+    if (!session.userid || session.isCoordinator != 0) {
 
-    res.render('pages/student_start');
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/student_start');
+
+    }
 
 });
 
 app.get('/student_group', (req, res) => {
 
+    if (!session.userid || session.isCoordinator != 0) {
 
-    res.render('pages/student_group');
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/student_group');
+
+    }
 
 });
 
 app.get('/student_profile', (req, res) => {
 
+    if (!session.userid || session.isCoordinator != 0) {
 
-    res.render('pages/student_profile');
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/student_profile');
+
+    }
 
 });
 
@@ -567,41 +638,6 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
     }
 
-    let checkGroupName = true;
-    let checkStudentFile = true;
-    let checkTopicsFile = true;
-    
-    if (req.body.nameGroupFormationInput == "") {
-
-        checkGroupName = false;
-
-    }  
-
-    if (!studentList) {
-
-        checkStudentFile = false;
-
-    } 
-    
-    if (!topicsList) {
-        
-        checkTopicsFile = false;
-
-    } 
-    
-    if (checkGroupName && checkStudentFile && checkTopicsFile) {
-        
-        studentObjectMaker(studentList.name, req.body.nameGroupFormationInput);
-        res.json({error: false, groupName: true, studentFile: true, topicsFile: true})
-        
-    } else {
-
-        res.json({error: true, groupName: checkGroupName, studentFile: checkStudentFile, topicsFile: checkTopicsFile})
-            
-    }
-    
-
-    //console.log(topicsList);
     for (let index = 0; index < topicsList.length; index++) {
 
         if (topicsList[index].hasOwnProperty('topic')) {
@@ -649,7 +685,7 @@ app.post('/search', (req, res) => {
             let studentArray = p.split('');
             let studentToMatch = [];
             
-            for(var i = 0; i < stringToMatch.length; i++) {
+            for (let i = 0; i < stringToMatch.length; i++) {
             
                 studentToMatch.push(studentArray[i]);
             
@@ -747,6 +783,14 @@ app.post('/unlockClass', (req, res) => {
 
 });
 
+app.get('/getGroup', (req, res) => {
+    
+    let fileName = session.class + "/groups.json";
+    
+    let groupFile = getJSONFile(fileName);
+
+})
+
 /**
  * Logs the servers url
  */
@@ -755,6 +799,7 @@ app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 
 });
+
 /**
  * Checks if a folder with a given name with a student.json exist, if not, it will make the folder and file 
  * @param {The folder that is in need of being checked} folderName 
@@ -792,7 +837,7 @@ function checkFolderName(folderName) {
 
     */
     
-    return true
+    return true;
     
 }
 /**
@@ -804,8 +849,6 @@ function getJSONFile(file) {
     
     //Makes the path to the file
     var filepath = __dirname + '/database/' + file;
-
-    console.log(filepath)
     
     //Reads content and saves it
     var file = fs.readFileSync(filepath, 'utf8');
@@ -870,7 +913,6 @@ function makeKeycode(length) {
  */
 async function studentObjectMaker(users, semester){
 
-
     let students = [];
     let keycodeFile = await getJSONFile("keycodes.json");
     let keycode = "";
@@ -879,26 +921,31 @@ async function studentObjectMaker(users, semester){
     //Makes an object with a name, code, and boolean, for every student sent by the coordinator
     for (let i in users) {
 
-        keycode = keycodeFile.some(user =>{
+        keycode = keycodeFile.some(user => {
+            
             tmpKeycode = makeKeycode(10);
 
-            if (tmpKeycode == user.keycode){
+            if (tmpKeycode == user.keycode) {
+                
                 return 0;
-            }else return tempKeyCode
+
+            } else {
+
+                return tempKeyCode
+
+            }
+            
         })
         
-         students[i] = {
-            Name: users[i],
-            Keycodes: makeKeycode(10),
+        students[i] = {
+            name: users[i],
+            keycode: makeKeycode(10),
             isRegistered: 0
         }
     
     }
 
     await checkFolderName(semester);
-
-    
-    
 
     fs.writeFile("./database/" + semester + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
 
@@ -910,32 +957,38 @@ async function studentObjectMaker(users, semester){
 
     });
 
+}
+
+function moveFile(oldPath, newPath) { // https://stackoverflow.com/a/21431865
+
+    fs.readFile(oldPath , function(err, data) {
+    
+        fs.writeFile(newPath, data, function(err) {
+    
+            fs.unlink(oldPath, function(){
+    
+                if(err) throw err;
+    
+            });
+    
+        }); 
+    
+    }); 
 
 }
 
-app.get('./getGroup', (req, res) => {
-    let fileName = session.class + "/groups.json";
-    let groupFile = getJSONFile(fileName);
+
+//These error middelware have to stay at the bottom
+app.use((err, req, res, next) => {
+
+    console.error(err.stack)
+
+    res.status(500).send('Something broke!')
 
 })
 
-//These error middelware have to stay at the bottom
-
-app.use((err, req, res, next) => {
-    console.error(err.stack)
-    res.status(500).send('Something broke!')
-  })
-
 app.use((req, res, next) => {
-    res.status(404).send("Sorry can't find that!")
-  })
 
-function moveFile(oldPath, newPath) { // https://stackoverflow.com/a/21431865
-    fs.readFile(oldPath , function(err, data) {
-        fs.writeFile(newPath, data, function(err) {
-            fs.unlink(oldPath, function(){
-                if(err) throw err;
-            });
-        }); 
-    }); 
-}
+    res.status(404).send("Sorry, can't find that!")
+
+})
