@@ -3,7 +3,6 @@
   <head>
 
     <%- include('../partials/head'); %>
-    
     <title>Student Profile</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/style_student.css">
@@ -15,24 +14,50 @@
     <div class="boks">
       <h5>You have been invited to a group formation. Input your preferences!</h5>
       <p>SW2-2023</p>
-        <form id="StudentProfile">
-          
-          <button id="addPref" onclick="addPrefFunction(event)">Add student preference</button><br><br>
+      <form id="StudentProfile">
 
-          <div id="prefModal" class="modal">
-            <div id ="modalContent" class="modal-content">
-              <span class="close">&times;</span>
-              <form action="./prefSearch" method="post" id="prefForm">
-                <input type="text" id="namePreference" name="namePreference" placeholder="Search Name"><br>
-                <button id="searchPref" onclick="searchPrefFunction(event)">Search</button>
-              </form>
-              
-            </div>
+      <div id="topicDiv" class="topics">
+        <label> Does topic matter to you?</label>
+        <input type="checkbox" id="DoesTopicMatterID" name="DoesTopicMatter">
+        <table id="MyTopicTable">
+          <thead>
+            <tr>
+              <th>Topics</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </div>
+
+        <button id="addPref">Add student preference</button><br><br>
+
+        <div id="prefModal" class="modal">
+          <div id ="modalContent" class="modal-content">
+            <span class="close">&times;</span>
+            
           </div>
+        </div>
 
-          <input type="text" id="override" name="override" placeholder="Override Code">
+        <input type="text" id="override" name="override" placeholder="Override Code"><br><br>
+
+        <span id="error" style="color: rgb(44, 44, 44)">Choose your roles:</span>
+
+        <table id="rolesTable">
+          <thead>
+            <tr>
+              <th>Belbin Roles</th>
+            </tr>
+          </thead>
+
+          <tbody>
+           
+          </tbody>
+            
+        </table>
               
-          <input type="submit" class="buttonS" value="Join Group formation">
+        <input type="submit" class="buttonS" value="Join Group formation">
           
       </form>
     </div>
@@ -42,4 +67,3 @@
     <script type="application/javascript" src="./js/student_profile.js"></script>
   </body>
 </html>
-

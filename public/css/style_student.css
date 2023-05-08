@@ -18,17 +18,15 @@
     padding-top: 20px;
     padding-bottom: 50px;
 }
-
+/*
 table{
     width:20%;
     border:1px solid;
 }
-
 th, td {
     border: 1px solid black;
     
 }
-
 tr:nth-child(odd) {
     background-color: #ff57eb;
     
@@ -38,7 +36,7 @@ tr:nth-child(even) {
     background-color: #f0ff1d;
     
 }
-
+*/
 #anchor1, #anchor2, #anchor3{
     color:#5A5555;
 }
@@ -90,12 +88,16 @@ p {
     
 }
 
-.buttonS, #knapidd, #addPref, #searchPref{
+.buttonS, #knapidd, #addPref, #searchPref, #SaveStudentPreferencesButton{
     background-color: white;
     color:rgba(0, 0, 0, 0.4);
     border-radius: 5px;
 }
-
+/*
+#SaveStudentPreferencesButton{
+    width: 40%;
+}
+*/
 .buttonS:hover,
 .buttonS:focus,
 #knapidd:hover,
@@ -103,7 +105,9 @@ p {
 #addPref:hover,
 #addPref:focus,
 #searchPref:hover,
-#searchPref:focus{
+#searchPref:focus,
+#SaveStudentPreferencesButton:hover,
+#SaveStudentPreferencesButton:focus{
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -138,6 +142,19 @@ p {
 
 
 
+#rolesTable, #MyTopicTable{
+  
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
 
 
 .modal {
@@ -152,28 +169,28 @@ p {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+}
   
   /* Modal Content */
-  .modal-content {
+.modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 40%;
-  }
+}
   
   /* The Close Button */
-  .close {
+.close {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-  }
+}
   
-  .close:hover,
-  .close:focus {
+.close:hover,
+.close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
-  }
+}
