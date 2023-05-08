@@ -1,3 +1,6 @@
+.item{
+    cursor: pointer;
+}
 
 .boks{
     margin-left: auto;
@@ -86,3 +89,16 @@ form > div.form-group {
   #error-msg-second-line {
     display: block;
   }
+  #main-content{
+    width:400px;
+    height:150px;
+    border:30px slateblue;
+    margin:30px 60px;
+    padding:30px;
+   }
+   .table-data{
+    width:400px;
+    height:150px;
+    border:30px slateblue;
+    overflow:scroll;
+   }

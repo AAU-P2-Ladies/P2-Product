@@ -15,24 +15,82 @@
     <div class="boks">
       <h5>You have been invited to a group formation. Input your preferences!</h5>
       <p>SW2-2023</p>
-        <form id="StudentProfile">
-          
-          <button id="addPref" onclick="addPrefFunction(event)">Add student preference</button><br><br>
+      <form id="StudentProfile">
 
-          <div id="prefModal" class="modal">
-            <div id ="modalContent" class="modal-content">
-              <span class="close">&times;</span>
-              <form action="./prefSearch" method="post" id="prefForm">
-                <input type="text" id="namePreference" name="namePreference" placeholder="Search Name"><br>
-                <button id="searchPref" onclick="searchPrefFunction(event)">Search</button>
-              </form>
-              
-            </div>
+      <div id="topicDiv" class="topics">
+        <label> Does topic matter to you?</label>
+        <input type="checkbox" id="DoesTopicMatterID" name="DoesTopicMatter">
+        <table id="MyTopicTable">
+          <thead>
+            <tr>
+              <th>Topics</th>
+              <th>Apply</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </div>
+
+        <button id="addPref" onclick="addPrefFunction(event)">Add student preference</button><br><br>
+
+        <div id="prefModal" class="modal">
+          <div id ="modalContent" class="modal-content">
+            <span class="close">&times;</span>
+            
           </div>
+        </div>
 
-          <input type="text" id="override" name="override" placeholder="Override Code">
+        <input type="text" id="override" name="override" placeholder="Override Code"><br><br>
+
+        <span id="error" style="color: rgb(44, 44, 44)">Choose your roles:</span>
+
+        <table id="rolesTable">
+            
+          <tr>
+            <th>Belbin Roles</th>
+          </tr>
+          <tr>
+            <td>Resource Investigator</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(0)" id="role1" name="role1" value="Resource Investigator"></td>
+          </tr>
+          <tr>
+            <td>Teamworker</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(1)" id="role2" name="role2" value="Teamworker"></td>
+          </tr>
+          <tr>
+            <td>Co-ordinator</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(2)" id="role3" name="role3" value="Co-ordinator"></td>
+          </tr>
+          <tr>
+            <td>Plant</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(3)" id="role4" name="role4" value="Plant"></td>
+          </tr>
+          <tr>
+            <td>Monitor Evaluator</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(4)" id="role5" name="role5" value="Monitor Evaluator"></td>
+          </tr>
+          <tr>
+            <td>Specialist</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(5)" id="role6" name="role6" value="Specialist"></td>
+          </tr>
+          <tr>
+            <td>Shaper</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(6)" id="role6" name="role6" value="Shaper"></td>
+          </tr>
+          <tr>
+            <td>Implementer</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(7)" id="role7" name="role7" value="Implementer"></td>
+          </tr>
+          <tr>
+            <td>Complete Finisher</td>
+            <td><input type="checkbox" class="checkbox" onclick="checkboxControl(8)" id="role8" name="role8" value="Complete Finisher"></td>
+          </tr>
+            
+        </table>
               
-          <input type="submit" class="buttonS" value="Join Group formation">
+        <input type="submit" class="buttonS" value="Join Group formation">
           
       </form>
     </div>
