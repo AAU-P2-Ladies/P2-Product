@@ -98,7 +98,13 @@ return preferenceMatrix;
 }
 
 
-
+/**
+ * 
+ * @param {*} students 
+ * @param {*} matrix 
+ * @param {*} groupSize 
+ * @returns 
+ */
 function prefGroups (students, matrix, groupSize) {  
     const groupNumber = Math.ceil(students.length/groupSize);
     
