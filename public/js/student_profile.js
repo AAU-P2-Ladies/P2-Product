@@ -68,12 +68,13 @@ function checkboxControl(clickedCheckBox) {
  * addPrefFunction will display a modal when the Add-student-preference button is clicked.
  * @param {event} e 
  */
-function addPrefFunction(e){
-  e.preventDefault();
-
+function addPrefFunction(event){
+  
+  event.preventDefault();
   modal.style.display = "block";
 
 }
+document.getElementById("addPref").addEventListener("click",addPrefFunction)
 
 /**
  * The modal will not be displayed when the span X is clicked.
@@ -378,18 +379,20 @@ fjerne students fra listen hvis de er valgt
 */
 
 
-function createDynamicList2(blockedArray) {
-  let table = document.getElementById('MyTopicTable').getElementsByTagName('tbody')[0]
+function createDynamicList2(TableID,SubjectArray,Subject) {
+  document.getElementById(TableID).style.display = "none ";
+  let table = document.getElementById(TableID).getElementsByTagName('tbody')[0]
 
-  for (let i in blockedArray){
+  for (let i in SubjectArray){
     let row = table.insertRow(0);
     let cell1 = row.insertCell(0)
     let cell2 = row.insertCell(1)
-    cell1.innerText = topics[i];
+    cell1.innerText = SubjectArray[i];
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "topic"+i;
-    checkbox.name = "topic"+i;
+    checkbox.class = "checkbox"
+    checkbox.id = Subject+i;
+    checkbox.name = Subject+i;
     checkbox.checked = false;
     cell2.append(checkbox);
   }
@@ -409,5 +412,16 @@ function ShowTopicTable(){
     }
 }
 
-document.getElementById("topicDiv").addEventListener("load",createDynamicList2(topics));
-document.getElementById('DoesTopicMatterID').addEventListener('click', ShowTopicTable())
+document.getElementById("topicDiv").addEventListener("load",createDynamicList2("MyTopicTable",topics,"Topic"));
+
+document.getElementById('DoesTopicMatterID').addEventListener('click', ShowTopicTable)
+
+roleTable.addEventListener("load",createDynamicList2("rolesTable",roles,"role"));
+document.getElementById("role1").addEventListener("click",() =>checkboxControl(0))
+document.getElementById("role2").addEventListener("click",() =>checkboxControl(1))
+document.getElementById("role3").addEventListener("click",() =>checkboxControl(2))
+document.getElementById("role4").addEventListener("click",() =>checkboxControl(3))
+document.getElementById("role5").addEventListener("click",() =>checkboxControl(4))
+document.getElementById("role6").addEventListener("click",() =>checkboxControl(5))
+document.getElementById("role7").addEventListener("click",() =>checkboxControl(6))
+document.getElementById("role8").addEventListener("click",() =>checkboxControl(7))
