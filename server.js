@@ -105,7 +105,7 @@ app.get('/', (req, res) => {
  * Takes Request (req) and Response (res) into account for the function
  */
 app.post('/login', (req, res) => {
-
+    
     // Loads the 'users.json'-file as 'users'
     let users = getJSONFile('users.json');
     
@@ -136,7 +136,7 @@ app.post('/login', (req, res) => {
 
                             // Checks if a class that the user is assigned to matches the inputted class.
                             if (user.classes[index]["class"] == req.body.class) {
-
+                                
                                 // Creates session for the user (now they are logged in)
                                 session = req.session;
                                 session.userid = req.body.username;

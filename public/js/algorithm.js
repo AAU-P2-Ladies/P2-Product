@@ -338,8 +338,8 @@ function hillClimb(students, groups, minDiversity, matrix, maxIterations){
 
 /**
  * This function will return a float representing the minimum diversity for this group formation
- * @param {students } 
- * @param {groupSize } 
+ * @param {*} students
+ * @param {*} groupSize
  * @returns diversityMin
  */
 function findMinDiversity(students, groupSize){
