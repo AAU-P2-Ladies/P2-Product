@@ -311,7 +311,7 @@ function masterAlgorithm(students, groups, minDiversity, matrix, maxIterations){
                 if(targetIndex > 0){
                     let target = students[targetIndex]
                     let targetGroup = groups[target.groupNr];
-                    //console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
+                    console.log("normal swap: swapped student " + groups[i].students[j].index + " with " + target.index)
                     helper.swapStudents(groups[i], j, targetGroup, targetGroup.students.indexOf(target));
                     swapped = true;
                 }
