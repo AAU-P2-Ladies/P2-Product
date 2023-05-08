@@ -73,7 +73,7 @@ app.use(cookieParser());
 app.use(function(req, res, next) {
 
     res.locals.isLoggedIn = req.session.userid ? 1 : 0;
-    res.locals.isCoordinator = req.session.isCoordinator ? 1 : 0;
+    res.locals.isCoordinator = req.session.isCoordinator;
     next();
 
 });
@@ -198,6 +198,7 @@ app.post('/login', (req, res) => {
                         session = req.session;
                         session.userid = req.body.username;
                         session.class = class1;
+                        session.isCoordinator = user.isCoordinator;
 
                         // Assigns 'duplicateClass' to 0
                         let duplicateClass = 0;
@@ -337,6 +338,7 @@ app.post('/checkUserLogin', (req, res) => {
                     // Logs the user in
                     session = req.session;
                     session.userid = req.body.username;
+                    session.isCoordinator = user.isCoordinator;
 
                 }
 
@@ -459,7 +461,7 @@ app.get('/register', (req, res) => {
 
 app.get('/coordinator_start', (req, res) => {
 
-    if (!session.userid || session.isCoordinator != 1) {
+    if (!req.session.userid || req.session.isCoordinator != 1) {
 
         res.redirect('./');
 
