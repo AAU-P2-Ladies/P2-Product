@@ -26,14 +26,14 @@ let blocked = [];
 
 function createDynamicList(input) {
 
-    fetch('./search', {
+    fetch('/../search', {
         method: "POST",
         headers: {
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            className: 'SW2',
+            className: window.location.pathname.split('/')[1],
             name: input.value
         }),
     })
@@ -178,7 +178,7 @@ if (next_btn) {
 
                 } else {
 
-                    window.location.href = './coordinator_config';
+                    window.location.href = `./${nameGroupFormationInput.value}/coordinator_config/`;
 
                 }
 
@@ -230,7 +230,7 @@ function SearchField(myInputID, myULID) {
 
 }
 
-if (window.location.pathname == "/coordinator_config") {
+if ((window.location.pathname).includes("coordinator_config")) {
 
     document.querySelectorAll("#myInput, #BlockedInput").forEach(function (element) {
 
@@ -348,14 +348,14 @@ if (save_btn) {
 
         let blockedPairArray = tableToArray(document.querySelector("table > tbody"));
 
-        fetch('./updateClassConfig', {
+        fetch('/../updateClassConfig', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: 'SW2',
+                className: window.location.pathname.split('/')[1],
                 amountOfGroupMembers: amountOfGroupMembers.value,
                 studentPreferences: studentPreferences.value,
                 previousMembers: previousMembers.value,
@@ -377,14 +377,14 @@ if (unlock_btn) {
 
     unlock_btn.addEventListener("click", function () {
 
-        fetch('./unlockClass', {
+        fetch('/../unlockClass', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: 'SW2'
+                className: window.location.pathname.split('/')[1]
             }),
         })
             .then((response) => response.json())

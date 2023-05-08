@@ -72,6 +72,7 @@ app.use(cookieParser());
 
 app.use(function(req, res, next) {
 
+    res.locals.baseUrl = req.protocol + "://" + req.headers.host;
     res.locals.isLoggedIn = req.session.userid ? 1 : 0;
     res.locals.isCoordinator = req.session.isCoordinator;
     next();
@@ -416,7 +417,7 @@ app.post('/register', (req, res) => {
         users.push(registerUser);
 
         // Update the users file, taking into account that the user is now registered as a student
-        fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), JSON.stringify(json, null, 4), err => {
+        fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), err => {
 
             if (err) {
 
@@ -447,7 +448,7 @@ app.post('/prefSearch',(req, res) => {
 
 app.get('/register', (req, res) => {
 
-    if (session.userid) {
+    if (req.session.userid) {
 
         res.redirect('./');
 
@@ -473,23 +474,9 @@ app.get('/coordinator_start', (req, res) => {
 
 });
 
-app.get('/coordinator_config', (req, res) => {
-
-    if (!session.userid || session.isCoordinator != 1) {
-
-        res.redirect('./');
-
-    } else {
-
-        res.render('pages/coordinator_config');
-
-    }
-
-});
-
 app.get('/coordinator_preconfig', (req, res) => {
 
-    if (!session.userid || session.isCoordinator != 1) {
+    if (!req.session.userid || req.session.isCoordinator != 1) {
 
         res.redirect('./');
 
@@ -501,9 +488,55 @@ app.get('/coordinator_preconfig', (req, res) => {
 
 });
 
+app.get('/:className/coordinator_config', (req, res) => {
+
+    if (!req.session.userid || req.session.isCoordinator != 1) {
+
+        res.redirect('./');
+
+    } else {
+
+        let users = getJSONFile('users.json');
+
+        let checkClass = 0;
+
+        users.some((user) => {
+
+            if (user.username == session.userid) {
+
+                for (let index = 0; index < user.classes.length; index++) {
+
+                    if (user.classes[index]["class"] == req.params.className) {
+
+                        checkClass = 1;
+
+                        break;
+    
+                    }
+    
+                }
+
+            }
+
+        });
+
+        if (checkClass == 1) {
+
+            res.render('pages/coordinator_config');
+
+        } else {
+
+            res.redirect('/../');
+
+        }
+
+    }
+
+});
+
 app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, res) =>{
 
-    let students = getJSONFile("uploads/"+req.file.filename)
+    let students = getJSONFile("uploads/" + req.file.filename)
 
     if (!students.names) throw "Not right format"
    
@@ -515,7 +548,7 @@ app.post('/coordinator_studentId', multer(multerConfig).single('file'), (req, re
 
 app.get('/student_start', (req, res) => {
 
-    if (!session.userid || session.isCoordinator != 0) {
+    if (!req.session.userid || req.session.isCoordinator != 0) {
 
         res.redirect('./');
 
@@ -529,7 +562,7 @@ app.get('/student_start', (req, res) => {
 
 app.get('/student_group', (req, res) => {
 
-    if (!session.userid || session.isCoordinator != 0) {
+    if (!req.session.userid || req.session.isCoordinator != 0) {
 
         res.redirect('./');
 
@@ -543,7 +576,7 @@ app.get('/student_group', (req, res) => {
 
 app.get('/student_profile', (req, res) => {
 
-    if (!session.userid || session.isCoordinator != 0) {
+    if (!req.session.userid || req.session.isCoordinator != 0) {
 
         res.redirect('./');
 
@@ -656,6 +689,51 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
     }
 
+    let users = getJSONFile('users.json');
+
+    users.some((user) => {
+
+        if (user.username == session.userid) {
+
+            // Assigns 'duplicateClass' to 0
+            let duplicateClass = 0;
+
+            // Loops through all the users different classes that they are a part of, if any.
+            for (let index = 0; index < user.classes.length; index++) {
+
+                // Checks if the user is already part of the class with the inputted keycode
+                if (user.classes[index]["class"] == groupFormationName) {
+
+                    duplicateClass = 1;
+                    break;
+
+                }
+
+            }
+
+            if (duplicateClass == 0) {
+
+                user.classes.push({ class: groupFormationName });
+
+            }
+
+            // Update the users file, taking into account that the user is now registered as a student
+            fs.writeFile("./database/users.json", JSON.stringify(users, null, 4), err => {
+        
+                if (err) {
+        
+                    console.error(err);
+        
+                } 
+        
+            });
+
+            return true;
+               
+        }
+
+    });
+
     res.json({ error: false, groupFormationName: true, studentList: true, topicsList: true, studentListJSON: true, topicsListJSON: true });
 
     return res.end();
@@ -670,11 +748,11 @@ app.post('/search', (req, res) => {
     let students = getJSONFile(className + '/students.json');
     let studentsArray = [];
 
-    students.map(({navn, email}) => navn);
+    students.map(({name}) => name);
 
     for (let i in students) {
 
-        studentsArray.push(students[i]['navn']);
+        studentsArray.push(students[i]['name']);
 
     }
 
@@ -775,11 +853,13 @@ app.post('/updateClassConfig', (req, res) => {
 
 app.post('/unlockClass', (req, res) => {
 
-    const className = req.body.className;
+    const className = session.className;
     
-    // kør studentObjectMaker
+    let students = getJSONFile(className + "/students.json")
+   
+    studentObjectMaker(students, className);
 
-    res.json({ error: false});
+    res.json({ error: false });
 
     return res.end();
 
@@ -787,7 +867,7 @@ app.post('/unlockClass', (req, res) => {
 
 app.get('/getGroup', (req, res) => {
     
-    let fileName = session.class + "/groups.json";
+    let fileName = req.session.class + "/groups.json";
     
     let groupFile = getJSONFile(fileName);
 
@@ -941,6 +1021,10 @@ async function studentObjectMaker(users, semester){
         
         students[i] = {
             name: users[i],
+            prefs: [],
+            blocks: [],
+            roles: [],
+            topics: [],
             keycode: makeKeycode(10),
             isRegistered: 0
         }

@@ -2,7 +2,14 @@
     {
         "username": "test",
         "password": "test",
-        "classes": [],
+        "classes": [
+            {
+                "class": "123"
+            },
+            {
+                "class": "12345"
+            }
+        ],
         "isCoordinator": 1
     },
     {
