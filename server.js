@@ -661,7 +661,7 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
         if (studentList[index].hasOwnProperty('name')) {
 
-            console.log(studentList[index]);
+            //console.log(studentList[index]);
 
         } else {
 
@@ -677,7 +677,7 @@ app.post('/fileGroupUpload', multer(multerConfig).any(), (req, res) =>{
 
         if (topicsList[index].hasOwnProperty('topic')) {
 
-            console.log(topicsList[index]);
+            //console.log(topicsList[index]);
 
         } else {
 
@@ -853,11 +853,11 @@ app.post('/updateClassConfig', (req, res) => {
 
 app.post('/unlockClass', (req, res) => {
 
-    const className = session.className;
+    const className = req.body.className;
     
-    let students = getJSONFile(className + "/students.json")
+    let students = getJSONFile(className + "/students.json");
    
-    studentObjectMaker(students, className);
+    studentKeycodeMaker(students, className);
 
     res.json({ error: false });
 
@@ -935,7 +935,15 @@ function getJSONFile(file) {
     //Reads content and saves it
     var file = fs.readFileSync(filepath, 'utf8');
 
-    return JSON.parse(file);
+    try {
+
+        return JSON.parse(file);
+
+    } catch (e) {
+
+        return [];
+
+    }
     
 }
 
@@ -991,21 +999,20 @@ function makeKeycode(length) {
  * This function makes an list of objects and writes a files with the students names, a specific code,
  * and a boolean function to check if they have registered
  * @param {This parameter takes names of the students uploaded by the coordinator} users 
- * @param {This to takes semester name inputted by coordinator to open its folder} semester 
+ * @param {This to takes class name inputted by coordinator to open its folder} className 
  */
-async function studentObjectMaker(users, semester){
+async function studentKeycodeMaker(users, className){
 
     let students = [];
     let keycodeFile = await getJSONFile("keycodes.json");
-    let keycode = "";
     let tmpKeycode = "";
 
     //Makes an object with a name, code, and boolean, for every student sent by the coordinator
     for (let i in users) {
 
-        keycode = keycodeFile.some(user => {
-            
-            tmpKeycode = makeKeycode(10);
+        tmpKeycode = makeKeycode(10);
+
+        keycodeFile.some(user => {
 
             if (tmpKeycode == user.keycode) {
                 
@@ -1013,27 +1020,40 @@ async function studentObjectMaker(users, semester){
 
             } else {
 
-                return tempKeyCode
+                return tmpKeycode
 
             }
             
-        })
+        });
+
+        keycodeFile.push({
+            keycode: tmpKeycode,
+            class: className
+        });
         
         students[i] = {
-            name: users[i],
+            name: users[i].name,
             prefs: [],
             blocks: [],
             roles: [],
             topics: [],
-            keycode: makeKeycode(10),
+            keycode: tmpKeycode,
             isRegistered: 0
-        }
+        };
     
     }
 
-    await checkFolderName(semester);
+    fs.writeFile("./database/keycodes.json", JSON.stringify(keycodeFile, null, 4), err => {
 
-    fs.writeFile("./database/" + semester + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
+        if (err) {
+
+            console.error(err);
+
+        } 
+
+    });
+
+    fs.writeFile("./database/" + className + "/students.json", JSON.stringify(students, null, 4), err => {
 
         if (err) {
 
