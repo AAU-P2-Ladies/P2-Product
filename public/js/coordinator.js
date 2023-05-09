@@ -144,6 +144,7 @@ if (next_btn) {
 
         if (nameGroupFormationInput.value != "" && studentListInput.value != "" && topicsInput.value != "") {
 
+
             const formData = new FormData();
             formData.append("nameGroupFormationInput", nameGroupFormationInput.value);
             formData.append("studentListInput", studentListInput.files[0]);
@@ -195,7 +196,6 @@ if (next_btn) {
 
 if (start_new_btn) {
     start_new_btn.addEventListener("click", function () {
-        console.log('clickededded');
         window.location.href = '/coordinator_preconfig';
 
     })

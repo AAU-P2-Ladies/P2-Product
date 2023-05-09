@@ -707,7 +707,7 @@ app.post('/search', (req, res) => {
 
 app.post('/updateClassConfig', (req, res) => {
 
-    const className = req.body.className;
+    const className = req.body.className; 
     const amountOfGroupMembers = req.body.amountOfGroupMembers;
     const studentPreferences = req.body.studentPreferences;
     const previousMembers = req.body.previousMembers;
