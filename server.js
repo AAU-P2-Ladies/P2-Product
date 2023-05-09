@@ -790,11 +790,13 @@ app.post('/updateClassConfig', (req, res) => {
     const studentPreferences = req.body.studentPreferences;
     const previousMembers = req.body.previousMembers;
     const objectArray = req.body.blockedPairArray;
+    const includeRoles = (req.body.includeRoles) ? "1" : "0";
 
     let config = {
         amountOfGroupMembers: amountOfGroupMembers,
         studentPreferences: studentPreferences,
-        previousMembers: previousMembers
+        previousMembers: previousMembers,
+        includeRoles: includeRoles
     };
 
     fs.writeFile("./database/" + className + "/config.json", JSON.stringify(config, null, 4), err => {
@@ -819,11 +821,11 @@ app.post('/updateClassConfig', (req, res) => {
 
     students.forEach(element => {
 
-        if (blockedArray.includes(element.navn)) {
+        if (blockedArray.includes(element.name)) {
 
             objectArray.filter(object => {
 
-                if (element.navn === object.name) {
+                if (element.name === object.name) {
 
                     element.blocks = object.blocks;
 
