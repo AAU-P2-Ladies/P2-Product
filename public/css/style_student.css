@@ -23,12 +23,10 @@ table{
     width:20%;
     border:1px solid;
 }
-
 th, td {
     border: 1px solid black;
     
 }
-
 tr:nth-child(odd) {
     background-color: #ff57eb;
     
@@ -98,7 +96,6 @@ p {
 /*
 #SaveStudentPreferencesButton{
     width: 40%;
-
 }
 */
 .buttonS:hover,
@@ -197,4 +194,3 @@ p {
     text-decoration: none;
     cursor: pointer;
 }
- 
