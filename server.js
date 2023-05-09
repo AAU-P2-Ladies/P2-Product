@@ -1035,10 +1035,10 @@ async function studentKeycodeMaker(users, className){
         
         students[i] = {
             name: users[i].name,
-            prefs: [],
-            blocks: [],
-            roles: [],
-            topics: [],
+            prefs: (users[i].prefs) ? users[i].prefs : [],
+            blocks: (users[i].blocks) ? users[i].blocks : [],
+            roles: (users[i].roles) ? users[i].roles : [],
+            topics: (users[i].topics) ? users[i].topics : [],
             keycode: tmpKeycode,
             isRegistered: 0
         };
