@@ -1,19 +1,45 @@
 [
     {
         "navn": "Abedullah Kamalzada",
-        "email": "akama22@student.aau.dk"
+        "email": "akama22@student.aau.dk",
+        "prefs": [
+            "hej2",
+            "hej3"
+        ],
+        "blocks": [
+            "hej",
+            "hej1"
+        ],
+        "roles": [
+            "hej4",
+            "hej5"
+        ],
+        "topics": [
+            "hej6",
+            "hej7"
+        ],
+        "keycode": "92uth92hg9g"
     },
     {
         "navn": "Adam Kuzniewski",
-        "email": "akuzni22@student.aau.dk"
+        "email": "akuzni22@student.aau.dk",
+        "blocks": [
+            "Allias Ghorbani"
+        ]
     },
     {
         "navn": "Adomas Ciplys",
-        "email": "aciply22@student.aau.dk"
+        "email": "aciply22@student.aau.dk",
+        "blocks": [
+            "Sina Grün"
+        ]
     },
     {
         "navn": "Alex Huynh",
-        "email": "ahuynh22@student.aau.dk"
+        "email": "ahuynh22@student.aau.dk",
+        "blocks": [
+            "Simon Melgaard Skelkjær"
+        ]
     },
     {
         "navn": "Alexander Egede Bøggild",
@@ -41,11 +67,18 @@
     },
     {
         "navn": "Allan Vester",
-        "email": "avest22@student.aau.dk"
+        "email": "avest22@student.aau.dk",
+        "blocks": [
+            "Allias Ghorbani"
+        ]
     },
     {
         "navn": "Allias Ghorbani",
-        "email": "aghorb22@student.aau.dk"
+        "email": "aghorb22@student.aau.dk",
+        "blocks": [
+            "Adam Kuzniewski",
+            "Allan Vester"
+        ]
     },
     {
         "navn": "Anders Dalgas Jacobsen",
@@ -457,7 +490,10 @@
     },
     {
         "navn": "Simon Melgaard Skelkjær",
-        "email": "sskelk21@student.aau.dk"
+        "email": "sskelk21@student.aau.dk",
+        "blocks": [
+            "Alex Huynh"
+        ]
     },
     {
         "navn": "Simon Thordal",
@@ -465,7 +501,10 @@
     },
     {
         "navn": "Sina Grün",
-        "email": "sgrun22@student.aau.dk"
+        "email": "sgrun22@student.aau.dk",
+        "blocks": [
+            "Adomas Ciplys"
+        ]
     },
     {
         "navn": "Subhan Rahmatyar",
@@ -530,23 +569,5 @@
     {
         "navn": "Zardasht Mustafa",
         "email": "zmusta22@student.aau.dk"
-    },
-    {
-        "keycode": "666",
-        "username": "123",
-        "password": "123"
-    },
-    {
-        "username": "456",
-        "password": "456"
-    },
-    {
-        "username": "789",
-        "password": "789"
-    },
-    {
-        "keycode": "c-4342",
-        "username": "543",
-        "password": "543"
     }
 ]
