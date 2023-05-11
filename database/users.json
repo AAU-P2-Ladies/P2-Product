@@ -11,6 +11,9 @@
             },
             {
                 "class": "DAT4"
+            },
+            {
+                "class": "DAT2"
             }
         ],
         "isCoordinator": 1

@@ -261,7 +261,7 @@ function classModalCreator(location){
                     })
                     .then((response) => response.json())
                     .then((data) => {})
-                    location = "/" + classesSelect.value + "/coordinator_config";
+                    location = "/" + classesSelect.value + location;
                     window.location.href = location;
                 })
         }

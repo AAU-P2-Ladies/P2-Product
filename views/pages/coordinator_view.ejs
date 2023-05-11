@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<html lang="en" class="h-100">
+    <head>
+
+        <%- include('../partials/head'); %>
+
+        <title>Coordinator configuration</title>
+        <link rel="stylesheet" href="/../css/style.css">
+        <script type="application/javascript" src="/../js/coordinator_view.js" defer></script>
+    
+    </head>
 <body>
-    <div class = "keycodes_table">
-        <table>
-            <tr>
-            <th>Student</th>
-            <th>Keycode</th>
-            </tr>
-            <tr>
-            <td>Student name udfyldes dynamisk</td>
-            </tr>
-            <tr>
-            <td>Keycode udfyldes dynamisk</td>
-            </tr>
-        </table>
+
+    <%- include('../partials/navbar'); %>
+    
+    <div class="table table-bordered table-responsive">    
+        <table id="keycodeTable">
+            <thead>
+                <tr> 
+                    <!--headers for the table--> 
+                    <th scope="col">Student</th>
+                    <th scope="col">Keycode</th>
+                    <th scope="col">Is registered?</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <!--body is updated dynamically via js-->          
+                </tbody>
+        </table>                       
     </div>
+
+    <button type="button" class="btn btn-primary" id="createGroups"></button>
+    
+    <%- include('../partials/footer'); %>
+
 </body>
 </html>

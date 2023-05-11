@@ -489,7 +489,17 @@ app.get('/coordinator_preconfig', (req, res) => {
 });
 
 app.get('/:className/coordinator_view', (req, res) => {
+
     res.render('pages/COORDINATOR_view')
+
+})
+
+app.post('/getStudents', (req, res) => {
+
+    let file = getJSONFile(req.body.className + "/students.json");
+
+    return res.json(file);
+    
 })
 
 app.get('/:className/coordinator_config', (req, res) => {
