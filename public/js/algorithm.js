@@ -5,8 +5,8 @@ const helper = require('./algHelpers.js');
 let min = 0;
 let StudentNum = 100;
 let groupSize = 7;
-const roleNumber = 9
-const maxIterations = 1000
+const roleNumber = 9;
+const maxIterations = 1000;
 //const minDiversity = 0.75
 
 /**
@@ -19,8 +19,8 @@ const maxIterations = 1000
  * @param {*} groupNr 
  * @param {*} topics 
  */
-function Student(first, index, prefs = [], blocks = [], roles = [], groupNr, topics = []) {
-    this.firstName = first;
+function Student(name, index, prefs = [], blocks = [], roles = [], groupNr, topics = []) {
+    this.firstName = name;
     this.index = index;
     this.prefs = prefs;
     this.blocks = blocks;
@@ -363,7 +363,9 @@ function findMinDiversity(students, groupSize){
     //The first student in the first group, since order does not matter
     groups[0].students[0] = students[0];
     //Looping through each student to put them into groups, labelling loops to be able to break loops properly
+    console.log("beginning to add students to groups")
     studentLoop: for(let student = 1; student < students.length; student++){
+        console.log(groups)
         //Looping through the groups to compare to current student 
         groupLoop: for(let i in groups){
             if(groups[i].students.length == 0){
@@ -376,21 +378,26 @@ function findMinDiversity(students, groupSize){
             }
             overlap[i] = 0;
             compareLoop: for(let j in groups[i].students){
+                console.log("starting the compare loop")
                 //Calculate the overlap between current student and group until a space is empty
                 overlap[i] += helper.roleCheck(students[student], groups[i].students[j])
-                    if(groups[i].students.length < j){
+                console.log("Found overlap between " + students[student].name + " and " + groups[i].students[j].name +  ": " + overlap[i])
+                    if(groups[i].isFull == false){
                         //If overlap is 0, student is placed into group
                         //If student is placed into a group, break so that the student loop continues
                         //Else, break so that the next loop is checked
                         if(overlap[i] == 0){
-                            groups[i].push(students[student]);
-                            break groupLoop;
+                            console.log("overlap is 0")
+                            groups[i].students.push(students[student]);
+                            continue studentLoop;
                         }
                         break;
                     }
             }
         }
+        console.log("adding student to group?")
         let i = helper.findMinPos(overlap);
+        console.log("added student to group")
         groups[i].students.push(students[student]);
         //If the number of students in the group is equal to the group size, or 1 smaller if the group is part of the last smaller groups, it becomes full
         if(groups[i].students.length >= groupSize ||
@@ -421,9 +428,15 @@ function findMinDiversity(students, groupSize){
  * @returns 
  */
 function masterAlgorithm(students, groupSize, maxSeconds){
+    console.log("Began master algorithm");
+    console.log(groupSize);
+    console.log(students);
     helper.indexStudents(students);
+    console.log(students);
     let matrix = preferenceMatrix(students);
+    console.log("Made preference matrix");
     let minDiversity = findMinDiversity(students, groupSize);
+    console.log("Found min diversity")
     /*if(roleNumber > 0){
         minDiversity = findMinDiversity(students, groupSize);
     }
@@ -435,6 +448,7 @@ function masterAlgorithm(students, groupSize, maxSeconds){
     let bestAvgDiversity = 0;
     let finalGroups = [];
     while(Date.now() - time < maxSeconds * 1000){
+        console.log("Starting new while loop");
         //Each students groupNr has to be reset for each new group formation since prefGroups assumes students are not in a group
         for(let student of students){
             student.groupNr = -1;
@@ -444,6 +458,7 @@ function masterAlgorithm(students, groupSize, maxSeconds){
         let matrix = preferenceMatrix(students);
         let groups = prefGroups(students, matrix, groupSize);
         groups = hillClimb(students, groups, minDiversity, matrix, maxIterations)
+        console.log("Climbed hill");
         //Loops through the groups and finds their total preference percentage and diversity percentage
         let totalDiverse = 0
         let totalPercent = 0
@@ -466,4 +481,4 @@ function masterAlgorithm(students, groupSize, maxSeconds){
 }
 
 
-module.exports = {Student, Group, preferenceMatrix, prefGroups, hillClimb}
+module.exports = {Student, Group, preferenceMatrix, prefGroups, hillClimb, masterAlgorithm}

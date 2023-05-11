@@ -2,9 +2,12 @@ function indexStudents (students) {
     //Loops through all students assigning their index number
     for (let indexNum = 0; indexNum < students.length; indexNum++) {
         students[indexNum].index = indexNum;
+        students[indexNum].groupNr = -1;
     }
     return students;
 }
+
+
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -204,7 +207,7 @@ function findMinSpace(array, boolean){
 }
 
 //This function finds the minimum positive element in an array
-//If there are no positive elements, returns 0
+//If there are no positive elements, returns -1
 function findMinPos(array){
     let i = 0;
     let key = -1;

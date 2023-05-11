@@ -4,6 +4,9 @@ const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const { exit } = require('process');
 const multer = require("multer");
+const alg = require('./public/js/algorithm.js');
+
+const maxTime = 5;
 
 var fs = require('fs'), json;
 var session;
@@ -499,6 +502,35 @@ app.post('/getStudents', (req, res) => {
     let file = getJSONFile(req.body.className + "/students.json");
 
     return res.json(file);
+    
+})
+
+app.post('/makeGroups', (req, res) => {
+
+    const className = req.body.className;
+
+    let students = getJSONFile(className + "/students.json");
+    let configFile = getJSONFile(className + "/config.json");
+
+    
+    let groupSize = configFile.amountOfGroupMembers;
+    console.log(groupSize)
+    let groups = alg.masterAlgorithm(students, groupSize, maxTime);
+
+    fs.writeFile("./database/" + className + "/groups.json", JSON.stringify(groups, null, 4), err => {
+        
+        if (err) {
+
+            console.error(err);
+
+        } 
+    });
+
+    res.json({ error: false });
+
+    return res.end();
+
+    //return res.json({'students': studentsFile, 'groupSize': configFile.amountOfGroupMembers});
     
 })
 

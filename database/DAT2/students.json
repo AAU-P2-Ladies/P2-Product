@@ -1,37 +1,69 @@
 [
     {
         "name": "Simon",
-        "keycode": "EasY5kgU7w",
-        "isRegistered": 1
+        "prefs": ["Allan", "Carmen"],
+        "blocks": [
+            "Merete"
+        ],
+        "roles": ["Implementer", "Shaper"],
+        "topics": [],
+        "keycode": "Rk9oNSBg2l",
+        "isRegistered": 0
     },
     {
         "name": "Allan",
-        "keycode": "h9WhjFICDx",
+        "prefs": ["Kamilla", "Sina"],
+        "blocks": [],
+        "roles": ["Master coder", "Monitor Evaluater"],
+        "topics": [],
+        "keycode": "kCw4ckeNQO",
         "isRegistered": 0
     },
     {
         "name": "Nicolaj",
-        "keycode": "PX9uMjL54D",
+        "prefs": ["Merete", "Simon"],
+        "blocks": [],
+        "roles": ["Monitor Evaluator", "Team Worker"],
+        "topics": [],
+        "keycode": "2nX06ogUqK",
         "isRegistered": 0
     },
     {
         "name": "Sina",
-        "keycode": "IxWIN3e1wV",
+        "prefs": ["Kamilla", "Allan"],
+        "blocks": [],
+        "roles": ["Resource Investigator", "Coordinator"],
+        "topics": [],
+        "keycode": "Qw1ykCOB8f",
         "isRegistered": 0
     },
     {
         "name": "Kamilla",
-        "keycode": "5hMsYQweQO",
+        "prefs": ["Allan", "Sina"],
+        "blocks": [],
+        "roles": ["Coordinator", "Shaper"],
+        "topics": [],
+        "keycode": "FonSGV787g",
         "isRegistered": 0
     },
     {
         "name": "Merete",
-        "keycode": "ygrwZCmzCJ",
+        "prefs": ["Carmen", "Simon"],
+        "blocks": [
+            "Simon"
+        ],
+        "roles": ["Er der bare", "Master coder"],
+        "topics": [],
+        "keycode": "8Htg5iLIbu",
         "isRegistered": 0
     },
     {
         "name": "Carmen",
-        "keycode": "BLUk0WfZTf",
+        "prefs": ["Nicolaj", "Kamilla"],
+        "blocks": [],
+        "roles": ["Plant", "Complete finisher"],
+        "topics": [],
+        "keycode": "VKsCaIOLf2",
         "isRegistered": 0
     }
 ]

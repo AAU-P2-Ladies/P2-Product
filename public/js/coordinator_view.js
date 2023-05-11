@@ -1,4 +1,6 @@
-let createButton = document.getElementById("createGroups")
+const maxTime = 5;
+
+let groupButton = document.getElementById("createGroups");
 
 function makeStudentTable() {
     fetch('/../getStudents', {
@@ -41,8 +43,8 @@ function makeStudentTable() {
     })
 };
 
-createButton.addEventListener("click", function () {
-    fetch('/../getStudents', {
+groupButton.addEventListener("click", () => {
+    fetch('/../makeGroups', {
         method: "POST",
         headers: {
             Accept: "application/json, text/plain, */*",
@@ -54,7 +56,25 @@ createButton.addEventListener("click", function () {
     })
     .then((response) => response.json())
     .then((data) => {
-})})
+        //console.log(groups);
+        /*
+        fetch('/../uploadGroups', {
+            method: "POST",
+            headers: {
+                Accept: "application/json, text/plain, *",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                groups: groups
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+
+        })
+        */
+    })
+})
 
 
 makeStudentTable();
