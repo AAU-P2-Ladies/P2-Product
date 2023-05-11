@@ -7,13 +7,6 @@ window.onload = fetch('./getGroup', {
         createTable(JSON.parse(data))
     })
 
-
-
-
-function readGroups(groupFile){
-
-}
-
 function createTable(group){
     let boksenn = document.getElementById("divBoks");
 
