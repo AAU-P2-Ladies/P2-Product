@@ -88,7 +88,7 @@ p {
     
 }
 
-.buttonS, #knapidd, #addPref, #searchPref, #SaveStudentPreferencesButton{
+.buttonS, #knapidd, #addPref, #addBlock, #searchPref, #SaveStudentPreferencesButton{
     background-color: white;
     color:rgba(0, 0, 0, 0.4);
     border-radius: 5px;
@@ -187,7 +187,7 @@ p {
     font-size: 28px;
     font-weight: bold;
 }
-  
+   
 .close:hover,
 .close:focus {
     color: #000;

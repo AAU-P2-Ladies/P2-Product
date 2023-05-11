@@ -873,6 +873,93 @@ app.get('/getGroup', (req, res) => {
 
 })
 
+app.post('/saveProfile', (req, res) => {
+
+    let students = getJSONFile(session.class + "/students.json");
+    let topics = getJSONFile(session.class + "/topics.json");
+    let users = getJSONFile("users.json")
+    let studentsName=[];
+    for(i in users){
+    students.some(std =>{
+        for(j in users[i].classes){
+        if(std.keycode == users[i].classes[j].keycode){
+            /**
+             * Now we have the right user, insert the input from req to student values
+             * 
+             */
+            const studentPreferences = req.body.prefs;
+            //Check in Student JSON
+            for(i in students){
+                studentsName.push(students[i].name)
+            }
+            
+                for(i in req.body.prefs)
+                    if(studentsName.includes(req.body.prefs[i])){
+    
+                        for(j in req.body.block){
+                        if(studentsName.includes(req.body.block[j])){
+                            res.json({error:true, prefs:true})
+                            return res.end()
+                        } } 
+                    }else{
+                        res.json({error:true, prefs:true})
+                        return res.end()
+                    }
+                    
+                
+            
+            //Student Exist
+
+            
+            
+            const studentBlocks = req.body.blocks;
+            //Check in Student JSON
+
+            const studentTopics = req.body.topics;
+            //Check in Topic JSON
+
+            const studentRoles = req.body.roles;
+            
+            
+        }}
+
+    })}
+
+    fs.writeFile("./database/" + session.className + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
+
+        if (err) {
+
+            console.error(err);
+
+        } 
+
+    });
+
+    
+
+})
+
+app.get('/getBlockedPair', (req, res) =>{
+
+    let students = getJSONFile(session.class + "/students.json");
+    let users = getJSONFile("users.json")
+    for(i in users){
+    students.some(std =>{
+        for(j in users[i].classes){
+        if(std.keycode == users[i].classes[j].keycode){
+            console.log(std.keycode);
+            console.log(users[i].classes[j].keycode);
+            console.log('do');
+            res.json({error: false, blocked: std.blocks});
+            return res.end()
+            
+
+            
+        }}
+
+    })}
+})
+
 /**
  * Logs the servers url
  */
