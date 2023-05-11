@@ -488,6 +488,10 @@ app.get('/coordinator_preconfig', (req, res) => {
 
 });
 
+app.get('/:className/coordinator_view', (req, res) => {
+    res.render('pages/COORDINATOR_view')
+})
+
 app.get('/:className/coordinator_config', (req, res) => {
 
     if (!req.session.userid || req.session.isCoordinator != 1) {
@@ -559,6 +563,26 @@ app.get('/student_start', (req, res) => {
     }
 
 });
+
+//Fetch the current coordinators classes in order to display list of options
+app.get('/getCoordinatorClasses', (req, res) => {
+    let userFile = getJSONFile('users.json');
+    let classes = [];
+    //Loop through users to find current logged in user and find their classes
+    for(let user of userFile){
+        if(user.username == session.userid){
+            classes = user.classes;
+        }
+    }
+    res.json(classes);
+    return res.end();
+})
+
+//save the coordinators chosen class ID to edit/view
+app.post('/postCoordinatorClass', (req, res) => {
+    session.class = req.body.class;
+    console.log(session.class)
+})
 
 app.get('/student_group', (req, res) => {
 
