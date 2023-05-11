@@ -44,6 +44,10 @@ function makeStudentTable() {
 };
 
 groupButton.addEventListener("click", () => {
+
+    groupButton.disabled = "disabled";
+    alert('The algorithm is about to start... Please press "Ok" to start the algorithm.');
+
     fetch('/../makeGroups', {
         method: "POST",
         headers: {
@@ -56,6 +60,13 @@ groupButton.addEventListener("click", () => {
     })
     .then((response) => response.json())
     .then((data) => {
+
+        if (data) {
+
+            alert('The group formation is now done!');
+
+        }
+
         //console.log(groups);
         /*
         fetch('/../uploadGroups', {

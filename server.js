@@ -6,7 +6,7 @@ const { exit } = require('process');
 const multer = require("multer");
 const alg = require('./public/js/algorithm.js');
 
-const maxTime = 5;
+const maxTime = 30;
 
 var fs = require('fs'), json;
 var session;

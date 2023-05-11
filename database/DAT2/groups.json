@@ -2,101 +2,6 @@
     {
         "students": [
             {
-                "name": "Nicolaj",
-                "prefs": [
-                    "Merete",
-                    "Simon"
-                ],
-                "blocks": [],
-                "roles": [
-                    "Monitor Evaluator",
-                    "Team Worker"
-                ],
-                "topics": [],
-                "keycode": "2nX06ogUqK",
-                "isRegistered": 0,
-                "index": 2,
-                "groupNr": 0
-            },
-            {
-                "name": "Carmen",
-                "prefs": [
-                    "Nicolaj",
-                    "Kamilla"
-                ],
-                "blocks": [],
-                "roles": [
-                    "Plant",
-                    "Complete finisher"
-                ],
-                "topics": [],
-                "keycode": "VKsCaIOLf2",
-                "isRegistered": 0,
-                "index": 0,
-                "groupNr": 0
-            },
-            {
-                "name": "Allan",
-                "prefs": [
-                    "Kamilla",
-                    "Sina"
-                ],
-                "blocks": [],
-                "roles": [
-                    "Master coder",
-                    "Monitor Evaluater"
-                ],
-                "topics": [],
-                "keycode": "kCw4ckeNQO",
-                "isRegistered": 0,
-                "index": 6,
-                "groupNr": 0
-            }
-        ],
-        "isFull": true
-    },
-    {
-        "students": [
-            {
-                "name": "Kamilla",
-                "prefs": [
-                    "Allan",
-                    "Sina"
-                ],
-                "blocks": [],
-                "roles": [
-                    "Coordinator",
-                    "Shaper"
-                ],
-                "topics": [],
-                "keycode": "FonSGV787g",
-                "isRegistered": 0,
-                "index": 1,
-                "groupNr": 1
-            },
-            {
-                "name": "Sina",
-                "prefs": [
-                    "Kamilla",
-                    "Allan"
-                ],
-                "blocks": [],
-                "roles": [
-                    "Resource Investigator",
-                    "Coordinator"
-                ],
-                "topics": [],
-                "keycode": "Qw1ykCOB8f",
-                "isRegistered": 0,
-                "index": 3,
-                "groupNr": 1
-            }
-        ],
-        "isFull": false
-    },
-    {
-        "students": [
-            {
                 "name": "Merete",
                 "prefs": [
                     "Carmen",
@@ -112,8 +17,103 @@
                 "topics": [],
                 "keycode": "8Htg5iLIbu",
                 "isRegistered": 0,
-                "index": 4,
+                "index": 3,
                 "groupNr": 2
+            },
+            {
+                "name": "Carmen",
+                "prefs": [
+                    "Nicolaj",
+                    "Kamilla"
+                ],
+                "blocks": [],
+                "roles": [
+                    "Plant",
+                    "Complete finisher"
+                ],
+                "topics": [],
+                "keycode": "VKsCaIOLf2",
+                "isRegistered": 0,
+                "index": 2,
+                "groupNr": 1
+            }
+        ],
+        "isFull": false
+    },
+    {
+        "students": [
+            {
+                "name": "Sina",
+                "prefs": [
+                    "Kamilla",
+                    "Allan"
+                ],
+                "blocks": [],
+                "roles": [
+                    "Resource Investigator",
+                    "Coordinator"
+                ],
+                "topics": [],
+                "keycode": "Qw1ykCOB8f",
+                "isRegistered": 0,
+                "index": 6,
+                "groupNr": 2
+            },
+            {
+                "name": "Kamilla",
+                "prefs": [
+                    "Allan",
+                    "Sina"
+                ],
+                "blocks": [],
+                "roles": [
+                    "Coordinator",
+                    "Shaper"
+                ],
+                "topics": [],
+                "keycode": "FonSGV787g",
+                "isRegistered": 0,
+                "index": 5,
+                "groupNr": 2
+            },
+            {
+                "name": "Allan",
+                "prefs": [
+                    "Kamilla",
+                    "Sina"
+                ],
+                "blocks": [],
+                "roles": [
+                    "Master coder",
+                    "Monitor Evaluater"
+                ],
+                "topics": [],
+                "keycode": "kCw4ckeNQO",
+                "isRegistered": 0,
+                "index": 4,
+                "groupNr": 0
+            }
+        ],
+        "isFull": true
+    },
+    {
+        "students": [
+            {
+                "name": "Nicolaj",
+                "prefs": [
+                    "Merete",
+                    "Simon"
+                ],
+                "blocks": [],
+                "roles": [
+                    "Monitor Evaluator",
+                    "Team Worker"
+                ],
+                "topics": [],
+                "keycode": "2nX06ogUqK",
+                "isRegistered": 0,
+                "index": 1,
+                "groupNr": 1
             },
             {
                 "name": "Simon",
@@ -131,8 +131,8 @@
                 "topics": [],
                 "keycode": "Rk9oNSBg2l",
                 "isRegistered": 0,
-                "index": 5,
-                "groupNr": 2
+                "index": 0,
+                "groupNr": 0
             }
         ],
         "isFull": false

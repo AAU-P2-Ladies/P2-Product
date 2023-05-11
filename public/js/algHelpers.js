@@ -26,16 +26,16 @@ function findPrefSum (student1, student2, matrix) {
 
 //This function checks two students preference for each other, if not blocked and no preference for each other it sets it to number of students divided by 2
 function prefCheck (student1, student2, studentNumber) {
-    let preferenceIndex = student1.prefs.indexOf(student2.index);
+    let preferenceIndex = student1.prefs.indexOf(student2.name);
     if (preferenceIndex >= 0) {
         return preferenceIndex + 1;
     }
     
-    let blockIndex = student1.blocks.indexOf(student2.index);
+    let blockIndex = student1.blocks.indexOf(student2.name);
     if(blockIndex >= 0) {
-        return studentNumber
+        return studentNumber;
     } else {
-        return Math.ceil((studentNumber)/2)
+        return Math.ceil((studentNumber)/2);
     }
 }
 

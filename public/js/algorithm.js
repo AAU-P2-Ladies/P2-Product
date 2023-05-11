@@ -3,8 +3,6 @@ const helper = require('./algHelpers.js');
 
 //Define values that should be given by the website
 let min = 0;
-let StudentNum = 100;
-let groupSize = 7;
 const roleNumber = 9;
 const maxIterations = 1000;
 //const minDiversity = 0.75
@@ -229,6 +227,7 @@ function swapCheck(origin, groups, minDiversity, students, matrix){
     let prefAvgOld = [0, 0];
     let prefAvgNew = [0, 0];
     prefAvgOld[0] += helper.groupPrefAvg(origin, originGroup, matrix);
+    //console.log("average preference in the group with " + origin.name + ": " + prefAvgOld[0])
     //This loop goes through every group
     for(let i in groups){
         diverseOld[1] = helper.groupDiversityCheck(groups[i], minDiversity)
@@ -238,21 +237,24 @@ function swapCheck(origin, groups, minDiversity, students, matrix){
         }
         //Now to through all students to check what a swap would do
         for(j in groups[i].students){
-            let target = groups[i].students[j]
-            prefAvgOld[1] = helper.groupPrefAvg(target, groups[i], matrix)
+            let target = groups[i].students[j];
+            prefAvgOld[1] = helper.groupPrefAvg(target, groups[i], matrix);
+            //console.log("average preference in the group with " + target.name + ": " + prefAvgOld[1]);
             helper.swapStudents(originGroup, originIndex, groups[i], j);
-            diverseNew[0] = helper.groupDiversityCheck(originGroup, minDiversity)
-            diverseNew[1] = helper.groupDiversityCheck(groups[i], minDiversity)
+            diverseNew[0] = helper.groupDiversityCheck(originGroup, minDiversity);
+            diverseNew[1] = helper.groupDiversityCheck(groups[i], minDiversity);
             //If the number of diverse groups is not decreased by the swap, calculate the preference delta
             let diversityDelta = diverseNew[0] + diverseNew[1] - diverseOld[0] - diverseOld[1];
             if(diversityDelta > 0){
-                divImprovements[target.index] = true
+                divImprovements[target.index] = true;
             }
             if(diversityDelta >= 0){
                 //The preference delta is simply the difference in average preference for the two groups
                 prefAvgNew[0] = helper.groupPrefAvg(target, originGroup, matrix);
+                //console.log("average new preference in the group with " + origin.name + ": " + prefAvgNew[1])
                 prefAvgNew[1] = helper.groupPrefAvg(origin, groups[i], matrix);
-                prefDelta[target.index] = prefAvgNew[0] + prefAvgNew[1] - prefAvgOld[0] - prefAvgOld[1];
+                //console.log("average new preference in the group with " + target.name + ": " + prefAvgNew[1])
+                prefDelta[target.index] = (prefAvgNew[0] + prefAvgNew[1] - prefAvgOld[0] - prefAvgOld[1]).toFixed(2);
             }
             //If the diversity will get worse from this swap, set prefDelta to 0, indicating no swap
             else{
@@ -265,7 +267,7 @@ function swapCheck(origin, groups, minDiversity, students, matrix){
     if(divImprovements.indexOf(true) == -1){
         let bestSwap = helper.findMin(prefDelta);
         //If the best swap does not improve the pref satisfaction (ie. is not negative), return 0
-        if(prefDelta[bestSwap] >= 0)
+        if(prefDelta[bestSwap] > -1)
             return -1;
         else 
             return bestSwap;
@@ -363,9 +365,7 @@ function findMinDiversity(students, groupSize){
     //The first student in the first group, since order does not matter
     groups[0].students[0] = students[0];
     //Looping through each student to put them into groups, labelling loops to be able to break loops properly
-    console.log("beginning to add students to groups")
     studentLoop: for(let student = 1; student < students.length; student++){
-        console.log(groups)
         //Looping through the groups to compare to current student 
         groupLoop: for(let i in groups){
             if(groups[i].students.length == 0){
@@ -378,16 +378,13 @@ function findMinDiversity(students, groupSize){
             }
             overlap[i] = 0;
             compareLoop: for(let j in groups[i].students){
-                console.log("starting the compare loop")
                 //Calculate the overlap between current student and group until a space is empty
                 overlap[i] += helper.roleCheck(students[student], groups[i].students[j])
-                console.log("Found overlap between " + students[student].name + " and " + groups[i].students[j].name +  ": " + overlap[i])
                     if(groups[i].isFull == false){
                         //If overlap is 0, student is placed into group
                         //If student is placed into a group, break so that the student loop continues
                         //Else, break so that the next loop is checked
                         if(overlap[i] == 0){
-                            console.log("overlap is 0")
                             groups[i].students.push(students[student]);
                             continue studentLoop;
                         }
@@ -395,9 +392,7 @@ function findMinDiversity(students, groupSize){
                     }
             }
         }
-        console.log("adding student to group?")
         let i = helper.findMinPos(overlap);
-        console.log("added student to group")
         groups[i].students.push(students[student]);
         //If the number of students in the group is equal to the group size, or 1 smaller if the group is part of the last smaller groups, it becomes full
         if(groups[i].students.length >= groupSize ||
@@ -428,27 +423,20 @@ function findMinDiversity(students, groupSize){
  * @returns 
  */
 function masterAlgorithm(students, groupSize, maxSeconds){
-    console.log("Began master algorithm");
-    console.log(groupSize);
-    console.log(students);
     helper.indexStudents(students);
-    console.log(students);
     let matrix = preferenceMatrix(students);
-    console.log("Made preference matrix");
-    let minDiversity = findMinDiversity(students, groupSize);
-    console.log("Found min diversity")
-    /*if(roleNumber > 0){
+    let minDiversity;
+    if(roleNumber > 0){
         minDiversity = findMinDiversity(students, groupSize);
     }
     else{
          minDiversity = 0;
-    }*/
+    }
     let time = Date.now();
     let bestAvgPref = 0;
     let bestAvgDiversity = 0;
     let finalGroups = [];
     while(Date.now() - time < maxSeconds * 1000){
-        console.log("Starting new while loop");
         //Each students groupNr has to be reset for each new group formation since prefGroups assumes students are not in a group
         for(let student of students){
             student.groupNr = -1;
@@ -458,25 +446,26 @@ function masterAlgorithm(students, groupSize, maxSeconds){
         let matrix = preferenceMatrix(students);
         let groups = prefGroups(students, matrix, groupSize);
         groups = hillClimb(students, groups, minDiversity, matrix, maxIterations)
-        console.log("Climbed hill");
         //Loops through the groups and finds their total preference percentage and diversity percentage
         let totalDiverse = 0
         let totalPercent = 0
         //This loop computes the variables to be compared in order to find the optimal values for this run
         for(let i in groups){
             let prefSum = helper.groupPrefSum(groups[i].students, matrix);
-            let percent = helper.prefSatisfactionPercent(prefSum, StudentNum, groups[i].students.length);
+            let percent = helper.prefSatisfactionPercent(prefSum, students.length, groups[i].students.length);
             totalDiverse += helper.groupDiversityCheck(groups[i],minDiversity)
             totalPercent += percent;
         }
-        let avgPref = totalPercent/Math.ceil(StudentNum/groupSize);
-        let avgDiversity = totalDiverse/Math.ceil(StudentNum/groupSize);
+        let avgPref = totalPercent/Math.ceil(students.length/groupSize);
+        let avgDiversity = totalDiverse/Math.ceil(students.length/groupSize);
         if(avgDiversity >= bestAvgDiversity && avgPref >= bestAvgPref){
             finalGroups = groups;
             bestAvgDiversity = avgDiversity;
             bestAvgPref = avgPref;
         }
     }
+    console.log(bestAvgDiversity)
+    console.log(bestAvgPref)
     return finalGroups
 }
 
