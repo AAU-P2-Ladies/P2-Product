@@ -8,6 +8,9 @@
             },
             {
                 "class": "12345"
+            },
+            {
+                "class": "DAT4"
             }
         ],
         "isCoordinator": 1

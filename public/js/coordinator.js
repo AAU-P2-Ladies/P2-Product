@@ -3,6 +3,9 @@ let next_btn = document.getElementById("next_btn");
 let unlock_btn = document.getElementById("unlock_btn");
 let start_new_btn = document.getElementById("new_session_btn");
 let save_btn = document.getElementById("save_btn");
+let edit_btn = document.getElementById("edit_btn");
+let view_btn = document.getElementById("view_btn");
+let table = document.getElementById("table")
 
 let nameGroupFormationInput = document.getElementById("name_group_formation");
 let studentListInput = document.getElementById("student_list");
@@ -201,6 +204,78 @@ if (start_new_btn) {
     })
 }
 
+/**
+ * This function creates a modal with the classes assigned to the currently logged in user
+ * @param {*} location The location that the 'next' button will lead to
+ */
+function classModalCreator(location){
+    fetch('/getCoordinatorClasses', {
+        method: "GET",})
+        .then((response) => response.json())
+        .then((data) => {
+            //If the response is empty, assume no classes exist
+            if(data == []){
+                alert("No classes made for this user")
+            }
+            //Else, add the options to the modal
+            else {
+                let classesSelect = document.getElementById("classesSelect");
+                classesSelect.innerHTML = "";
+
+                document.getElementById("classesModalLabel").innerText = 'Please select class:';
+                document.getElementById("classesDiv").style.display = "block";
+
+                let element = document.createElement("option");
+                element.textContent = '- select class -';
+                element.disabled = true;
+                element.selected = true;
+          
+                classesSelect.appendChild(element);
+
+                for(var i = 0; i < data.length; i++) {
+
+                    let opt = data[i].class ;
+                    let el = document.createElement("option");
+            
+                    el.textContent = opt;
+                    el.value = opt;
+                    
+                    classesSelect.appendChild(el);
+            
+                }
+
+                let myModal = new bootstrap.Modal(document.getElementById('classesModal'));
+                myModal.show();
+
+                let submitBtn = document.getElementById("submit-btn");
+                submitBtn.addEventListener("click", function () {
+                    fetch('./postCoordinatorClass', {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json, text/plain, */*",
+                                "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            class: classesSelect.value
+                        }),
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {})
+                    location = "/" + classesSelect.value + "/coordinator_config";
+                    window.location.href = location;
+                })
+        }
+    })
+}
+
+if (edit_btn && view_btn){
+    edit_btn.addEventListener("click", function () {
+        classModalCreator('/coordinator_config');
+    })
+    view_btn.addEventListener("click", function () {
+        classModalCreator('/coordinator_view');
+    })
+}
 
 function SearchField(myInputID, myULID) {
     let input, filter, ul, li, a, i, txtValue;
@@ -293,12 +368,6 @@ function BlockedList(StudentA, StudentB) {
             }
         }
     }
-
-
-
-
-
-
 
     blocked.push(blockedPair)
     createDynamicList2(blockedPair)
