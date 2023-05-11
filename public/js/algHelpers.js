@@ -248,6 +248,7 @@ function findCommonTopic(group){
             topics.push(group.students[i].topics[j]);
         }
     }
+    console.log(topics)
     if(topics){
         return findMostOccuring(topics);
     }

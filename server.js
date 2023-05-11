@@ -495,7 +495,15 @@ app.get('/coordinator_preconfig', (req, res) => {
 
 app.get('/:className/coordinator_view', (req, res) => {
 
-    res.render('pages/COORDINATOR_view')
+    if (!req.session.userid || req.session.isCoordinator != 1) {
+
+        res.redirect('./');
+
+    } else {
+
+        res.render('pages/coordinator_view')
+
+    }
 
 })
 
@@ -935,13 +943,25 @@ app.post('/unlockClass', (req, res) => {
 
 });
 
-app.get('/getGroup', (req, res) => {
-    
-    let fileName = req.session.class + "/groups.json";
-    
-    let groupFile = getJSONFile(fileName);
+
+app.get('/getGroups', (req, res) => {
+
+    const className = session.class;
+
+    if (!fs.existsSync('./database/' + className + '/groups.json')) {
+
+        return res.json({ error: true });
+
+    } else {
+
+        let groups = getJSONFile(className + "/groups.json");
+        
+        return res.json(groups);
+
+    }
 
 })
+
 
 /**
  * This get is used for the output page for a student to see their group after group formation
@@ -966,8 +986,8 @@ app.get('/getGroup', (req, res) => {
     let classFile = getJSONFile(fileName);
     let name = "";
     for(let student of classFile){
-        if(student.Keycodes == keycode){
-            name = student.Name;
+        if(student.keycode == keycode){
+            name = student.name;
         }
     }
     
@@ -977,16 +997,19 @@ app.get('/getGroup', (req, res) => {
     let groupFile = getJSONFile(fileName);
     for(let i in groupFile){
         for(let j in groupFile[i].students){
-            if(groupFile[i].students[j] == name){
+            if(groupFile[i].students[j].name == name){
                 group = groupFile[i];
                 break;
             }
         }
     }
+    
+    console.log(name);
+    console.log(group);
 
     if(group){
         
-        return res.json(JSON.stringify(group));
+        return res.json(group);
     }
     else{
         console.log("group does not exist")
