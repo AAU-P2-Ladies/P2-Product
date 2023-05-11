@@ -4,6 +4,8 @@ const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const { exit } = require('process');
 const multer = require("multer");
+const { get } = require('http');
+const { log } = require('console');
 const alg = require('./public/js/algorithm.js');
 
 const maxTime = 30;
@@ -939,6 +941,57 @@ app.get('/getGroup', (req, res) => {
     
     let groupFile = getJSONFile(fileName);
 
+})
+
+/**
+ * This get is used for the output page for a student to see their group after group formation
+ */
+app.get('/getGroup', (req, res) => {
+    
+    let users = getJSONFile("users.json");
+    let username = session.userid;
+    let keycode = "";
+    //First, find the current users keycode in order to be able to find their name from the student file
+    for(let user of users){
+        //Checks for the first user in the database that has the username of the currently logged in student
+        if(user.username == username){
+            for(let i in user.classes){
+                if(user.classes[i].class == session.class){
+                    keycode = user.classes[i].keycode
+                }
+            }
+        }
+    }
+    let fileName = session.class + "/students.json";
+    let classFile = getJSONFile(fileName);
+    let name = "";
+    for(let student of classFile){
+        if(student.Keycodes == keycode){
+            name = student.Name;
+        }
+    }
+    
+    //Having found the name of the current user, search the group file to find this users group 
+    fileName = session.class + "/groups.json";
+    let group; 
+    let groupFile = getJSONFile(fileName);
+    for(let i in groupFile){
+        for(let j in groupFile[i].students){
+            if(groupFile[i].students[j] == name){
+                group = groupFile[i];
+                break;
+            }
+        }
+    }
+
+    if(group){
+        
+        return res.json(JSON.stringify(group));
+    }
+    else{
+        console.log("group does not exist")
+        return res.end();
+    }
 })
 
 /**

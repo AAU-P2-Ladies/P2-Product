@@ -1,0 +1,19 @@
+[
+    {
+        "students": [
+            "Allan",
+            "Nicolaj",
+            "Sina",
+            "Kamilla"
+        ],
+        "topic": "Group formation"
+    },
+    {
+        "students": [
+            "Merete",
+            "Simon",
+            "Carmen"
+        ],
+        "topic": "Food waste"
+    }
+]

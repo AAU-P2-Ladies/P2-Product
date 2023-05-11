@@ -64,7 +64,7 @@
     {
         "username": "pee",
         "password": "poo",
-        "groups": [],
+        "classes": [],
         "isCoordinator": 0
     }
 ]

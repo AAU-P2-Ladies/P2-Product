@@ -464,6 +464,9 @@ function masterAlgorithm(students, groupSize, maxSeconds){
             bestAvgPref = avgPref;
         }
     }
+    for(let group of finalGroups){
+        group.topic = helper.findCommonTopic(group);
+    }
     console.log(bestAvgDiversity)
     console.log(bestAvgPref)
     return finalGroups

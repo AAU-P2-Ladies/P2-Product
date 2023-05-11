@@ -226,4 +226,35 @@ function findMinPos(array){
     return key;
     }
 
-module.exports = {indexStudents, shuffleArray, findPrefSum, prefCheck, groupPrefSum, groupDiversityCheck, roleCheck, checkMinDiversity, checkRoleDiversity, groupPrefAvg, prefSatisfactionPercent, swapStudents, findMin, findMinPos, findMinSpace}
+/**
+ * This function finds the element with most occurences in an array
+ * and count the amount of occurences
+ * @param {arr} - It takes any array that can be sorted as input
+ * @returns - It returns the element with most occurences
+ */
+function findMostOccuring(arr){
+    //Sort the array with the compare function checking the amount of occurences of each element
+    //Pop and return the last element, which will be (one of) the elements with the most occurences
+    return arr.sort((a,b) =>
+            arr.filter(v => v===a).length
+            - arr.filter(v => v===b).length)
+            .pop();
+}
+
+function findCommonTopic(group){
+    let topics = [];
+    for(let i in group.students){
+        for(let j in group.students[i].topics){
+            topics.push(group.students[i].topics[j]);
+        }
+    }
+    if(topics){
+        return findMostOccuring(topics);
+    }
+    else{
+        return "Any"
+    }
+}
+
+
+module.exports = {indexStudents, shuffleArray, findPrefSum, prefCheck, groupPrefSum, groupDiversityCheck, roleCheck, checkMinDiversity, checkRoleDiversity, groupPrefAvg, prefSatisfactionPercent, swapStudents, findMin, findMinPos, findMinSpace, findCommonTopic}
