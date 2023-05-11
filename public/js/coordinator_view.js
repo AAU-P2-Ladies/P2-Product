@@ -54,8 +54,7 @@ createButton.addEventListener("click", function () {
     })
     .then((response) => response.json())
     .then((data) => {
-})
+})})
 
 
 makeStudentTable();
-
