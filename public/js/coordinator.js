@@ -417,6 +417,8 @@ if (save_btn) {
 
         let blockedPairArray = tableToArray(document.querySelector("table > tbody"));
 
+        let includeRoles = document.getElementById("include_roles");
+
         fetch('/../updateClassConfig', {
             method: "POST",
             headers: {
@@ -428,7 +430,8 @@ if (save_btn) {
                 amountOfGroupMembers: amountOfGroupMembers.value,
                 studentPreferences: studentPreferences.value,
                 previousMembers: previousMembers.value,
-                blockedPairArray: blockedPairArray
+                blockedPairArray: blockedPairArray,
+                includeRoles: includeRoles.checked
             }),
         })
             .then((response) => response.json())
@@ -465,22 +468,6 @@ if (unlock_btn) {
 
     });
 
-}
-
-function addelement() {
-    // let counter=["Ana","Camelia","fish"] ;
-    let checkBox = document.getElementById("include_roles");
-    let completelist = document.getElementById("thelist");
-    completelist.innerHTML = "";
-    for (let i = 0; i < roles.length; i++) {
-        completelist.innerHTML += "<li>" + roles[i] + "</li>";
-    }
-    if (checkBox.checked == true) {
-        document.getElementById("thelist").style.display = "block";
-    } else {
-        document.getElementById("thelist").style.display = "none";
-
-    }
 }
 
 function createElement(type, props) {
