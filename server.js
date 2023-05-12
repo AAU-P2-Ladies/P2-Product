@@ -788,16 +788,14 @@ app.post('/updateClassConfig', (req, res) => {
     const className = req.body.className;
     const amountOfGroupMembers = req.body.amountOfGroupMembers;
     const studentPreferences = req.body.studentPreferences;
-    const previousMembers = req.body.previousMembers;
     const objectArray = req.body.blockedPairArray;
 
     let config = {
         amountOfGroupMembers: amountOfGroupMembers,
         studentPreferences: studentPreferences,
-        previousMembers: previousMembers
     };
 
-    fs.writeFile("./database/" + className + "/config.json", JSON.stringify(config, null, 4), err => {
+    fs.writeFile("./database/" + className + "/config.json", JSON.stringify(config, null,4), err => {
 
         if (err) {
 
@@ -876,56 +874,93 @@ app.get('/getGroup', (req, res) => {
 app.post('/saveProfile', (req, res) => {
 
     let students = getJSONFile(session.class + "/students.json");
-    let topics = getJSONFile(session.class + "/topics.json");
+    let topicList = getJSONFile(session.class + "/topics.json");
     let users = getJSONFile("users.json")
     let studentsName=[];
     for(i in users){
     students.some(std =>{
         for(j in users[i].classes){
         if(std.keycode == users[i].classes[j].keycode){
-            /**
-             * Now we have the right user, insert the input from req to student values
-             * 
-             */
+            
             const studentPreferences = req.body.prefs;
             //Check in Student JSON
             for(i in students){
                 studentsName.push(students[i].name)
             }
             
-                for(i in req.body.prefs)
-                    if(studentsName.includes(req.body.prefs[i])){
+            for(i in req.body.prefs)
+                if(studentsName.includes(req.body.prefs[i])){
     
-                        for(j in req.body.block){
-                        if(studentsName.includes(req.body.block[j])){
+                    for(j in req.body.blocks){
+                        if(req.body.blocks[j] == req.body.prefs[i]){
                             res.json({error:true, prefs:true})
                             return res.end()
-                        } } 
-                    }else{
-                        res.json({error:true, prefs:true})
-                        return res.end()
-                    }
-                    
+                        } 
+                    } 
+                }
+                else{
+                    res.json({error:true, prefs:true})
+                    return res.end()
+                }
                 
             
             //Student Exist
 
             
-            
             const studentBlocks = req.body.blocks;
             //Check in Student JSON
 
+            for(i in req.body.block){
+                if(studentsName.includes(req.body.blocks[i])){
+                    for(j in students.blocks){
+                        if(students.blocks[j] == req.body.blocks[i]){
+                            res.json({error:true, block:true})
+                            return res.end()
+                        } } 
+                    }
+                    else{
+                    res.json({error:true, blocks:true})
+                    return res.end()
+                }
+            }
+             
+            
             const studentTopics = req.body.topics;
             //Check in Topic JSON
 
+
+            if(topicList.length < req.body.topics.length || 0 > req.body.topics.length){
+                    res.json({error:true, topics:true})
+                    return res.end()
+            }
+            
+
             const studentRoles = req.body.roles;
+            //Future check for if the roles are equal to the roles made by coordinator
+            if(9 < req.body.topics.length || 0 > req.body.topics.length){
+                res.json({error:true, roles:true})
+                return res.end()
+        }
+            for (i in studentPreferences) {
+                std.prefs.push(studentPreferences[i])
+            }
+            for (i in studentBlocks) {
+                std.blocks.push(studentBlocks[i])
+            }
+            for (i in studentTopics) {
+                std.topics.push(studentTopics[i])
+            }
+            for (i in studentRoles) {
+                std.roles.push(studentRoles[i])
+            }
+            
             
             
         }}
 
     })}
 
-    fs.writeFile("./database/" + session.className + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
+    fs.writeFile("./database/" + session.class + "/students.json", JSON.stringify(students, null, 4), JSON.stringify(json, null, 4), err => {
 
         if (err) {
 
@@ -934,6 +969,9 @@ app.post('/saveProfile', (req, res) => {
         } 
 
     });
+
+    res.json({error: false})
+    return res.end()
 
     
 
@@ -947,9 +985,8 @@ app.get('/getBlockedPair', (req, res) =>{
     students.some(std =>{
         for(j in users[i].classes){
         if(std.keycode == users[i].classes[j].keycode){
-            console.log(std.keycode);
-            console.log(users[i].classes[j].keycode);
-            console.log('do');
+           
+          
             res.json({error: false, blocked: std.blocks});
             return res.end()
             

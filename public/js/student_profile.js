@@ -29,7 +29,7 @@ let submit = document.getElementById("submitProfile");
 let checkboxes = document.getElementsByClassName("checkboxrole");
 let span = document.getElementsByClassName("close")[0];
 
-submit.addEventListener('click', () => {sendProfile(getPriorities(),[],[],[])
+submit.addEventListener('click', () => {sendProfile(getPriorities(),blocked,getIndexOfChecked("Topic"),getIndexOfChecked("role"))
   })
 
 
@@ -639,7 +639,7 @@ function createElement(type, props) {
 
 function BlockedList(Student) {
   let blockedPair = [document.getElementById(Student).value];
-  blocked.push(blockedPair);
+  blocked.push(blockedPair[0]);
   console.log(document.getElementById(Student).ariaPlaceholder)
   createDynamicList2("studentBlockTableID", blockedPair, "Block")
 }
@@ -661,11 +661,26 @@ function sendProfile(pref, blocked, topics, roles) {
 
   }).then((response) => response.json()).then((data) =>{
     if(data.error){
+      if (data.blocks)
+      {
+        alert("You Fucked up blocks")
+      } 
       if (data.prefs)
       {
-        alert("You Fucked up Prefs")
-      }
+        alert("You Fucked up prefs")
+      } 
+      if (data.roles)
+      {
+        alert("You Fucked up roles")
+      } 
+      if (data.topics)
+      {
+        alert("You Fucked up topics")
+      } 
+    } else {
+      location.href = './student_start';
     }
+
     //Check JSON Roles
     //Check JSON Topics
     //Check Blocked Exist
@@ -710,3 +725,18 @@ function getPriorities(){
 
   }else{console.log("fejl");}
 }
+
+function getIndexOfChecked(subject){
+  let checkedboxes = [];
+  subject = "checkbox"+subject
+
+  data = document.getElementsByClassName(subject)
+
+  for (i in data){
+    if(data[i].checked)
+    checkedboxes.push(i) 
+  }
+  
+  return checkedboxes
+}
+
