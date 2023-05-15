@@ -14,7 +14,6 @@ let blockedUL = document.getElementById("BlockedUL");
 
 let AmountOfGroupMembers = document.getElementById("amountOfGroupMembers");
 let AmountOfStudentPreferences = document.getElementById("studentPreferences");
-let AmountOfPreviousGroupMembers = document.getElementById("previousMembers");
 //let BlockedInput = document.getElementById("BlockedInput");
 //let myInput = document.getElementById("myInput");
 //let ULItems = blockedUL.getElementsByTagName("li");
@@ -413,7 +412,7 @@ if (save_btn) {
 
         let amountOfGroupMembers = document.getElementById("amountOfGroupMembers");
         let studentPreferences = document.getElementById("studentPreferences");
-        let previousMembers = document.getElementById("previousMembers");
+        //let previousMembers = document.getElementById("previousMembers");
 
         let blockedPairArray = tableToArray(document.querySelector("table > tbody"));
 
@@ -429,9 +428,8 @@ if (save_btn) {
                 className: window.location.pathname.split('/')[1],
                 amountOfGroupMembers: amountOfGroupMembers.value,
                 studentPreferences: studentPreferences.value,
-                previousMembers: previousMembers.value,
-                blockedPairArray: blockedPairArray,
-                includeRoles: includeRoles.checked
+                //previousMembers: previousMembers.value,
+                blockedPairArray: blockedPairArray
             }),
         })
             .then((response) => response.json())

@@ -56,7 +56,8 @@
         "password": "123",
         "classes": [
             {
-                "class": "SW2"
+                "class": "SW2",
+                "keycode": "92uth92hg9g"
             },
             {
                 "class": "DAT2"
