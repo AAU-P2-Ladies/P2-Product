@@ -437,6 +437,8 @@ if (save_btn) {
 
                 console.log(data);
 
+                alert('Configurations are now saved!');
+
             });
 
     });
@@ -461,6 +463,8 @@ if (unlock_btn) {
             .then((data) => {
 
                 console.log(data);
+
+                alert('Student profile pages are now unlocked!');
 
             });
 
