@@ -72,10 +72,6 @@
         "class": "DAT2"
     },
     {
-        "keycode": "Qw1ykCOB8f",
-        "class": "DAT2"
-    },
-    {
         "keycode": "FonSGV787g",
         "class": "DAT2"
     },
@@ -86,5 +82,33 @@
     {
         "keycode": "VKsCaIOLf2",
         "class": "DAT2"
+    },
+    {
+        "keycode": "Az1dGYHgpq",
+        "class": "SW3"
+    },
+    {
+        "keycode": "dZACesYqtI",
+        "class": "SW3"
+    },
+    {
+        "keycode": "PqVYD3P7Kh",
+        "class": "SW3"
+    },
+    {
+        "keycode": "QKkzqcNUcJ",
+        "class": "SW3"
+    },
+    {
+        "keycode": "Oj7Fi3I99A",
+        "class": "SW3"
+    },
+    {
+        "keycode": "peC7qY3AQM",
+        "class": "SW3"
+    },
+    {
+        "keycode": "HMXDtLPAMx",
+        "class": "SW3"
     }
 ]

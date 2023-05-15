@@ -17,6 +17,9 @@
             },
             {
                 "class": "DAT2"
+            },
+            {
+                "class": "SW3"
             }
         ],
         "isCoordinator": 1
@@ -64,7 +67,18 @@
     {
         "username": "pee",
         "password": "poo",
-        "classes": [],
+        "classes": [
+            {
+                "class": "DAT2",
+                "keycode": "Qw1ykCOB8f"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "MagicMarvin",
+        "password": "5678",
+        "groups": [],
         "isCoordinator": 0
     }
 ]
