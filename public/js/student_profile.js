@@ -35,7 +35,7 @@ submit.addEventListener('click', () => {sendProfile(getPriorities(),blocked,getI
 
 function createDynamicBlockList(input) {
 
-  fetch('/../search', {
+  fetch('./search', {
       method: "POST",
       headers: {
           Accept: "application/json, text/plain, */*",
@@ -646,7 +646,7 @@ function BlockedList(Student) {
 
 function sendProfile(pref, blocked, topics, roles) {
 
-  fetch('/saveProfile', {
+  fetch('./saveProfile', {
       method:"POST",
       headers: {
         Accept:"application/json, text/plain, */*",
@@ -703,7 +703,7 @@ document.querySelectorAll("#addBlock").forEach(function (element) {
 
 });
 
-fetch('/getBlockedPair').then((response) => response.json()).then((data) => {
+fetch('./getBlockedPair').then((response) => response.json()).then((data) => {
 let Blocktable = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
 for (let i in data.blocked) {
 

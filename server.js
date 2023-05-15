@@ -202,7 +202,8 @@ app.post("/login", (req, res) => {
             if (duplicateClass == 0) {
               user.classes.push({ class: class1, keycode: keycode });
 
-              classFile = getJSONFile(class1 + "/students.json");
+              classFileName = class1 + "/students.json";
+              classFile = getJSONFile(classFileName);
 
               classFile.some((userKey) => {
                 if (userKey.keycode == keycode) {
@@ -213,7 +214,6 @@ app.post("/login", (req, res) => {
               fs.writeFile(
                 "./database/" + class1 + "/students.json",
                 JSON.stringify(classFile, null, 4),
-                JSON.stringify(json, null, 4),
                 (err) => {
                   if (err) {
                     console.error(err);
@@ -225,7 +225,6 @@ app.post("/login", (req, res) => {
               fs.writeFile(
                 "./database/users.json",
                 JSON.stringify(users, null, 4),
-                JSON.stringify(json, null, 4),
                 (err) => {
                   if (err) {
                     console.error(err);
@@ -245,7 +244,6 @@ app.post("/login", (req, res) => {
               fs.writeFile(
                 "./database/keycodes.json",
                 JSON.stringify(keycodes, null, 4),
-                JSON.stringify(json, null, 4),
                 (err) => {
                   if (err) {
                     console.error(err);
@@ -493,10 +491,7 @@ app.get("/:className/coordinator_config", (req, res) => {
   }
 });
 
-app.post(
-  "/coordinator_studentId",
-  multer(multerConfig).single("file"),
-  (req, res) => {
+app.post("/coordinator_studentId", multer(multerConfig).single("file"), (req, res) => {
     let students = getJSONFile("uploads/" + req.file.filename);
 
     if (!students.names) throw "Not right format";
