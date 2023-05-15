@@ -28,14 +28,14 @@ let blocked = [];
 
 function createDynamicList(input) {
 
-    fetch('/../search', {
+    fetch('./../search', {
         method: "POST",
         headers: {
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            className: window.location.pathname.split('/')[1],
+            className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2],
             name: input.value
         }),
     })
@@ -198,7 +198,7 @@ if (next_btn) {
 
 if (start_new_btn) {
     start_new_btn.addEventListener("click", function () {
-        window.location.href = '/coordinator_preconfig';
+        window.location.href = './coordinator_preconfig';
 
     })
 }
@@ -208,7 +208,7 @@ if (start_new_btn) {
  * @param {*} location The location that the 'next' button will lead to
  */
 function classModalCreator(location){
-    fetch('/getCoordinatorClasses', {
+    fetch('./getCoordinatorClasses', {
         method: "GET",})
         .then((response) => response.json())
         .then((data) => {
@@ -260,7 +260,7 @@ function classModalCreator(location){
                     })
                     .then((response) => response.json())
                     .then((data) => {})
-                    location = "/" + classesSelect.value + location;
+                    location = "./" + classesSelect.value + location;
                     window.location.href = location;
                 })
         }
@@ -418,14 +418,14 @@ if (save_btn) {
 
         let includeRoles = document.getElementById("include_roles");
 
-        fetch('/../updateClassConfig', {
+        fetch('./../updateClassConfig', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: window.location.pathname.split('/')[1],
+                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2],
                 amountOfGroupMembers: amountOfGroupMembers.value,
                 studentPreferences: studentPreferences.value,
                 //previousMembers: previousMembers.value,
@@ -447,14 +447,14 @@ if (unlock_btn) {
 
     unlock_btn.addEventListener("click", function () {
 
-        fetch('/../unlockClass', {
+        fetch('./../unlockClass', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: window.location.pathname.split('/')[1]
+                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2]
             }),
         })
             .then((response) => response.json())
