@@ -211,7 +211,7 @@ app.post("/login", (req, res) => {
               });
 
               fs.writeFile(
-                "./database/" + classFileName,
+                "./database/" + class1 + "/students.json",
                 JSON.stringify(classFile, null, 4),
                 JSON.stringify(json, null, 4),
                 (err) => {
