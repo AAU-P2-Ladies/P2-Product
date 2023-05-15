@@ -2,8 +2,8 @@
     {
         "name": "Simon",
         "prefs": [
-            "Allan",
-            "Carmen"
+            "Carmen",
+            "Allan"
         ],
         "blocks": [
             "Merete"
@@ -19,17 +19,20 @@
     {
         "name": "Allan",
         "prefs": [
-            "Kamilla",
-            "Sina"
+            "Simon",
+            "Sina",
+            "Merete"
         ],
-        "blocks": [],
+        "blocks": [
+            "Nicolaj"
+        ],
         "roles": [
-            "Master coder",
-            "Monitor Evaluater"
+            "4",
+            "7"
         ],
         "topics": [],
         "keycode": "kCw4ckeNQO",
-        "isRegistered": 0
+        "isRegistered": 1
     },
     {
         "name": "Nicolaj",

@@ -153,5 +153,16 @@
             }
         ],
         "isCoordinator": 0
+    },
+    {
+        "username": "NicolajsKone",
+        "password": "1234",
+        "classes": [
+            {
+                "class": "DAT2",
+                "keycode": "kCw4ckeNQO"
+            }
+        ],
+        "isCoordinator": 0
     }
 ]
