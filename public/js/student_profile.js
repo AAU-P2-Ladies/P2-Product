@@ -42,7 +42,7 @@ function createDynamicBlockList(input) {
           "Content-Type": "application/json",
       },
       body: JSON.stringify({
-          className: 'SW2',
+          className: "",
           name: input.value
       }),
   })
@@ -244,7 +244,7 @@ function createDynamicList(id, divNumber) {
 }
 
 /**
- * createSearchPref creates a number of input text elements for seaching for student names.
+ * createSearchPref creates a number of input text elements for searching for student names.
  * @param {The number of searchfields that have to be created} number 
  */
 function createSearchPref(number) {
@@ -286,7 +286,7 @@ function createSearchPref(number) {
  * SearchField uses the value from the input text to search through the students in the unordered list.
  * The students that matches the input text will be shown. The rest will be hidden.
  * At most 10 results can shown to the user.
- * @param {id for the input text seachfield} myInputID 
+ * @param {id for the input text searchfield} myInputID 
  * @param {id for the unordered list under the searchfield} myULID 
  */
 function SearchField(myInputID, myULID) {
@@ -396,7 +396,7 @@ function saveStudentPreferences(e) {
 
       currentStudent.style.background = "red";
 
-      alert("You can't choose the same person twice idiot! lol");
+      alert("You can't choose the same person twice");
       modal.style.display = "block";
       text.innerText = priority + ". Priority: ";
       break;
@@ -663,19 +663,19 @@ function sendProfile(pref, blocked, topics, roles) {
     if(data.error){
       if (data.blocks)
       {
-        alert("You Fucked up blocks")
+        alert("Invalid blocks")
       } 
       if (data.prefs)
       {
-        alert("You Fucked up prefs")
+        alert("Invalid prefs")
       } 
       if (data.roles)
       {
-        alert("You Fucked up roles")
+        alert("Invalid roles")
       } 
       if (data.topics)
       {
-        alert("You Fucked up topics")
+        alert("Invalid topics")
       } 
     } else {
       location.href = './student_start';
