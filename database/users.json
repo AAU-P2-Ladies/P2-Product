@@ -20,6 +20,12 @@
             },
             {
                 "class": "SW3"
+            },
+            {
+                "class": "Mega_test"
+            },
+            {
+                "class": "Mega_test2"
             }
         ],
         "isCoordinator": 1
@@ -56,7 +62,8 @@
         "password": "123",
         "classes": [
             {
-                "class": "SW2"
+                "class": "SW2",
+                "keycode": "92uth92hg9g"
             },
             {
                 "class": "DAT2"
@@ -78,7 +85,73 @@
     {
         "username": "MagicMarvin",
         "password": "5678",
-        "groups": [],
+        "classes": [],
+        "isCoordinator": 0
+    },
+    {
+        "username": "BananaMuffin69",
+        "password": "SinaErSej",
+        "classes": [
+            {
+                "class": "Mega_test2",
+                "keycode": "xnG2rTg0xu"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "kamzmillz",
+        "password": "numse",
+        "classes": [
+            {
+                "class": "Mega_test2",
+                "keycode": "Co4nhbXrQ9"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "kyllingSWAG456",
+        "password": "123456",
+        "classes": [
+            {
+                "class": "Mega_test2",
+                "keycode": "MLC3oOAqdN"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "Nicolaj",
+        "password": "Kylle123",
+        "classes": [
+            {
+                "class": "Mega_test2",
+                "keycode": "21HWQHZQj7"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "AllanVester",
+        "password": "<3",
+        "classes": [
+            {
+                "class": "Mega_test2",
+                "keycode": "db5mLOGCQr"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "pisici",
+        "password": "pisici",
+        "classes": [
+            {
+                "class": "Mega_test2",
+                "keycode": "z7kqM1G7N3"
+            }
+        ],
         "isCoordinator": 0
     }
 ]
