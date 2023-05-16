@@ -10,8 +10,7 @@ const alg = require("./public/js/algorithm.js");
 
 const maxTime = 30;
 
-var fs = require("fs"),
-  json;
+var fs = require("fs"), json;
 var session;
 
 const app = express();
@@ -72,6 +71,7 @@ app.use(function (req, res, next) {
 });
 
 app.get("/", (req, res) => {
+
   if (!req.session.userid) {
     res.render("pages/index");
   } else {
@@ -472,7 +472,7 @@ app.get("/:className/coordinator_config", (req, res) => {
     let checkClass = 0;
 
     users.some((user) => {
-      if (user.username == session.userid) {
+      if (user.username == req.session.userid) {
         for (let index = 0; index < user.classes.length; index++) {
           if (user.classes[index]["class"] == req.params.className) {
             checkClass = 1;
@@ -503,6 +503,7 @@ app.post("/coordinator_studentId", multer(multerConfig).single("file"), (req, re
 );
 
 app.get("/student_start", (req, res) => {
+
   if (!req.session.userid || req.session.isCoordinator != 0) {
     res.redirect("./");
   } else {
@@ -516,7 +517,7 @@ app.get("/getCoordinatorClasses", (req, res) => {
   let classes = [];
   //Loop through users to find current logged in user and find their classes
   for (let user of userFile) {
-    if (user.username == session.userid) {
+    if (user.username == req.session.userid) {
       classes = user.classes;
     }
   }
@@ -527,7 +528,7 @@ app.get("/getCoordinatorClasses", (req, res) => {
 //save the coordinators chosen class ID to edit/view
 app.post("/postCoordinatorClass", (req, res) => {
   session.class = req.body.class;
-  console.log(session.class);
+  console.log(req.session.class);
 });
 
 app.get("/student_group", (req, res) => {
@@ -655,7 +656,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
   let users = getJSONFile("users.json");
 
   users.some((user) => {
-    if (user.username == session.userid) {
+    if (user.username == req.session.userid) {
       // Assigns 'duplicateClass' to 0
       let duplicateClass = 0;
 
@@ -704,7 +705,7 @@ app.post("/search", (req, res) => {
 
   let className;
   if (req.body.className == "") {
-    className = session.class;
+    className = req.session.class;
   } else {
     className = req.body.className;
   }
@@ -808,7 +809,7 @@ app.post("/unlockClass", (req, res) => {
 });
 
 app.get("/getGroups", (req, res) => {
-  const className = session.class;
+  const className = req.session.class;
 
   if (!fs.existsSync("./database/" + className + "/groups.json")) {
     return res.json({ error: true });
@@ -824,20 +825,20 @@ app.get("/getGroups", (req, res) => {
  */
 app.get("/getGroup", (req, res) => {
   let users = getJSONFile("users.json");
-  let username = session.userid;
+  let username = req.session.userid;
   let keycode = "";
   //First, find the current users keycode in order to be able to find their name from the student file
   for (let user of users) {
     //Checks for the first user in the database that has the username of the currently logged in student
     if (user.username == username) {
       for (let i in user.classes) {
-        if (user.classes[i].class == session.class) {
+        if (user.classes[i].class == req.session.class) {
           keycode = user.classes[i].keycode;
         }
       }
     }
   }
-  let fileName = session.class + "/students.json";
+  let fileName = req.session.class + "/students.json";
   let classFile = getJSONFile(fileName);
   let name = "";
   for (let student of classFile) {
@@ -847,7 +848,7 @@ app.get("/getGroup", (req, res) => {
   }
 
   //Having found the name of the current user, search the group file to find this users group
-  fileName = session.class + "/groups.json";
+  fileName = req.session.class + "/groups.json";
   let group;
   let groupFile = getJSONFile(fileName);
   for (let i in groupFile) {
@@ -871,16 +872,16 @@ app.get("/getGroup", (req, res) => {
 });
 
 app.post("/saveProfile", (req, res) => {
-  let students = getJSONFile(session.class + "/students.json");
-  let topicList = getJSONFile(session.class + "/topics.json");
+  let students = getJSONFile(req.session.class + "/students.json");
+  let topicList = getJSONFile(req.session.class + "/topics.json");
   let users = getJSONFile("users.json");
   let studentsName = [];
   let keycode;
   for (let i in users) {
-    console.log(session.userid)
-    if (session.userid == users[i].username) {
+    console.log(req.session.userid)
+    if (req.session.userid == users[i].username) {
       for (let j in users[i].classes) {
-        if (users[i].classes[j].class == session.class) {
+        if (users[i].classes[j].class == req.session.class) {
           keycode = users[i].classes[j].keycode;
           console.log(users[i].username + " just made a profile");
         }
@@ -959,7 +960,7 @@ app.post("/saveProfile", (req, res) => {
         }
 
         fs.writeFile(
-          "./database/" + session.class + "/students.json",
+          "./database/" + req.session.class + "/students.json",
           JSON.stringify(students, null, 4),
           JSON.stringify(json, null, 4),
           (err) => {
@@ -977,7 +978,7 @@ app.post("/saveProfile", (req, res) => {
 });
 
 app.get("/getBlockedPair", (req, res) => {
-  let students = getJSONFile(session.class + "/students.json");
+  let students = getJSONFile(req.session.class + "/students.json");
   let users = getJSONFile("users.json");
   for (let i in users) {
     students.some((std) => {
