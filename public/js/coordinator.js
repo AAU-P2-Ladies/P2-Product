@@ -20,7 +20,7 @@ let blocked = [];
 
 /**
  * This function creates a dynamic list by fetching from the server the data on the input 
- * it is used on line 300 in this file
+ * it is used on line 300 in this file for the creation of the dynamic lists for choosing a student name for the blocked pairs
  * @param {*} input 
  */
 function createDynamicList(input) {
