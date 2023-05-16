@@ -407,7 +407,7 @@ if (unlock_btn) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2];
+                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2]
             }),
         })
             .then((response) => response.json())
