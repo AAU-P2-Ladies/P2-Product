@@ -1,3 +1,6 @@
+//This file is used for several of the coordinator pages and therefore many of the eventlisteners are encased in if-statements to check if the desired button/element
+//is active on the current page being viewed
+
 let back_btn = document.getElementById("back_btn");
 let next_btn = document.getElementById("next_btn");
 let unlock_btn = document.getElementById("unlock_btn");
@@ -21,7 +24,7 @@ let blocked = [];
 /**
  * This function creates a dynamic list by fetching from the server the data on the input 
  * it is used on line 300 in this file for the creation of the dynamic lists for choosing a student name for the blocked pairs
- * @param {*} input 
+ * @param {*} input the data required for the list
  */
 function createDynamicList(input) {
 
@@ -123,6 +126,7 @@ if (back_btn) {
     })
 }
 
+//Check if the input list of students is the correct format
 if (studentListInput) {
     studentListInput.addEventListener("change", function () {
         FileExtension = studentListInput.value.split(".")
@@ -139,9 +143,10 @@ if (next_btn) {
 
         e.preventDefault();
 
+        //checks if all required fields are filled out and only if they are, allow to continue to next page
         if (nameGroupFormationInput.value != "" && studentListInput.value != "" && topicsInput.value != "") {
 
-
+            //Saves the input data from the page in order to post it to the server and perform checks 
             const formData = new FormData();
             formData.append("nameGroupFormationInput", nameGroupFormationInput.value);
             formData.append("studentListInput", studentListInput.files[0]);
@@ -191,6 +196,7 @@ if (next_btn) {
     })
 }
 
+//Relocates to the pre_config page if coordinator selects to start a new group formation
 if (start_new_btn) {
     start_new_btn.addEventListener("click", function () {
         window.location.href = './coordinator_preconfig';
@@ -262,6 +268,7 @@ function classModalCreator(location){
     })
 }
 
+//Uses the ClassModalCreator to generate a modal for the coordinator to choose the desired class (data) to continue to next page with
 if (edit_btn && view_btn){
     edit_btn.addEventListener("click", function () {
         classModalCreator('/coordinator_config');
@@ -271,20 +278,25 @@ if (edit_btn && view_btn){
     })
 }
 
+/**
+ * This function is never used but I am scared to delete it
+ * @param {*} myInputID 
+ * @param {*} myULID 
+ */
 function SearchField(myInputID, myULID) {
-    let input, filter, ul, li, a, i, txtValue;
+    let input, filter, ul, li, i, txtValue;
     input = document.getElementById(myInputID);
     filter = input.value.toUpperCase();
     ul = document.getElementById(myULID);
     li = ul.getElementsByTagName('li');
     input.setAttribute("Placeholder", "Search for names..")
     ul.hidden = "";
-    //Måske optimer koden, så den kun tager 'input' ind som parameter
     let count = 0;
+
     // Loop through all list items, and hide those who don't match the search query
     for (i = 0; li.length > i; i++) {
         txtValue = li[i].textContent || li[i].innerText;
-        console.log(txtValue)
+        
         if ((txtValue.toUpperCase().indexOf(filter) > -1) && count < 10) {
             li[i].style.display = "";
             count++;
@@ -314,6 +326,13 @@ if ((window.location.pathname).includes("coordinator_config")) {
     });
 }
 
+/**
+ * This functions generates the list of all blocked student pairs
+ * It uses createDynamicList2 to create the list dynamically as the blocked pairs are added by the coordinator
+ * If a pair is encountered that does not fulfill certain requirements, a message is returned to the user
+ * @param {*} StudentA 
+ * @param {*} StudentB 
+ */
 function BlockedList(StudentA, StudentB) {
     let blockedPair = [];
     blockedPair = new Array(2);
@@ -322,25 +341,30 @@ function BlockedList(StudentA, StudentB) {
    
 
     if (document.getElementById(StudentA).placeholder != "Selected" || document.getElementById(StudentB).placeholder != "Selected") {
-        return (alert("You have to choose 2 Students!"))
+        return (alert("You have to choose 2 Students!"));
     }
 
     if (blockedPair[0] == blockedPair[1]) {
-        return (alert("You cannot block the same student"))
+        return (alert("You cannot block the same student"));
     }
 
     for (let i = 0; blocked.length > i; i++) {
         if (blockedPair[0] == blocked[i][0] || blockedPair[0] == blocked[i][1]) {
             if (blockedPair[1] == blocked[i][0] || blockedPair[1] == blocked[i][1]) {
-                return (alert("Pair already exists"))
+                return (alert("Pair already exists"));
             }
         }
     }
 
-    blocked.push(blockedPair)
-    createDynamicList2(blockedPair)
+    blocked.push(blockedPair);
+    createDynamicList2(blockedPair);
 }
 
+/**
+ * This function generates the table of blocked student pairs that the coordinator has saved
+ * It is generated dynamically as blocked pairs are added
+ * @param {*} blockedArray 
+ */
 function createDynamicList2(blockedArray) {
     let table = document.getElementById('MyBlockedTable').getElementsByTagName('tbody')[0];
 
@@ -361,6 +385,7 @@ function createDynamicList2(blockedArray) {
 
 }
 
+//If the coordinator presses the save button, the input data from the current page is saved and posted to the server
 if (save_btn) {
 
     save_btn.addEventListener("click", function () {
@@ -386,8 +411,6 @@ if (save_btn) {
             .then((response) => response.json())
             .then((data) => {
 
-                console.log(data);
-
                 alert('Configurations are now saved!');
 
             });
@@ -396,6 +419,8 @@ if (save_btn) {
 
 }
 
+//When the coordinator is ready to unlock the profile making for the students, this button is pressed
+//It posts the current classname to the server that then generates the keycodes for the students
 if (unlock_btn) {
 
     unlock_btn.addEventListener("click", function () {
@@ -421,6 +446,12 @@ if (unlock_btn) {
 
 }
 
+/**
+ * This function generates a new HTML element with the inputs
+ * @param {*} type the type of the new element
+ * @param {*} props the properties of the new element
+ * @returns the newly generated HTML element
+ */
 function createElement(type, props) {
 
     let element = document.createElement(type);
@@ -446,14 +477,19 @@ function createElement(type, props) {
 
 }
 
-function tableToArray(table) { // https://stackoverflow.com/a/34349548
+/**
+ * Converts table to multidimensional array of objects with name and the blocks for this name
+ * @param {*} table table to be converted
+ * @returns multidimensional array with data from table
+ */
+function tableToArray(table) { 
 
     let array = [];
-
     let rows = table.children;
 
     for (let i = 0; i < rows.length; i++) {
 
+        //checks if the blocked pair is unchecked, so not to be blocked, and skips this iteration if it is unchecked
         if (rows[i].children[2].getElementsByTagName('input')[0].checked == "0") {
 
             continue;
@@ -461,7 +497,6 @@ function tableToArray(table) { // https://stackoverflow.com/a/34349548
         }
 
         let fields = rows[i].children;
-
         let firstBlock = fields[0].innerText;
         let secondBlock = fields[1].innerText;
 
