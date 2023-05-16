@@ -4,8 +4,8 @@
 
     <%- include('../partials/head'); %>
 
-    <link rel="stylesheet" href="./css/style.css">
-    <script type="application/javascript" src="./js/coordinator.js" defer></script>
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+    <script type="application/javascript" src="<%= baseUrl %>/js/coordinator.js" defer></script>
     
 </head>
 <body>
@@ -30,8 +30,8 @@
 
         <div class="buttons">
             <p class="paragrafCoordinator">When you have finished the preconfiguration, please click "next" to continue!🌟</p>
-            <button type="button" class="buttonsCoordinator" id="back_btn">Go back</button>
-            <button type="button" class="buttonsCoordinator" id="next_btn">Next</button>
+            <button type="button" class="btn btn-primary" id="back_btn">Go back</button>
+            <button type="button" class="btn btn-primary" id="next_btn">Next</button>
         </div>
     </div>
     

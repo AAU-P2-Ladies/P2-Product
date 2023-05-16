@@ -72,15 +72,13 @@ app.use(cookieParser());
 
 // Global locals to use with EJS file, mainly in 'navbar.ejs'
 app.use(function (req, res, next) {
-  res.locals.baseUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  res.locals.baseUrl = ((req.originalUrl).includes('node0')) ? req.protocol + '://' + req.get('host') + '/node0' : req.protocol + '://' + req.get('host');
   res.locals.isLoggedIn = req.session.userid ? 1 : 0;
   res.locals.isCoordinator = req.session.isCoordinator;
   next();
 });
 
 app.get("/", (req, res) => {
-
-  console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
 
   // Checks if the user is not logged in, if so, redirect them to the index page
   if (!req.session.userid) {
@@ -353,6 +351,7 @@ app.post("/checkUserLogin", (req, res) => {
  * Takes Request (req) and Response (res) into account for the function
  */
 app.post("/register", (req, res) => {
+
   // Loads the 'users.json'-file as 'users'
   let users = getJSONFile("users.json");
 
@@ -402,6 +401,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
+
   // Checks if the user is already logged in, if so, redirect them to the index page instead of the register page
   if (req.session.userid) {
     res.redirect("./");

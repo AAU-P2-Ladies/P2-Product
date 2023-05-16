@@ -4,8 +4,8 @@
 
     <%- include('../partials/head'); %>
     
-    <link rel="stylesheet" href="./css/style.css">
-    <script type="application/javascript" src="./js/coordinator.js" defer></script> 
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+    <script type="application/javascript" src="<%= baseUrl %>/js/coordinator.js" defer></script> 
      
   </head>
   <body>
@@ -16,9 +16,9 @@
       <p class="paragrafCoordinator">Please choose where to go</p><br>
 
       <div class="start_buttons">        
-        <button type="button" class="buttonsCoordinator" id="new_session_btn">New group formation</button><br><br>
-        <button type="button" class="buttonsCoordinator" id="edit_btn">Edit current group formation</button><br><br>
-        <button type="button" class="buttonsCoordinator" id="view_btn">View keycodes and make groups</button><br><br>
+        <button type="button" class="btn btn-secondary" id="new_session_btn">New group formation</button><br><br>
+        <button type="button" class="btn btn-secondary" id="edit_btn">Edit current group formation</button><br><br>
+        <button type="button" class="btn btn-secondary" id="view_btn">View keycodes and make groups</button><br><br>
       </div>
 
       <div class="modal fade" id="classesModal" tabindex="-1" aria-labelledby="classesModalLabel" aria-hidden="true">

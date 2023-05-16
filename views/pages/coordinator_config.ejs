@@ -4,8 +4,8 @@
 
         <%- include('../partials/head'); %>
 
-        <link rel="stylesheet" href="./../css/style.css">
-        <script type="application/javascript" src="./../js/coordinator.js" defer></script>
+        <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+        <script type="application/javascript" src="<%= baseUrl %>/js/coordinator.js" defer></script>
     
     </head>
 <body>
@@ -26,7 +26,7 @@
             <label for="studentPreferences" class="paragrafCoordinator">Allowed number of preferences for group members:</label><br>
             <input type="number" class="form-control" id="studentPreferences" name="studentPreferences" min="0"><br><br>
 
-            <button id="addPref" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Click to block pair</button><br><br>
+            <button id="addPref" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Click to block pair</button><br><br>
           
               <div class="table-data table-bordered" id="TableDivId">
                 <table id="MyBlockedTable">
@@ -68,7 +68,7 @@
           <div class="modal-body">
             <form>
               <div class="div1" id="MyDivUL">
-                <input type="text" id="myInput" onkeyup=   placeholder="Search for names.." required>
+                <input type="text" id="myInput" placeholder="Search for names.." required>
               </div>
 
               <div class="div2" id="MyDivBlockedUL"> 

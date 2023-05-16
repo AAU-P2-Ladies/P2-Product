@@ -71,7 +71,7 @@ p {
 }
 
 .buttonS, #knapidd, #addBlock, #searchPref, #SaveStudentPreferencesButton, #BlockedButton, #addPref{
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     color:rgba(0, 0, 0, 0.4);
     border-radius: 5px;
 }
