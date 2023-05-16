@@ -24,7 +24,8 @@ let submit = document.getElementById("submitProfile");
 let checkboxes = document.getElementsByClassName("checkboxrole");
 let span = document.getElementsByClassName("close")[0];
 
-submit.addEventListener('click', () => {sendProfile(getPriorities(),blocked,getIndexOfChecked("Topic"),getIndexOfChecked("role"))
+submit.addEventListener('click', () => {
+  sendProfile(getPriorities(),blocked,getIndexOfChecked("Topic"),getIndexOfChecked("role"))
   })
 
 
@@ -163,7 +164,7 @@ function checkboxControl(clickedCheckBox) {
 
         error.textContent = "You Can only Select Three Roles";
         error.style.color = "red";
-        checkboxes[clickedCheckBox].checked = false;
+        checkboxes[clickedCheckBox+1].checked = false;
         return false;
 
       }
@@ -539,18 +540,22 @@ function sendProfile(pref, blocked, topics, roles) {
       if (data.blocks)
       {
         alert("Invalid blocks")
+        console.log(1);
       } 
       if (data.prefs)
       {
         alert("Invalid prefs")
+        console.log(2);
       } 
       if (data.roles)
       {
         alert("Invalid roles")
+        console.log(3);
       } 
       if (data.topics)
       {
         alert("Invalid topics")
+        console.log(4);
       } 
     } else {
       location.href = './student_start';

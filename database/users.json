@@ -29,6 +29,9 @@
             },
             {
                 "class": "testcssS"
+            },
+            {
+                "class": "yoyo"
             }
         ],
         "isCoordinator": 1

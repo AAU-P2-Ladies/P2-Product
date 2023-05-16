@@ -5,7 +5,7 @@ let start_new_btn = document.getElementById("new_session_btn");
 let save_btn = document.getElementById("save_btn");
 let edit_btn = document.getElementById("edit_btn");
 let view_btn = document.getElementById("view_btn");
-let table = document.getElementById("table")
+let table = document.getElementById("table");
 
 let nameGroupFormationInput = document.getElementById("name_group_formation");
 let studentListInput = document.getElementById("student_list");

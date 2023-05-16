@@ -1,3 +1,4 @@
+// Requires all dependencies and modules 
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -7,35 +8,38 @@ const multer = require("multer");
 const { get } = require("http");
 const { log } = require("console");
 const alg = require("./public/js/algorithm.js");
-
-const maxTime = 30;
-
+const { response } = require("express");
 var fs = require("fs"), json;
+
+// Sets a global variable 'session' for later use 
 var session;
 
+// Initializes 'app' and 'port' for use with Express-framework and port for the server to listen to.
 const app = express();
 const port = 3080;
 
+// Using the Express-framework, we can use the Express-template engine to use Embedded JavaScript (EJS)
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.engine("ejs", require("ejs").renderFile);
 
+// Using the Express-framework, we can use the JSON-middleware and URLEncoded-middleware to parse incoming requests
+// This has to be done, so that Express can take advantage of POST and PUT requests. 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Using the Express-framework, we can use the static()-middleware to serve JS- and CSS-files. We put these in the public-folder
 app.use(express.static(path.join(__dirname, "public")));
 
-const oneDay = 1000 * 60 * 60 * 24;
-
-//MULTER CONFIG: to get file to temp server storage
+// MULTER CONFIG: to get file to temporary server storage
 const multerConfig = {
   storage: multer.diskStorage({
-    //Setup where the user's file will go
+    // Setup where the user's file will go
     destination: function (req, file, next) {
       next(null, "./database/uploads");
     },
 
-    //Then give the file a unique name
+    // Then give the file a unique name
     filename: function (req, file, next) {
       const ext = file.mimetype.split("/")[1];
 
@@ -43,6 +47,7 @@ const multerConfig = {
     },
   }),
 
+  // Then check if the file is a JSON-file
   fileFilter: function (req, file, next) {
     if (file.mimetype != "application/json") {
       return next(new Error("Wrong file type"));
@@ -57,7 +62,7 @@ app.use(
   sessions({
     secret: "merete",
     saveUninitialized: true,
-    cookie: { maxAge: oneDay },
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
     resave: false,
   })
 );
@@ -245,7 +250,7 @@ app.post("/login", (req, res) => {
                 }
               }
 
-              // Writes back into the keycodes file
+              // Writes the keycodes back into the keycodes file
               fs.writeFile(
                 "./database/keycodes.json",
                 JSON.stringify(keycodes, null, 4),
@@ -429,21 +434,30 @@ app.get("/:className/coordinator_view", (req, res) => {
 });
 
 app.post("/getStudents", (req, res) => {
-  let file = getJSONFile(req.body.className + "/students.json");
+  // Gets the students-JSON-file and returns it to the client
+  const className = req.body.className;
 
-  return res.json(file);
+  let studentsFile = getJSONFile(className + "/students.json");
+
+  return res.json(studentsFile);
 });
 
 app.post("/makeGroups", (req, res) => {
+  // Gets the students-JSON-file and config-JSON-file
   const className = req.body.className;
 
   let students = getJSONFile(className + "/students.json");
   let configFile = getJSONFile(className + "/config.json");
 
+  // Sets the amount of group members for that class
   let groupSize = configFile.amountOfGroupMembers;
-  console.log(groupSize);
+  // Sets the max running time for the algorithm
+  const maxTime = 30;
+
+  // Runs the Master Algorithm and assigns the groups to the 'groups'-variable
   let groups = alg.masterAlgorithm(students, groupSize, maxTime);
 
+  // Writes the groups from the algorithm into the 'groups.json'-file
   fs.writeFile(
     "./database/" + className + "/groups.json",
     JSON.stringify(groups, null, 4),
@@ -454,21 +468,23 @@ app.post("/makeGroups", (req, res) => {
     }
   );
 
+  // Returns that there was no errors back to the client
   res.json({ error: false });
 
   return res.end();
-
-  //return res.json({'students': studentsFile, 'groupSize': configFile.amountOfGroupMembers});
 });
 
 app.get("/:className/coordinator_config", (req, res) => {
+  // Checks if the user is not logged in or if the user is not a coordinator, if so, redirect them to the index page instead of the coordinator config page
   if (!req.session.userid || req.session.isCoordinator != 1) {
     res.redirect("./");
   } else {
+    // Loads the 'users.json'-file
     let users = getJSONFile("users.json");
 
     let checkClass = 0;
 
+    // Loops through the users and checks if the user's class matches the inputted class
     users.some((user) => {
       if (user.username == req.session.userid) {
         for (let index = 0; index < user.classes.length; index++) {
@@ -481,39 +497,21 @@ app.get("/:className/coordinator_config", (req, res) => {
       }
     });
 
+    // If it matches, then we serve the coordinator config page to them
     if (checkClass == 1) {
       res.render("pages/coordinator_config");
     } else {
+      // Else, we redirect them to the homepage
       res.redirect("/../");
     }
   }
 });
 
-app.post("/coordinator_studentId", multer(multerConfig).single("file"), (req, res) => {
-    let students = getJSONFile("uploads/" + req.file.filename);
-
-    if (!students.names) throw "Not right format";
-
-    studentObjectMaker(students.names, req.body.groupName);
-
-    //res.render('pages/coordinator_start');
-  }
-);
-
-app.get("/student_start", (req, res) => {
-
-  if (!req.session.userid || req.session.isCoordinator != 0) {
-    res.redirect("./");
-  } else {
-    res.render("pages/student_start");
-  }
-});
-
-//Fetch the current coordinators classes in order to display list of options
+// Fetch the current coordinators classes in order to display list of options
 app.get("/getCoordinatorClasses", (req, res) => {
   let userFile = getJSONFile("users.json");
   let classes = [];
-  //Loop through users to find current logged in user and find their classes
+  // Loop through users to find current logged in user and find their classes
   for (let user of userFile) {
     if (user.username == req.session.userid) {
       classes = user.classes;
@@ -523,13 +521,23 @@ app.get("/getCoordinatorClasses", (req, res) => {
   return res.end();
 });
 
-//save the coordinators chosen class ID to edit/view
+// Save the coordinators chosen class ID to edit/view
 app.post("/postCoordinatorClass", (req, res) => {
   session.class = req.body.class;
-  console.log(req.session.class);
+  //console.log(req.session.class);
+});
+
+app.get("/student_start", (req, res) => {
+  // Checks if the user is not logged in or if the user is not a student, if so, redirect them to the index page instead of the student start page
+  if (!req.session.userid || req.session.isCoordinator != 0) {
+    res.redirect("./");
+  } else {
+    res.render("pages/student_start");
+  }
 });
 
 app.get("/student_group", (req, res) => {
+  // Checks if the user is not logged in or if the user is not a student, if so, redirect them to the index page instead of the student group page
   if (!req.session.userid || req.session.isCoordinator != 0) {
     res.redirect("./");
   } else {
@@ -538,6 +546,7 @@ app.get("/student_group", (req, res) => {
 });
 
 app.get("/student_profile", (req, res) => {
+  // Checks if the user is not logged in or if the user is not a student, if so, redirect them to the index page instead of the student profile page
   if (!req.session.userid || req.session.isCoordinator != 0) {
     res.redirect("./");
   } else {
@@ -545,6 +554,7 @@ app.get("/student_profile", (req, res) => {
   }
 });
 
+// Logs the current user out and redirect them to the homepage
 app.get("/logout", (req, res) => {
   req.session.destroy();
 
@@ -552,10 +562,12 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
+  // Assigns 'groupFormationName' to the user-inputted group formation name
   let groupFormationName = req.body.nameGroupFormationInput;
   let studentList = [];
   let topicsList = [];
 
+  // Checks if the group formation name already exists, if so, return an error
   if (fs.existsSync("database/" + groupFormationName)) {
     res.json({
       error: true,
@@ -569,8 +581,10 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
     return res.end();
   }
 
+  // Makes a folder with the group formation name
   fs.mkdirSync("database/" + groupFormationName);
 
+  // Loops through the user-inputted files and moves them to the correct folder
   for (let index = 0; index < req.files.length; index++) {
     if (req.files[index].fieldname == "studentListInput") {
       if (isJSON("uploads/" + req.files[index].filename)) {
@@ -581,6 +595,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
           "./database/" + groupFormationName + "/students.json"
         );
       } else {
+        // Returns an error if the user-inputted students-file is not a valid JSON-file
         res.json({
           error: true,
           groupFormationName: true,
@@ -603,6 +618,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
           "./database/" + groupFormationName + "/topics.json"
         );
       } else {
+        // Returns an error if the user-inputted topics-file is not a valid JSON-file
         res.json({
           error: true,
           groupFormationName: true,
@@ -617,10 +633,10 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
     }
   }
 
+  // Loops through the students-file
   for (let index = 0; index < studentList.length; index++) {
-    if (studentList[index].hasOwnProperty("name")) {
-      //console.log(studentList[index]);
-    } else {
+    // If an object in the students-file does not have the name-property, then return an error
+    if (!studentList[index].hasOwnProperty("name")) {
       res.json({
         error: true,
         groupFormationName: true,
@@ -635,9 +651,8 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
   }
 
   for (let index = 0; index < topicsList.length; index++) {
+    // If an object in the topics-file does not have the topic-property, then return an error
     if (topicsList[index].hasOwnProperty("topic")) {
-      //console.log(topicsList[index]);
-    } else {
       res.json({
         error: true,
         groupFormationName: true,
@@ -651,6 +666,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
     }
   }
 
+  // Loads the 'users.json'-file
   let users = getJSONFile("users.json");
 
   users.some((user) => {
@@ -660,18 +676,19 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
 
       // Loops through all the users different classes that they are a part of, if any.
       for (let index = 0; index < user.classes.length; index++) {
-        // Checks if the user is already part of the class with the inputted keycode
+        // Checks if the user is part of the class with the inputted class
         if (user.classes[index]["class"] == groupFormationName) {
           duplicateClass = 1;
           break;
         }
       }
 
+      // If the user is not part of the class, then we assign them to it
       if (duplicateClass == 0) {
         user.classes.push({ class: groupFormationName });
       }
 
-      // Update the users file, taking into account that the user is now registered as a student
+      // Update the users file
       fs.writeFile(
         "./database/users.json",
         JSON.stringify(users, null, 4),
@@ -686,6 +703,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
     }
   });
 
+  // Returns that there was no errors
   res.json({
     error: false,
     groupFormationName: true,
@@ -699,8 +717,10 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
 });
 
 app.post("/search", (req, res) => {
+  // Assigns 'queryName' to the user-inputted name
   const queryName = req.body.name;
 
+  // If there is not sent a class name with the request, we assign 'className' to the session's class name
   let className;
   if (req.body.className == "") {
     className = req.session.class;
@@ -708,17 +728,20 @@ app.post("/search", (req, res) => {
     className = req.body.className;
   }
 
+  // Loads the correct students-file
   let students = getJSONFile(className + "/students.json");
   let studentsArray = [];
 
+  // Maps out students to only have name-property 
   students.map(({ name }) => name);
 
+  // Loops through the students and puts the student names into 'studentsArray'
   for (let i in students) {
     studentsArray.push(students[i]["name"]);
   }
 
+  // Here we compare the user-inputted string with the 'studentsArray'
   let stringToMatch = queryName;
-
   if (stringToMatch != "") {
     studentsArray = studentsArray.filter(function (p) {
       let studentArray = p.split("");
@@ -734,23 +757,28 @@ app.post("/search", (req, res) => {
     });
   }
 
+  // Returns the 'studentsArray' with the matching students, based on the input, to the client
   res.json({ students: studentsArray });
 
   return res.end();
 });
 
 app.post("/updateClassConfig", (req, res) => {
+  // Assigns all the relevant Request data
   const className = req.body.className;
   const amountOfGroupMembers = req.body.amountOfGroupMembers;
   const studentPreferences = req.body.studentPreferences;
-  const objectArray = req.body.blockedPairArray;
   const includeRoles = req.body.includeRoles ? "1" : "0";
+  const objectArray = req.body.blockedPairArray;
 
+  // Assigns 'config' to be an object of amountOfGroupMembers, studentPreferences and includeRoles
   let config = {
     amountOfGroupMembers: amountOfGroupMembers,
     studentPreferences: studentPreferences,
+    includeRoles: includeRoles
   };
 
+  // Writes 'config' into the 'config.json'-file
   fs.writeFile(
     "./database/" + className + "/config.json",
     JSON.stringify(config, null, 4),
@@ -763,12 +791,15 @@ app.post("/updateClassConfig", (req, res) => {
 
   let blockedArray = [];
 
+  // Loops through 'objectArray' and sets 'blockedArray' to be the names of all the blocked pairs 
   for (let key in objectArray) {
     blockedArray.push(objectArray[key].name);
   }
 
+  // Loads the students-file
   let students = getJSONFile(className + "/students.json");
 
+  // Loops through all students and sets blocked pairs accordingly
   students.forEach((element) => {
     if (blockedArray.includes(element.name)) {
       objectArray.filter((object) => {
@@ -779,6 +810,7 @@ app.post("/updateClassConfig", (req, res) => {
     }
   });
 
+  // Writes the students, with the blocked pairs, back into the 'students.json'-file
   fs.writeFile(
     "./database/" + className + "/students.json",
     JSON.stringify(students, null, 4),
@@ -789,6 +821,7 @@ app.post("/updateClassConfig", (req, res) => {
     }
   );
 
+  // Returns that there was no errors back to the client
   res.json({ error: false });
 
   return res.end();
@@ -797,10 +830,13 @@ app.post("/updateClassConfig", (req, res) => {
 app.post("/unlockClass", (req, res) => {
   const className = req.body.className;
 
+  // Loads the students-file
   let students = getJSONFile(className + "/students.json");
 
+  // Runs the 'studentKeycodeMaker'-function to generate keycodes for the students
   studentKeycodeMaker(students, className);
 
+  // Returns that there was no errors back to the client
   res.json({ error: false });
 
   return res.end();
@@ -809,9 +845,11 @@ app.post("/unlockClass", (req, res) => {
 app.get("/getGroups", (req, res) => {
   const className = req.session.class;
 
+  // Checks if the 'groups.json'-file exists, if so, return an error
   if (!fs.existsSync("./database/" + className + "/groups.json")) {
     return res.json({ error: true });
   } else {
+    // Loads the groups and returns them
     let groups = getJSONFile(className + "/groups.json");
 
     return res.json(groups);
@@ -825,9 +863,9 @@ app.get("/getGroup", (req, res) => {
   let users = getJSONFile("users.json");
   let username = req.session.userid;
   let keycode = "";
-  //First, find the current users keycode in order to be able to find their name from the student file
+  // First, find the current users keycode in order to be able to find their name from the student file
   for (let user of users) {
-    //Checks for the first user in the database that has the username of the currently logged in student
+    // Checks for the first user in the database that has the username of the currently logged in student
     if (user.username == username) {
       for (let i in user.classes) {
         if (user.classes[i].class == req.session.class) {
@@ -845,7 +883,7 @@ app.get("/getGroup", (req, res) => {
     }
   }
 
-  //Having found the name of the current user, search the group file to find this users group
+  // Having found the name of the current user, search the group file to find this users group
   fileName = req.session.class + "/groups.json";
   let group;
   let groupFile = getJSONFile(fileName);
@@ -858,13 +896,10 @@ app.get("/getGroup", (req, res) => {
     }
   }
 
-  console.log(name);
-  console.log(group);
-
   if (group) {
     return res.json(group);
   } else {
-    console.log("group does not exist");
+    console.log("Group does not exist");
     return res.end();
   }
 });
@@ -873,22 +908,24 @@ app.post("/saveProfile", (req, res) => {
   let students = getJSONFile(req.session.class + "/students.json");
   let topicList = getJSONFile(req.session.class + "/topics.json");
   let users = getJSONFile("users.json");
-  let studentsName = [];
   let keycode;
-  for (let i in users) {
-    console.log(req.session.userid)
+  usersfind:
+  for (let i in users) { // den her kører users.length-times
     if (req.session.userid == users[i].username) {
       for (let j in users[i].classes) {
         if (users[i].classes[j].class == req.session.class) {
           keycode = users[i].classes[j].keycode;
+          break usersfind;
         }
       }
     }
-
-    students.some((std) => {
+  }
+    students.find((std) => {
       if (std.keycode == keycode) {
+
         const studentPreferences = req.body.prefs;
         //Check in Student JSON
+        let studentsName = [];
         for (let i in students) {
           studentsName.push(students[i].name);
         }
@@ -902,7 +939,7 @@ app.post("/saveProfile", (req, res) => {
               }
             }
           } else {
-            res.json({ error: true, prefs: true });
+            res.json({error: true, prefs: true, blocks: false, topics: false, roles: false});
             return res.end();
           }
         }
@@ -915,84 +952,73 @@ app.post("/saveProfile", (req, res) => {
           if (studentsName.includes(req.body.blocks[i])) {
             for (let j in students.blocks) {
               if (students.blocks[j] == req.body.blocks[i]) {
-                res.json({ error: true, block: true });
+                res.json({error: true, prefs: false, blocks: true, topics: false, roles: false});
                 return res.end();
               }
             }
           } else {
-            res.json({ error: true, blocks: true });
+            res.json({error: true, prefs: false, blocks: true, topics: false, roles: false});
             return res.end();
           }
         }
-
-        const studentTopics = () =>{
-          let topicsList1 = getJSONFile(req.session.class + "/topic.json");
-          let topicList2 = [];
-          for (let i in topicList1) {
-            if(req.body.topics.includes(i)){
-              topicList2[i] = topicList1[i].topic;
-            }
-          }
-          console.log(topicList2);
-          return topicList2;
-        };
+        const studentTopics = getTopicList(topicList, req.body.topics)
         //Check in Topic JSON
-
-        if (topicList.length < req.body.topics.length ||
-          0 > req.body.topics.length
-        ){
-          res.json({ error: true, topics: true });
+        if (topicList.length < req.body.topics.length || 0 > req.body.topics.length){
+          res.json({error: true, prefs: false, blocks: false, topics: true, roles: false});
           return res.end();
         }
 
         const studentRoles = req.body.roles;
         //Future check for if the roles are equal to the roles made by coordinator
         if (9 < req.body.topics.length || 0 > req.body.topics.length) {
-          res.json({ error: true, roles: true });
+          res.json({error: true, prefs: false, blocks: false, topics: false, roles: true});
           return res.end();
         }
         console.log("Adding to user" + std.name);
-        for (let i in studentPreferences) {
-          std.prefs.push(studentPreferences[i]);
+        console.log(studentTopics.length);
+        for (let k in studentPreferences) {
+          std.prefs.push(studentPreferences[k]);
         }
-        for (let i in studentBlocks) {
-          std.blocks.push(studentBlocks[i]);
+        for (let k in studentBlocks) {
+          std.blocks.push(studentBlocks[k]);
         }
-        for (let i in studentTopics) {
-          std.topics.push(studentTopics[i]);
+        for (let k in studentTopics) {
+          std.topics.push(studentTopics[k]);
         }
-        for (let i in studentRoles) {
-          std.roles.push(studentRoles[i]);
+        for (let k in studentRoles) {
+          std.roles.push(studentRoles[k]);
         }
 
         fs.writeFile(
           "./database/" + req.session.class + "/students.json",
           JSON.stringify(students, null, 4),
-          JSON.stringify(json, null, 4),
           (err) => {
             if (err) {
               console.error(err);
             }
           }
         );
-
-        res.json({ error: false });
+        
+        res.json({error: false, prefs: false, blocks: false, topics: false, roles: false});
         return res.end();
+
       }
+      
     });
-  }
+  
 });
 
 app.get("/getBlockedPair", (req, res) => {
   let students = getJSONFile(req.session.class + "/students.json");
   let users = getJSONFile("users.json");
   let keycode;
+  usersFind:
   for (let i in users) {
-    console.log(session.userid)
     if (session.userid == users[i].username) {
       for (let j in users[i].classes) {
         if (users[i].classes[j].class == session.class) {
           keycode = users[i].classes[j].keycode;
+          break usersFind;
         }
       }
     }}
@@ -1038,20 +1064,6 @@ function checkFolderName(folderName) {
       }
     );
   }
-
-  /*
-
-    if(!fs.existsSync('./database/' + folderName + '/keycode.json')) {
-
-        fs.writeFileSync('./database/' + folderName + '/keycode.json', data, { flag: 'w+' }, err => {
-
-            if (err) throw err;
-
-        });
-
-    }
-
-    */
 
   return true;
 }
@@ -1171,7 +1183,21 @@ async function studentKeycodeMaker(users, className) {
     }
   );
 }
-
+/**
+ * Makes a list of topics from a list of indexes
+ * @param {All the availible topics} topicList 
+ * @param {The list of indexes} topicIndex 
+ * @returns the final list of topics
+ */
+function getTopicList(topicList, topicIndex){
+  let topicList2 = [];
+  for (let i in topicList) {
+    if(topicIndex.includes(i)){
+      topicList2.push(topicList[i].topic);
+    }
+  }
+  return topicList2;
+}
 function moveFile(oldPath, newPath) {
   // https://stackoverflow.com/a/21431865
 
