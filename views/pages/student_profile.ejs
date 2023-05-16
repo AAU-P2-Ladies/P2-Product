@@ -3,7 +3,6 @@
   <head>
 
     <%- include('../partials/head'); %>
-    <title>Student Profile</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/style_student.css">
   </head>
@@ -31,7 +30,7 @@
         </div><br>
 
         <div id="addPrefDiv">
-          <button id="addPref" class="btn btn-primary">Add student preference</button><br><br>
+          <button id="addPref">Add student preference</button><br><br>
         </div>
 
         <div id="prefModal" class="modal">
@@ -43,9 +42,9 @@
 
         <div id="blockSearch">
           <label>Block Students</label><br>
-          <input id="addBlock" placeholder="Search for names.."><br><br>
-          <input type="button" id="BlockedButton" class="btn btn-primary" value="Add Blocked Person" onclick="BlockedList('addBlock')">  
-        </div><br>
+          <input id="addBlock" placeholder="Search for names..">
+          <input type="button" id="BlockedButton" value="Add Blocked Person" onclick="BlockedList('addBlock')">  
+        </div>
       
         
         <div id="blockTableDivID">
@@ -82,7 +81,7 @@
             
         </table>
               
-        <input type="button" id="submitProfile" class="buttonS" value="Join Group formation">
+        <input type="button" id="submitProfile" class="btn btn-primary" value="Join Group formation">
           
       </form>
     </div>

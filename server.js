@@ -72,12 +72,16 @@ app.use(cookieParser());
 
 // Global locals to use with EJS file, mainly in 'navbar.ejs'
 app.use(function (req, res, next) {
+  res.locals.baseUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   res.locals.isLoggedIn = req.session.userid ? 1 : 0;
   res.locals.isCoordinator = req.session.isCoordinator;
   next();
 });
 
 app.get("/", (req, res) => {
+
+  console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
+
   // Checks if the user is not logged in, if so, redirect them to the index page
   if (!req.session.userid) {
     res.render("pages/index");
@@ -949,7 +953,7 @@ app.post("/saveProfile", (req, res) => {
         const studentBlocks = req.body.blocks;
         //Check in Student JSON
 
-        for (let i in req.body.block) {
+        for (let i in req.body.blocks) {
           if (studentsName.includes(req.body.blocks[i])) {
             for (let j in students.blocks) {
               if (students.blocks[j] == req.body.blocks[i]) {
@@ -1199,9 +1203,7 @@ function getTopicList(topicList, topicIndex){
   }
   return topicList2;
 }
-function moveFile(oldPath, newPath) {
-  // https://stackoverflow.com/a/21431865
-
+function moveFile(oldPath, newPath) { // https://stackoverflow.com/a/21431865
   fs.readFile(oldPath, function (err, data) {
     fs.writeFile(newPath, data, function (err) {
       fs.unlink(oldPath, function () {

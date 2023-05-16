@@ -70,7 +70,7 @@ p {
     
 }
 
-.buttonS, #knapidd, #addBlock, #searchPref, #SaveStudentPreferencesButton{
+.buttonS, #knapidd, #addBlock, #searchPref, #SaveStudentPreferencesButton, #BlockedButton, #addPref{
     background-color: white;
     color:rgba(0, 0, 0, 0.4);
     border-radius: 5px;
@@ -83,7 +83,11 @@ p {
 #searchPref:hover,
 #searchPref:focus,
 #SaveStudentPreferencesButton:hover,
-#SaveStudentPreferencesButton:focus{
+#SaveStudentPreferencesButton:focus,
+#BlockedButton:focus,
+#BlockedButton:hover,
+#addPref:hover,
+#addPref:focus{
   color: #000;
   text-decoration: none;
   cursor: pointer;

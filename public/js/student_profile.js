@@ -176,7 +176,7 @@ function checkboxControl(clickedCheckBox) {
 
         error.textContent = "You Can only Select Three Roles";
         error.style.color = "red";
-        checkboxes[clickedCheckBox+1].checked = false;
+        checkboxes[clickedCheckBox].checked = false;
         return false;
 
       }
@@ -219,8 +219,7 @@ function createDivs(numberOfDivs) {
     let divElement = document.createElement("div");
     divElement.id = "prefDiv" + divNumber;
     modalDiv.append(divElement);
-    //divElement.addEventListener("load", createDynamicList(divElement.id, divNumber));
-
+   
   }
   
 }
@@ -263,8 +262,6 @@ function createSearchPref(number) {
     inputText.setAttribute("type", "text");
     inputText.id = currentNumber + "prio";
     inputText.className = "prioClass" 
-    //inputText.class = "searchPrefClass";
-    
     inputText.setAttribute("placeholder", "Search");
     inputText.addEventListener("keyup", () => SearchField(inputText.id, "myUL" + currentNumber)); 
   
@@ -510,14 +507,15 @@ document.getElementById("topicDiv").addEventListener("load",
 document.getElementById('DoesTopicMatterID').addEventListener('click', ShowTopicTable);
 
 roleTable.addEventListener("load", createDynamicList2("rolesTable", roles, "role"));
-document.getElementById("role1").addEventListener("click",() =>checkboxControl(0));
-document.getElementById("role2").addEventListener("click",() =>checkboxControl(1)); 
-document.getElementById("role3").addEventListener("click",() =>checkboxControl(2));
-document.getElementById("role4").addEventListener("click",() =>checkboxControl(3));
-document.getElementById("role5").addEventListener("click",() =>checkboxControl(4));
-document.getElementById("role6").addEventListener("click",() =>checkboxControl(5));
-document.getElementById("role7").addEventListener("click",() =>checkboxControl(6));
-document.getElementById("role8").addEventListener("click",() =>checkboxControl(7));
+document.getElementById("role0").addEventListener("click",() =>checkboxControl(0));
+document.getElementById("role1").addEventListener("click",() =>checkboxControl(1));
+document.getElementById("role2").addEventListener("click",() =>checkboxControl(2)); 
+document.getElementById("role3").addEventListener("click",() =>checkboxControl(3));
+document.getElementById("role4").addEventListener("click",() =>checkboxControl(4));
+document.getElementById("role5").addEventListener("click",() =>checkboxControl(5));
+document.getElementById("role6").addEventListener("click",() =>checkboxControl(6));
+document.getElementById("role7").addEventListener("click",() =>checkboxControl(7));
+document.getElementById("role8").addEventListener("click",() =>checkboxControl(8));
 document.getElementById("addBlock").addEventListener("keyup", () => SearchField('addBlock', 'myUL'))
 
 function createElement(type, props) {
@@ -573,9 +571,6 @@ function BlockedList(Student) {
       return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is already blocked")
     }
   }
-  
-  
-    //blocked.push(blockedPair[0]);
     console.log(document.getElementById(Student).ariaPlaceholder)
     createDynamicList2("studentBlockTableID", blockedPair, "Block")
     

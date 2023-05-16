@@ -1,11 +1,9 @@
-//let startTime = performance.now()
 const helper = require('./algHelpers.js');
 
 //Define values that should be given by the website
 let min = 0;
 const roleNumber = 9;
 const maxIterations = 1000;
-//const minDiversity = 0.75
 
 /**
  * Creates the object Student
