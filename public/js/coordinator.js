@@ -14,18 +14,14 @@ let blockedUL = document.getElementById("BlockedUL");
 
 let AmountOfGroupMembers = document.getElementById("amountOfGroupMembers");
 let AmountOfStudentPreferences = document.getElementById("studentPreferences");
-//let BlockedInput = document.getElementById("BlockedInput");
-//let myInput = document.getElementById("myInput");
-//let ULItems = blockedUL.getElementsByTagName("li");
-//document.getElementById("BlockedUL").onclick=submitForm;
-
-
-
-// nameArray = ["Adele Adele Adle","Agnes","Adrian","Adil","Andreas","Anders","Adomas","Billy","Bob","Calvin","Cim","Charlotete","Cello","Cimmy","Clara","Claire","Christina","Cindy"];
-//let blocked1 = [["Nadia","Tania"],["Tina","Thomas"],["Adomas","Trine"],["Simon","Tobias"],["Carmen","Daniel"],["Jonas","Nicolaj"],["Cathrine","Kamilla"],["Simon","Allan"],["Andreas","Adomas"],["Sina","Merete"]];
 let blocked = [];
 
 
+
+/**
+ * This function
+ * @param {*} input 
+ */
 function createDynamicList(input) {
 
     fetch('./../search', {
@@ -107,7 +103,7 @@ function createDynamicList(input) {
                     if (e.target && e.target.matches("li")) {
                         document.getElementById("BlockedInput").value = e.target.innerText; // new class name here
                         document.getElementById("BlockedInput").setAttribute("Placeholder", "Selected")
-                        //alert("clicked " + e.target.innerText);
+                    
                     }
                 });
 
@@ -132,8 +128,8 @@ if (studentListInput) {
     studentListInput.addEventListener("change", function () {
         FileExtension = studentListInput.value.split(".")
         if (FileExtension[1] != "json") {
-            alert("Not Json!")
-            studentListInput.value = ""
+            alert("Not Json!");
+            studentListInput.value = "";
         }
     })
 }
@@ -190,7 +186,7 @@ if (next_btn) {
 
         } else {
 
-            alert("Mandatory field(s) not filled!")
+            alert("Mandatory field(s) not filled!");
 
         }
     })
@@ -214,7 +210,7 @@ function classModalCreator(location){
         .then((data) => {
             //If the response is empty, assume no classes exist
             if(data == []){
-                alert("No classes made for this user")
+                alert("No classes made for this user");
             }
             //Else, add the options to the modal
             else {
@@ -315,42 +311,16 @@ if ((window.location.pathname).includes("coordinator_config")) {
         });
 
     });
-    /*
-        if(document.getElementById("myInput").innerHTML != "")
-        {
-        document.getElementById("proeveDiv").addEventListener("load",createDynamicList());
-        //document.getElementById("TableDivId").addEventListener("load",createDynamicList2());
-        }
-      */
 
 }
 
-/*
-function addPrefFunction(e){
-    e.preventDefault();
-  
-    console.log("bib");
-    modal.style.display = "block";
 
-
-    onclick="myFunction(event)"
-}
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}*/
 function BlockedList(StudentA, StudentB) {
     let blockedPair = [];
     blockedPair = new Array(2);
     blockedPair[0] = document.getElementById(StudentA).value;
     blockedPair[1] = document.getElementById(StudentB).value;
-    console.log(document.getElementById(StudentA).ariaPlaceholder)
+   
 
     if (document.getElementById(StudentA).placeholder != "Selected" || document.getElementById(StudentB).placeholder != "Selected") {
         return (alert("You have to choose 2 Students!"))
@@ -373,36 +343,19 @@ function BlockedList(StudentA, StudentB) {
 }
 
 function createDynamicList2(blockedArray) {
-    let table = document.getElementById('MyBlockedTable').getElementsByTagName('tbody')[0]
-
-    /*
-        let tr = document.createElement('tr'); //column
-        let th1 = document.createElement('th');
-        let th2 = document.createElement("th");
-        let th3 = document.createElement('th');
-        th1.innerText = "Student A"
-        th2.innerText = "Student B"
-        th3.innerText = "Blocked"
-        tr.appendChild(th1)
-        tr.appendChild(th2)
-        tr.appendChild(th3)
-        table.appendChild(tr)
-    */
-
-    console.log(blockedArray);
-
+    let table = document.getElementById('MyBlockedTable').getElementsByTagName('tbody')[0];
     let row = table.insertRow(0);
-    let cell1 = row.insertCell(0)
-    let cell2 = row.insertCell(1)
-    let cell3 = row.insertCell(2)
-    checkbox = document.createElement("input")
+    let cell1 = row.insertCell(0);
+    let cell2 = row.insertCell(1);
+    let cell3 = row.insertCell(2);
+    checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.id = "blocked_pairs";
     checkbox.name = "blocked_pairs";
     checkbox.checked = true;
-    cell1.innerHTML = blockedArray[0]
-    cell2.innerHTML = blockedArray[1]
-    cell3.append(checkbox)
+    cell1.innerHTML = blockedArray[0];
+    cell2.innerHTML = blockedArray[1];
+    cell3.append(checkbox);
 
 }
 
@@ -412,7 +365,6 @@ if (save_btn) {
 
         let amountOfGroupMembers = document.getElementById("amountOfGroupMembers");
         let studentPreferences = document.getElementById("studentPreferences");
-        //let previousMembers = document.getElementById("previousMembers");
 
         let blockedPairArray = tableToArray(document.querySelector("table > tbody"));
 
@@ -428,7 +380,6 @@ if (save_btn) {
                 className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2],
                 amountOfGroupMembers: amountOfGroupMembers.value,
                 studentPreferences: studentPreferences.value,
-                //previousMembers: previousMembers.value,
                 blockedPairArray: blockedPairArray
             }),
         })
@@ -456,13 +407,11 @@ if (unlock_btn) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2]
+                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2];
             }),
         })
             .then((response) => response.json())
             .then((data) => {
-
-                console.log(data);
 
                 alert('Student profile pages are now unlocked!');
 
