@@ -882,7 +882,6 @@ app.post("/saveProfile", (req, res) => {
       for (let j in users[i].classes) {
         if (users[i].classes[j].class == session.class) {
           keycode = users[i].classes[j].keycode;
-          console.log(users[i].username + " just made a profile");
         }
       }
     }
@@ -979,17 +978,23 @@ app.post("/saveProfile", (req, res) => {
 app.get("/getBlockedPair", (req, res) => {
   let students = getJSONFile(session.class + "/students.json");
   let users = getJSONFile("users.json");
+  let keycode;
   for (let i in users) {
-    students.some((std) => {
+    console.log(session.userid)
+    if (session.userid == users[i].username) {
       for (let j in users[i].classes) {
-        if (std.keycode == users[i].classes[j].keycode) {
+        if (users[i].classes[j].class == session.class) {
+          keycode = users[i].classes[j].keycode;
+        }
+      }
+    }}
+    students.some((std) => {
+      if (std.keycode == keycode) {
           res.json({ error: false, blocked: std.blocks });
           return res.end();
         }
-      }
-    });
-  }
-});
+      })
+  });
 
 /**
  * Logs the servers url
