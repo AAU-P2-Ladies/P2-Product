@@ -26,6 +26,9 @@
             },
             {
                 "class": "Mega_test2"
+            },
+            {
+                "class": "testcssS"
             }
         ],
         "isCoordinator": 1

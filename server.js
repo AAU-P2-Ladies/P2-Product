@@ -52,6 +52,7 @@ const multerConfig = {
   },
 };
 
+// Tells Express to use the Express-sessions-module to keep track of and store sessions
 app.use(
   sessions({
     secret: "merete",
@@ -61,24 +62,26 @@ app.use(
   })
 );
 
+// Tells Express to use the cookieParser-module for keeping track of and store cookies
 app.use(cookieParser());
 
+// Global locals to use with EJS file, mainly in 'navbar.ejs'
 app.use(function (req, res, next) {
-  res.locals.baseUrl = req.protocol + "://" + req.headers.host;
   res.locals.isLoggedIn = req.session.userid ? 1 : 0;
   res.locals.isCoordinator = req.session.isCoordinator;
   next();
 });
 
 app.get("/", (req, res) => {
-
+  // Checks if the user is not logged in, if so, redirect them to the index page
   if (!req.session.userid) {
     res.render("pages/index");
   } else {
+    // Checks if the user is a coordinator or not, if they are not, redirect to student start page, else, coordinator start page
     if (req.session.isCoordinator == 0) {
-      res.render("pages/student_start");
+      res.redirect("./student_start");
     } else if (req.session.isCoordinator == 1) {
-      res.render("pages/coordinator_start");
+      res.redirect("./coordinator_start");
     }
   }
 });
@@ -178,8 +181,6 @@ app.post("/login", (req, res) => {
 
             return true;
           } else {
-            // Else...
-
             // ... log the user in to the inputted class
             session = req.session;
             session.userid = req.body.username;
@@ -202,15 +203,18 @@ app.post("/login", (req, res) => {
             if (duplicateClass == 0) {
               user.classes.push({ class: class1, keycode: keycode });
 
+              // Loads the students file for the current class
               classFileName = class1 + "/students.json";
               classFile = getJSONFile(classFileName);
 
+              // Loops through the students to find the inputted keycode and sets 'isRegistered' to 1
               classFile.some((userKey) => {
                 if (userKey.keycode == keycode) {
                   userKey.isRegistered = 1;
                 }
               });
 
+              // Writes back into the students file
               fs.writeFile(
                 "./database/" + class1 + "/students.json",
                 JSON.stringify(classFile, null, 4),
@@ -241,6 +245,7 @@ app.post("/login", (req, res) => {
                 }
               }
 
+              // Writes back into the keycodes file
               fs.writeFile(
                 "./database/keycodes.json",
                 JSON.stringify(keycodes, null, 4),
@@ -356,8 +361,6 @@ app.post("/register", (req, res) => {
     // Sends a JSON-response back that the username is already taken
     return res.json({ error: true, username: false, password: false });
   } else {
-    // Else...
-
     // Assigns 'registerUser' to the "Request.body"-object
     let registerUser = req.body;
 
@@ -388,17 +391,9 @@ app.post("/register", (req, res) => {
     return res.end();
   }
 });
-/*
-app.post('/prefSearch',(req, res) => {
-
-
-    console.log(req);
-    res.render('pages/student_start');
-
-});
-*/
 
 app.get("/register", (req, res) => {
+  // Checks if the user is already logged in, if so, redirect them to the index page instead of the register page
   if (req.session.userid) {
     res.redirect("./");
   } else {
@@ -407,6 +402,7 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/coordinator_start", (req, res) => {
+  // Checks if the user is not logged in or if the user is not a coordinator, if so, redirect them to the index page instead of the coordinator start page
   if (!req.session.userid || req.session.isCoordinator != 1) {
     res.redirect("./");
   } else {
@@ -415,6 +411,7 @@ app.get("/coordinator_start", (req, res) => {
 });
 
 app.get("/coordinator_preconfig", (req, res) => {
+  // Checks if the user is not logged in or if the user is not a coordinator, if so, redirect them to the index page instead of the coordinator preconfig page
   if (!req.session.userid || req.session.isCoordinator != 1) {
     res.redirect("./");
   } else {
@@ -423,6 +420,7 @@ app.get("/coordinator_preconfig", (req, res) => {
 });
 
 app.get("/:className/coordinator_view", (req, res) => {
+  // Checks if the user is not logged in or if the user is not a coordinator, if so, redirect them to the index page instead of the coordinator view page
   if (!req.session.userid || req.session.isCoordinator != 1) {
     res.redirect("./");
   } else {
@@ -927,13 +925,22 @@ app.post("/saveProfile", (req, res) => {
           }
         }
 
-        const studentTopics = req.body.topics;
+        const studentTopics = () =>{
+          let topicsList1 = getJSONFile(req.session.class + "/topic.json");
+          let topicList2 = [];
+          for (let i in topicList1) {
+            if(req.body.topics.includes(i)){
+              topicList2[i] = topicList1[i].topic;
+            }
+          }
+          console.log(topicList2);
+          return topicList2;
+        };
         //Check in Topic JSON
 
-        if (
-          topicList.length < req.body.topics.length ||
+        if (topicList.length < req.body.topics.length ||
           0 > req.body.topics.length
-        ) {
+        ){
           res.json({ error: true, topics: true });
           return res.end();
         }
@@ -997,6 +1004,14 @@ app.get("/getBlockedPair", (req, res) => {
       })
   });
 
+app.get("/getTopics", (req, res) => {
+  let topicList1 = getJSONFile(req.session.class + "/topics.json");
+  let topicList2 = topicList1.map(x => Object.values(x));
+  res.json(topicList2);
+
+  return res.end();
+
+})
 /**
  * Logs the servers url
  */

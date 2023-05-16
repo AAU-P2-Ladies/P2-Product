@@ -12,37 +12,35 @@
   <body>
     
     <%- include('../partials/navbar'); %>
+    <div class="outerCoordinator"> 
+      <h1 class="headingCoordinator">Welcome Coordinator!</h1>
+      <p class="paragrafCoordinator">Please choose where to go</p><br>
 
-    <h1>Welcome!😎</h1>
-    <p>🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻</p>
-    <p>Please choose where to go 🌞:</p>
+      <div class="start_buttons">        
+        <button type="button" class="buttonsCoordinator" id="new_session_btn">New group formation</button><br><br>
+        <button type="button" class="buttonsCoordinator" id="edit_btn">Edit current group formation</button><br><br>
+        <button type="button" class="buttonsCoordinator" id="view_btn">View keycodes and make groups</button><br><br>
+      </div>
 
-    <div class="start_buttons">        
-        <button type="button" id="new_session_btn">New group formation</button>
-        <button type="button" id="edit_btn">Edit current group formation</button>
-        <button type="button" id="view_btn">View keycodes and make groups</button>
-       <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classesModal" id="make_stud_login">Get keycodes for Students</button>-->
-    </div>
-
-    <div class="modal fade" id="classesModal" tabindex="-1" aria-labelledby="classesModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="classesModalLabel">Choose class</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="formClasses">
-              <div class="mb-3" id="classesDiv" style="display:none">
-                <label for="classesSelect" class="col-form-label">Classes:</label>
-                <select class="form-select" id="classesSelect">
-                </select>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" id="close-btn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" id="submit-btn" class="btn btn-secondary" data-bs-dismiss="modal">Submit</button>
+      <div class="modal fade" id="classesModal" tabindex="-1" aria-labelledby="classesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="classesModalLabel">Choose class</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="formClasses">
+                <div class="mb-3" id="classesDiv" style="display:none">
+                  <label for="classesSelect" class="col-form-label">Classes:</label>
+                  <select class="form-select" id="classesSelect"></select>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="close-btn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" id="submit-btn" class="btn btn-secondary" data-bs-dismiss="modal">Submit</button>
+            </div>
           </div>
         </div>
       </div>

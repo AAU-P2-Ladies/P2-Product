@@ -1,11 +1,6 @@
-let topics = ["klima", "miljø", "energi", "simons mor", "wife-finder",
-              "klima", "miljø", "energi", "simons mor",
-              "klima", "miljø", "energi", "simons mor"];
-
 let roles = ["Resource Investigator", "Teamworker", "Co-ordinator", 
               "Plant", "Monitor Evaluator", "Specialist", "Shaper", 
                 "Implementer", "Completer Finisher"];
-
 
 
 
@@ -409,74 +404,6 @@ function saveStudentPreferences(e) {
   }
   
 }
-
-/*
-/**
- * createDropDown takes two input parameters: 
- * @param {An id for the select element.} id 
- * @param {An array with a list of names for each element in the drop down menu.} array 
- * @returns the select element
- */
-/*function createDropDown(id, array) {
-  const selection = document.createElement("select");
-  selection.id = id;
-  selection.className = "selectt";
-  for (let i of array) {
-    const options = document.createElement("option");
-    const text = document.createTextNode(i);
-    options.appendChild(text);
-    options.value = i;
-    selection.append(options);
-  }
-  return selection;
-}
-*/
-
-
-/*function topic_choice(number, data, nameId, divName){//This function creates multiple select elements,depend on the number of topics.
-  for(let i = number; i > 0; i--){//This line will loop throough all topic,number variable represents the number of topics
-    let selectionTopics = createDropDown((nameId), data);//This will call function above"createdropDown" which create an elem  
-    divName.prepend(selectionTopics);
-    let currentSelection = document.getElementById(nameId);
-    const nameLabel = document.createElement("label");
-    const text = document.createTextNode("*");
-    nameLabel.appendChild(text);
-    divName.prepend(nameLabel);
-    makeBreaks(currentSelection, 1);
-  }
-  
-}*/
-
-/*
-let newDivv = document.createElement("div");
-newDivv.id = "newDivOne";
-let headingE = document.createElement("h1");
-  let textz = document.createTextNode("Topic");
-  headingE.appendChild(textz);
-  newDivv.prepend(headingE);
-let x= document.createElement("input");
-x.type= "checkbox";
-x.id= "topics";
-newDivv.prepend(x);
-list.prepend(newDivv);
-*/
-
-
-/*document.getElementById("topics").addEventListener("change", (e) => {
-  if (!document.getElementById("Topic")) {
-    let newNewDiv = document.createElement("div");
-    newNewDiv.id = "newNewDivOne";
-    list.prepend(newNewDiv);
-    let numberOfTopics = topics.length - 1;
-    topic_choice(numberOfTopics, topics, "Topic", newNewDiv);
-  } else {
-    document.getElementById("newNewDivOne").remove();
-  }
-  
-});
-*/
-
-
 //KALDE FUNKTIONER
 
 createDivs(numberOfStudentPreferences);
@@ -490,27 +417,6 @@ for (let i = 1; i <= numberOfStudentPreferences; i++) {
   test.addEventListener("keyup", SearchField(test.id, "myUL" + i));
 
 }
-
-/*
-for (let input = 1; input <= numberOfStudentPreferences; input++) {
-
-  document.getElementById("myUL" + input).addEventListener("click", function(e) {
-
-    if (e.target && e.target.matches("li")) {
-
-      let myInput = document.getElementById(input + "prio");
-      //Find Field
-      //Check 2 others
-      myInput.setAttribute("InnerHTML", e.target.innerText);
-      myInput.value = e.target.innerText;
-      document.getElementById("myUL" + input).hidden = "hidden";
-
-    }
-  
-  });
-
-}*/
-
 createSaveButton();
 
 
@@ -528,11 +434,9 @@ console.log(SubjectArray)
     document.getElementById(TableID).style.display = "none";
 
   }
-  
-
-  for (let i in SubjectArray) {
-
-    let row = table.insertRow(i-1);
+ 
+  for(let i = 0; i < SubjectArray.length; i++ ) {
+    let row = table.insertRow(i);
     let cell1 = row.insertCell(0);
     let cell2 = row.insertCell(1);
     cell1.innerText = SubjectArray[i];
@@ -543,7 +447,7 @@ console.log(SubjectArray)
     checkbox.name = Subject + i;
     checkbox.checked = false;
     cell2.append(checkbox);
-
+    console.log(i);
   }
   
 }
@@ -562,7 +466,12 @@ function ShowTopicTable() {
 
 }
 
-document.getElementById("topicDiv").addEventListener("load", createDynamicList2("MyTopicTable", topics, "Topic"));
+document.getElementById("topicDiv").addEventListener("load",
+  fetch("./getTopics").then((response) => response.json()).then((data) => {
+    console.log(data);
+    createDynamicList2("MyTopicTable", data, "Topic")
+  })
+);
 
 document.getElementById('DoesTopicMatterID').addEventListener('click', ShowTopicTable);
 
@@ -575,40 +484,6 @@ document.getElementById("role5").addEventListener("click",() =>checkboxControl(4
 document.getElementById("role6").addEventListener("click",() =>checkboxControl(5));
 document.getElementById("role7").addEventListener("click",() =>checkboxControl(6));
 document.getElementById("role8").addEventListener("click",() =>checkboxControl(7));
-
-/*
-function createDynamicBlockList(DivID){   
-  
-  let dynalist = document.getElementById(DivID)
-  let dyn = document.createElement("ul")
-  
-  for (let i in nameArray)
-  {
-      let li = document.createElement('li')
-      li.innerText = nameArray[i]
-      li.className = "item"
-      let li2 = document.createElement('li')
-      li2.innerText = nameArray[i]
-      li2.className = "item"
-      dyn.appendChild(li)
-      
-  }
-  dyn.hidden = "hidden"
-  dyn.id = "MyUL"
-
-
-  dynalist.prepend(dyn)
-}
-*/
-
-//createDynamicBlockList("blockTableDivID")
-
-
-
- 
-
-
-
 document.getElementById("addBlock").addEventListener("keyup", () => SearchField('addBlock', 'myUL'))
 
 function createElement(type, props) {
@@ -680,13 +555,6 @@ function sendProfile(pref, blocked, topics, roles) {
     } else {
       location.href = './student_start';
     }
-
-    //Check JSON Roles
-    //Check JSON Topics
-    //Check Blocked Exist
-      //Check Blocked isn't Pref
-    //Check Prefs Exist
-      //Check Prefs isn't Blocked
   })
   
 }
