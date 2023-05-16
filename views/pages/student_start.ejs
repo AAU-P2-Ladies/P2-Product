@@ -4,7 +4,6 @@
     
     <%- include('../partials/head'); %>
     
-    <title>Student Start</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/style_student.css">
 
@@ -14,10 +13,12 @@
     <%- include('../partials/navbar'); %>
 
     <div class="boks">
-      <a href="./student_profile" id="anchor1">Create your profile HERE!</a><br><br>
-      <a href="./student_profile" id="anchor2">Watch your current group and submit feedback</a><br><br>
-      <a href="./student_profile" id="anchor3">The groups are DONE. Watch them HERE!</a><br><br>
+      <button type="button" class="btn btn-primary" id="studentProfileButton" href="./student_profile">Create your profile HERE!</button><br><br>
+      <button type="button" class="btn btn-primary" id="studentGroupsButton" href="./student_profile">Watch your current group and submit feedback</button>
       
+      <a href="./student_profile" id="studentProfileButton" class="btn btn-primary" >Create your profile HERE!</a>
+      <a href="./student_group" id="studentGroupsButton" class="btn btn-primary"> Watch your current group and submit feedback </a>
+
     </div>
 
     <%- include('../partials/footer'); %>
