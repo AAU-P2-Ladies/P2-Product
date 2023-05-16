@@ -138,9 +138,9 @@ function prefGroups (students, matrix, groupSize) {
             if (sortedStudentToStudentsPrefs[a] != sortedStudentToStudentsPrefs[a-1]) {
                 matrixIndex = -1;
             }
-            //a gets assigned the indexOf the lowest preference value.
+            //matrixIndex gets assigned the indexOf the lowest preference value.
             //If the student is in a group the IndexOf searches for the next value
-            //a + 1 allows to find the next student with same preference value in the matrix[j]
+            //matrixIndex + 1 allows to find the next student with same preference value in the matrix[j]
             matrixIndex = matrix[j].indexOf(sortedStudentToStudentsPrefs[a], matrixIndex + 1);            
             a++;
         } while (students[matrixIndex].groupNr != -1)

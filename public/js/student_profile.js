@@ -2,10 +2,6 @@ let roles = ["Resource Investigator", "Teamworker", "Co-ordinator",
               "Plant", "Monitor Evaluator", "Specialist", "Shaper", 
                 "Implementer", "Completer Finisher"];
 
-
-
-
-
 let blocked=[];
 let preferences=[];
 let numberOfStudentPreferences = 3;
