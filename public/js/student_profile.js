@@ -24,14 +24,26 @@ let submit = document.getElementById("submitProfile");
 let checkboxes = document.getElementsByClassName("checkboxrole");
 let span = document.getElementsByClassName("close")[0];
 
-submit.addEventListener('click', () => {
-  sendProfile(getPriorities(),blocked,getIndexOfChecked("Topic"),getIndexOfChecked("role"))
+submit.addEventListener('click', () => {sendProfile(getPriorities(),getBlockedStudents(),getIndexOfChecked("Topic"),getIndexOfChecked("role"))
   })
 
 
+function getBlockedStudents () {
+  blocked = [];
+  let blockedCheckboxData = document.getElementsByClassName("checkboxBlock");
+  let blockedData= document.getElementById('studentBlockTableID').getElementsByTagName('tbody')[0];
+  for (let i = 0; i<blockedCheckboxData.length; i++){
+    if(blockedCheckboxData[i].checked){
+      blocked.push(blockedData.children[i].children[0].innerText)
+    }
+  } 
+  console.log(blocked)
+  return blocked
+}
+
 function createDynamicBlockList(input) {
 
-  fetch('./search', {
+  fetch('/../search', {
       method: "POST",
       headers: {
           Accept: "application/json, text/plain, */*",
@@ -250,6 +262,7 @@ function createSearchPref(number) {
     let inputText = document.createElement("input");
     inputText.setAttribute("type", "text");
     inputText.id = currentNumber + "prio";
+    inputText.className = "prioClass" 
     //inputText.class = "searchPrefClass";
     
     inputText.setAttribute("placeholder", "Search");
@@ -351,13 +364,42 @@ function saveStudentPreferences(e) {
 
   let arrayPrefStudents = [];
 
+  let preferenceFields = document.getElementsByClassName("prioClass")
+  for (let i = 0;i<preferenceFields.length;i++){
+    console.log(i + "debug")
+    let currentField = document.getElementById(preferenceFields[i].id)
+
+    for (let j = i/1 + 1; j < preferenceFields.length; j++){
+      let nextField = document.getElementById(preferenceFields[j].id)
+      if (currentField.value == nextField.value){
+        if(currentField.value != ""){
+          return alert("Student " + currentField.value + " cannot be added as preference twice")
+        }
+      }
+    }
+
+    let blockedDataHead = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
+  for (let i = 1; i<blockedDataHead.children.length; i++){
+    console.log(i)
+    if (currentField.value == blockedDataHead.children[i].innerText){
+      return alert("Student "+ blockedDataHead.children[i].innerText+ " is blocked")
+    }
+  }
+
+  let blockedDataBody = document.getElementById("blockTableDivID").getElementsByTagName('tbody')[0];
+  for (let i = 0; i<blockedDataBody.children.length; i++){
+    if (currentField.value == blockedDataBody.children[i].children[0].innerText){
+      return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is blocked")
+    }
+  }
+  }
+
   for (let priority = 1; priority <= numberOfStudentPreferences; priority++) {
-    
 
     let currentStudent = document.getElementById(priority + "prio");
     currentStudent.style.background = "white";
 
-    if ((arrayPrefStudents.indexOf(currentStudent.value) < 0) || (currentStudent.value == "")) {
+
 
       if (document.getElementById("p" + priority) === null) {
 
@@ -387,18 +429,6 @@ function saveStudentPreferences(e) {
         modal.style.display = "none";
   
       }
-  
-    } else {
-
-      currentStudent.style.background = "red";
-
-      alert("You can't choose the same person twice");
-      modal.style.display = "block";
-      text.innerText = priority + ". Priority: ";
-      break;
-
-    }
-
     
     arrayPrefStudents.push(currentStudent.value);
 
@@ -447,6 +477,9 @@ console.log(SubjectArray)
     checkbox.id = Subject + i;
     checkbox.name = Subject + i;
     checkbox.checked = false;
+    if (Subject == "Block"){
+      checkbox.checked = true;  
+    }
     cell2.append(checkbox);
     console.log(i);
   }
@@ -515,14 +548,44 @@ function createElement(type, props) {
 
 function BlockedList(Student) {
   let blockedPair = [document.getElementById(Student).value];
-  blocked.push(blockedPair[0]);
-  console.log(document.getElementById(Student).ariaPlaceholder)
-  createDynamicList2("studentBlockTableID", blockedPair, "Block")
+
+  if (blockedPair == "") {
+    return alert("You have to input a student to block")
+  }
+
+  let studentPreferences = document.getElementsByClassName("priorities")
+  for (let i in studentPreferences){
+  if (blockedPair == studentPreferences[i].innerText){
+    return alert("Student "+studentPreferences[i].innerText+ " is added as a preference")
+  } 
+  }
+
+  let blockedDataHead = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
+  for (let i = 1; i<blockedDataHead.children.length; i++){
+    if (blockedPair == blockedDataHead.children[i].innerText){
+      return alert("Student "+ blockedDataHead.children[i].innerText+ " is already blocked")
+    }
+  }
+
+  let blockedDataBody = document.getElementById("blockTableDivID").getElementsByTagName('tbody')[0];
+  for (let i = 0; i<blockedDataBody.children.length; i++){
+    if (blockedPair == blockedDataBody.children[i].children[0].innerText){
+      return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is already blocked")
+    }
+  }
+  
+  
+    //blocked.push(blockedPair[0]);
+    console.log(document.getElementById(Student).ariaPlaceholder)
+    createDynamicList2("studentBlockTableID", blockedPair, "Block")
+    
+
+  
 }
 
 function sendProfile(pref, blocked, topics, roles) {
 
-  fetch('./saveProfile', {
+  fetch('/saveProfile', {
       method:"POST",
       headers: {
         Accept:"application/json, text/plain, */*",
@@ -576,7 +639,7 @@ document.querySelectorAll("#addBlock").forEach(function (element) {
 
 });
 
-fetch('./getBlockedPair').then((response) => response.json()).then((data) => {
+fetch('/getBlockedPair').then((response) => response.json()).then((data) => {
 let Blocktable = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
 for (let i in data.blocked) {
 

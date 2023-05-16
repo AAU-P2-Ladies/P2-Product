@@ -523,6 +523,7 @@ app.get("/getCoordinatorClasses", (req, res) => {
 
 // Save the coordinators chosen class ID to edit/view
 app.post("/postCoordinatorClass", (req, res) => {
+  session = req.session
   session.class = req.body.class;
   //console.log(req.session.class);
 });
