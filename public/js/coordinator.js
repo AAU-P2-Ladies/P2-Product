@@ -19,7 +19,8 @@ let blocked = [];
 
 
 /**
- * This function
+ * This function creates a dynamic list by fetching from the server the data on the input 
+ * it is used on line 300 in this file
  * @param {*} input 
  */
 function createDynamicList(input) {
@@ -297,8 +298,11 @@ function SearchField(myInputID, myULID) {
 
 }
 
+//if the current page is the coordinator config, a dynamic list is created for either elements myInput or BlockedInput if there is data
+//th this keyword refers to the element that is currently triggering this function and creates the dynamic list for this element
 if ((window.location.pathname).includes("coordinator_config")) {
-
+    //myInput and BlockedInput are the elements of the modal on the coordinator_config page that searches for names of students to add as blocked pair
+    //they are similar boxes and elements
     document.querySelectorAll("#myInput, #BlockedInput").forEach(function (element) {
 
         element.addEventListener("input", function () {
