@@ -17,6 +17,11 @@ let AmountOfStudentPreferences = document.getElementById("studentPreferences");
 let blocked = [];
 
 
+
+/**
+ * This function
+ * @param {*} input 
+ */
 function createDynamicList(input) {
 
     fetch('./../search', {
@@ -121,8 +126,8 @@ if (studentListInput) {
     studentListInput.addEventListener("change", function () {
         FileExtension = studentListInput.value.split(".")
         if (FileExtension[1] != "json") {
-            alert("Not Json!")
-            studentListInput.value = ""
+            alert("Not Json!");
+            studentListInput.value = "";
         }
     })
 }
@@ -179,7 +184,7 @@ if (next_btn) {
 
         } else {
 
-            alert("Mandatory field(s) not filled!")
+            alert("Mandatory field(s) not filled!");
 
         }
     })
@@ -203,7 +208,7 @@ function classModalCreator(location){
         .then((data) => {
             //If the response is empty, assume no classes exist
             if(data == []){
-                alert("No classes made for this user")
+                alert("No classes made for this user");
             }
             //Else, add the options to the modal
             else {
@@ -310,7 +315,7 @@ function BlockedList(StudentA, StudentB) {
     blockedPair = new Array(2);
     blockedPair[0] = document.getElementById(StudentA).value;
     blockedPair[1] = document.getElementById(StudentB).value;
-    console.log(document.getElementById(StudentA).ariaPlaceholder)
+   
 
     if (document.getElementById(StudentA).placeholder != "Selected" || document.getElementById(StudentB).placeholder != "Selected") {
         return (alert("You have to choose 2 Students!"))
@@ -338,17 +343,17 @@ function createDynamicList2(blockedArray) {
     console.log(blockedArray);
 
     let row = table.insertRow(0);
-    let cell1 = row.insertCell(0)
-    let cell2 = row.insertCell(1)
-    let cell3 = row.insertCell(2)
-    checkbox = document.createElement("input")
+    let cell1 = row.insertCell(0);
+    let cell2 = row.insertCell(1);
+    let cell3 = row.insertCell(2);
+    checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.id = "blocked_pairs";
     checkbox.name = "blocked_pairs";
     checkbox.checked = true;
-    cell1.innerHTML = blockedArray[0]
-    cell2.innerHTML = blockedArray[1]
-    cell3.append(checkbox)
+    cell1.innerHTML = blockedArray[0];
+    cell2.innerHTML = blockedArray[1];
+    cell3.append(checkbox);
 
 }
 
@@ -403,8 +408,6 @@ if (unlock_btn) {
         })
             .then((response) => response.json())
             .then((data) => {
-
-                console.log(data);
 
                 alert('Student profile pages are now unlocked!');
 
