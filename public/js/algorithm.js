@@ -227,7 +227,6 @@ function swapCheck(origin, groups, minDiversity, students, matrix){
     let prefAvgOld = [0, 0];
     let prefAvgNew = [0, 0];
     prefAvgOld[0] += helper.groupPrefAvg(origin, originGroup, matrix);
-    //console.log("average preference in the group with " + origin.name + ": " + prefAvgOld[0])
     //This loop goes through every group
     for(let i in groups){
         diverseOld[1] = helper.groupDiversityCheck(groups[i], minDiversity)
@@ -239,7 +238,6 @@ function swapCheck(origin, groups, minDiversity, students, matrix){
         for(j in groups[i].students){
             let target = groups[i].students[j];
             prefAvgOld[1] = helper.groupPrefAvg(target, groups[i], matrix);
-            //console.log("average preference in the group with " + target.name + ": " + prefAvgOld[1]);
             helper.swapStudents(originGroup, originIndex, groups[i], j);
             diverseNew[0] = helper.groupDiversityCheck(originGroup, minDiversity);
             diverseNew[1] = helper.groupDiversityCheck(groups[i], minDiversity);
@@ -251,9 +249,7 @@ function swapCheck(origin, groups, minDiversity, students, matrix){
             if(diversityDelta >= 0){
                 //The preference delta is simply the difference in average preference for the two groups
                 prefAvgNew[0] = helper.groupPrefAvg(target, originGroup, matrix);
-                //console.log("average new preference in the group with " + origin.name + ": " + prefAvgNew[1])
                 prefAvgNew[1] = helper.groupPrefAvg(origin, groups[i], matrix);
-                //console.log("average new preference in the group with " + target.name + ": " + prefAvgNew[1])
                 prefDelta[target.index] = (prefAvgNew[0] + prefAvgNew[1] - prefAvgOld[0] - prefAvgOld[1]).toFixed(2);
             }
             //If the diversity will get worse from this swap, set prefDelta to 0, indicating no swap
@@ -351,7 +347,6 @@ function findMinDiversity(students, groupSize){
     if(students.length % groupSize != 0){
         smallerGroups = groupSize - (students.length % groupSize)
      }
-    //smallGroupSize = ceiling(smallerGroups/groupNumber)
         while(smallerGroups > groupNumber){
             groupSize -= Math.floor(smallerGroups/groupNumber)
             smallerGroups = groupSize - (students.length % groupSize)

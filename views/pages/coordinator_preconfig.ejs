@@ -12,29 +12,28 @@
 <body>
 
     <%- include('../partials/navbar'); %>
+    <div class="outerCoordinator"> 
+        <div class="heading_coordinator">
+            <h1 class="headingCoordinator">Configuration page</h1>
+            <p class="paragrafCoordinator">Welcome to the configuration page, please proceed to fill out below!</p><br>
+        </div>
 
-    <div class="heading_coordinator">
-        <h1 id="heading">Configuration page</h1>
-        <p>Welcome to the configuration page, please proceed to fill out below!🌟</p>
-        <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
-    </div>
+        <div class="file_upload">
+            <form id="fileForm"><!--atm do not want page to reload when submitting to form-->
+                <label for="name_group_formation">Name of Group formation:</label>
+                <input type="text" id="name_group_formation" name="name_group_formation" required><br><br>
+                <p>Upload student list:</p>
+                <input type="file" id="student_list" name="student_list" accept=".json,application/json" required><br><br>
+                <p>Upload topic list:</p>
+                <input type="file" id="topics" name="topics" required>
+            </form>
+        </div>
 
-    <div class="file_upload">
-        <form id="fileForm"><!atm do not want page to reload when submitting to form>
-            <label for="name_group_formation">Name of Group formation:</label>
-            <input type="text" id="name_group_formation" name="name_group_formation" required><br><br>
-            <p>Upload student list:</p>
-            <input type="file" id="student_list" name="student_list" accept=".json,application/json" required><br><br>
-            <p>Upload topic list:</p>
-            <input type="file" id="topics" name="topics" required>
-          </form>
-          <p>🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓</p>
-    </div>
-
-    <div class="buttons">
-        <p>When you have finished configuration, please save and unlock student page to continue!🌟</p>
-        <button type="button" id="back_btn">Go back</button>
-        <button type="button" id="next_btn">Next</button>
+        <div class="buttons">
+            <p>When you have finished configuration, please save and unlock student page to continue!🌟</p>
+            <button type="button" class="buttonsCoordinator" id="back_btn">Go back</button>
+            <button type="button" class="buttonsCoordinator" id="next_btn">Next</button>
+        </div>
     </div>
     
     <%- include('../partials/footer'); %>

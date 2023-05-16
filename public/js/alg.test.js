@@ -101,13 +101,3 @@ describe('findCommonTopic', () => {
     })
 })
 
-/*
-describe('masterAlgorithm', () => {
-    test('The groups outputted by the algorithm need to have a larger or equal preference average than those inputtet', () => {
-        let matrix = main.preferenceMatrix(students)
-        let groups = main.prefGroups(students, matrix, 2)
-        new_groups = main.masterAlgorithm(students, groups, 0.75, matrix, 1000)
-        expect(helper.groupPrefAvg(new_groups)).toBeLessThanOrEqual(helper.groupPrefAvg(groups))
-    })
-})
-*/

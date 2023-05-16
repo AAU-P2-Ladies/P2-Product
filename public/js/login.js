@@ -177,7 +177,7 @@ loginButton.addEventListener("click", (e) => {
             }
       
           })
-          .catch((err) => {//Cathes any errors sent by the promises or the data sent from the server
+          .catch((err) => {//Catches any errors sent by the promises or the data sent from the server
       
             console.error(err);
       
@@ -192,33 +192,11 @@ loginButton.addEventListener("click", (e) => {
     }
 
   })
-  .catch((err) => {//Cathes any errors sent by the promises or the data sent from the server
+  .catch((err) => {//Catches any errors sent by the promises or the data sent from the server
 
     console.error(err);
 
     alert("Something went wrong!"); 
 
   });
-
-  /*
-
-  const exampleModal = document.getElementById('exampleModal')
-  if (exampleModal) {
-      exampleModal.addEventListener('show.bs.modal', event => {
-      // Button that triggered the modal
-      const button = event.relatedTarget
-
-      // Update the modal's content.
-      const modalTitle = exampleModal.querySelector('.modal-title')
-      const modalBodyInput = exampleModal.querySelector('.modal-body input')
-      })
-  }
-
-  */
-
 });
-
-/* "groups": [
-    {"class": "SW2", "keycode": "Merete"}, 
-    {"class": "DAT2", "keycode": "Merete2"}
-],*/

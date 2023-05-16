@@ -18,25 +18,7 @@
     padding-top: 20px;
     padding-bottom: 50px;
 }
-/*
-table{
-    width:20%;
-    border:1px solid;
-}
-th, td {
-    border: 1px solid black;
-    
-}
-tr:nth-child(odd) {
-    background-color: #ff57eb;
-    
-}
-  
-tr:nth-child(even) {
-    background-color: #f0ff1d;
-    
-}
-*/
+
 #anchor1, #anchor2, #anchor3{
     color:#5A5555;
 }

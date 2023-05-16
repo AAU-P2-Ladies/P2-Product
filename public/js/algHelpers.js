@@ -155,10 +155,7 @@ function binomial(total, drawn){
 //It returns a percentage showing how close the group is to the minimum prefSum from the maximum prefSum
 function prefSatisfactionPercent(prefSum, studentNum, size){
     let worst = binomial(size, 2)*studentNum;
-    //console.log("worst = " + worst)
     let best = size*(size-1)*(size-1);
-    //console.log("best = " + best)
-    //console.log("actual = " + prefSum)
     let percentage = (worst - prefSum)/(worst - best);
     return percentage;
  }
