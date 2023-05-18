@@ -20,8 +20,9 @@ let submit = document.getElementById("submitProfile");
 let checkboxes = document.getElementsByClassName("checkboxrole");
 let span = document.getElementsByClassName("close")[0];
 
-submit.addEventListener('click', () => {sendProfile(getPriorities(),getBlockedStudents(),getIndexOfChecked("Topic"),getIndexOfChecked("role"))
-  })
+submit.addEventListener('click', () => {
+  sendProfile(getPriorities(),getBlockedStudents(),getIndexOfChecked("Topic"),getIndexOfChecked("role"))
+})
 
 
 function getBlockedStudents () {
