@@ -72,7 +72,7 @@ app.use(cookieParser());
 
 // Global locals to use with EJS file, mainly in 'navbar.ejs'
 app.use(function (req, res, next) {
-  res.locals.baseUrl = ((req.originalUrl).includes('node0')) ? req.protocol + '://' + req.get('host') + '/node0' : req.protocol + '://' + req.get('host');
+  res.locals.baseUrl = (req.headers['x-forwarded-host']) ? 'https://' + req.headers['x-forwarded-host'] + '/node0' : req.protocol + '://' + req.headers.host;
   res.locals.isLoggedIn = req.session.userid ? 1 : 0;
   res.locals.isCoordinator = req.session.isCoordinator;
   next();
