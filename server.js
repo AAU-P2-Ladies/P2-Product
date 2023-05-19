@@ -912,7 +912,10 @@ app.get("/getGroup", (req, res) => {
     return res.end();
   }
 });
-
+/**
+ * Checks data for any malicious intent
+ * Saves data from request to right student
+ */
 app.post("/saveProfile", (req, res) => {
   let students = getJSONFile(req.session.class + "/students.json");
   let topicList = getJSONFile(req.session.class + "/topics.json");
@@ -1018,7 +1021,9 @@ app.post("/saveProfile", (req, res) => {
   });
   
 });
-
+/**
+ * Get a list of students that are blocked from the requesting user
+ */
 app.get("/getBlockedPair", (req, res) => {
   let students = getJSONFile(req.session.class + "/students.json");
   let users = getJSONFile("users.json");
@@ -1210,6 +1215,11 @@ function getTopicList(topicList, topicIndex){
   }
   return topicList2;
 }
+/**
+ * Moves a file to a new location
+ * @param {*} oldPath 
+ * @param {*} newPath 
+ */
 function moveFile(oldPath, newPath) { // https://stackoverflow.com/a/21431865
   fs.readFile(oldPath, function (err, data) {
     fs.writeFile(newPath, data, function (err) {
