@@ -70,10 +70,11 @@ app.use(
 // Tells Express to use the cookieParser-module for keeping track of and store cookies
 app.use(cookieParser());
 
-// Global locals to use with EJS file, mainly in 'navbar.ejs'
+// Global locals to use with EJS file
+// baseUrl used for checking if the server is on a local machine or on a dedicated server, like AAU-server
 app.use(function (req, res, next) {
-  res.locals.baseUrl = (req.headers['x-forwarded-host']) ? 'https://' + req.headers['x-forwarded-host'] + '/node0' : req.protocol + '://' + req.headers.host;
-  res.locals.isLoggedIn = req.session.userid ? 1 : 0;
+  res.locals.baseUrl = (req.headers['x-forwarded-host']) ? ('https://' + req.headers['x-forwarded-host'] + '/node0') : (req.protocol + '://' + req.headers.host);
+  res.locals.isLoggedIn = (req.session.userid) ? 1 : 0;
   res.locals.isCoordinator = req.session.isCoordinator;
   next();
 });
@@ -589,7 +590,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
   // Makes a folder with the group formation name
   fs.mkdirSync("database/" + groupFormationName);
 
-  // Loops through the user-inputted files and moves them to the correct folder
+  // Loops through the user-inputted files, checks if they are valid JSON and moves them to the correct folder
   for (let index = 0; index < req.files.length; index++) {
     if (req.files[index].fieldname == "studentListInput") {
       if (isJSON("uploads/" + req.files[index].filename)) {
@@ -870,7 +871,7 @@ app.get("/getGroup", (req, res) => {
   let keycode = "";
   // First, find the current users keycode in order to be able to find their name from the student file
   for (let user of users) {
-    // Checks for the first user in the database that has the username of the currently logged in student
+    // Checks for the first user in the database that has the username of the currently logged in student and sets 'keycode' for that student
     if (user.username == username) {
       for (let i in user.classes) {
         if (user.classes[i].class == req.session.class) {
@@ -879,12 +880,15 @@ app.get("/getGroup", (req, res) => {
       }
     }
   }
+
   let fileName = req.session.class + "/students.json";
   let classFile = getJSONFile(fileName);
   let name = "";
+  // Loops through the students JSON-file to find the name of the student (user) that is logged in
   for (let student of classFile) {
     if (student.keycode == keycode) {
       name = student.name;
+      break;
     }
   }
 
@@ -901,10 +905,10 @@ app.get("/getGroup", (req, res) => {
     }
   }
 
+  // Return the group else end the response
   if (group) {
     return res.json(group);
   } else {
-    console.log("Group does not exist");
     return res.end();
   }
 });
@@ -914,8 +918,9 @@ app.post("/saveProfile", (req, res) => {
   let topicList = getJSONFile(req.session.class + "/topics.json");
   let users = getJSONFile("users.json");
   let keycode;
-  usersfind:
-  for (let i in users) { // den her kører users.length-times
+  
+  // Loop through to find the keycode of the current student (user) that is logged in
+  usersfind: for (let i in users) {
     if (req.session.userid == users[i].username) {
       for (let j in users[i].classes) {
         if (users[i].classes[j].class == req.session.class) {
@@ -925,91 +930,92 @@ app.post("/saveProfile", (req, res) => {
       }
     }
   }
-    students.find((std) => {
-      if (std.keycode == keycode) {
 
-        const studentPreferences = req.body.prefs;
-        //Check in Student JSON
-        let studentsName = [];
-        for (let i in students) {
-          studentsName.push(students[i].name);
-        }
+  students.find((std) => {
+    if (std.keycode == keycode) {
 
-        for (let i in req.body.prefs) {
-          if (studentsName.includes(req.body.prefs[i])) {
-            for (let j in req.body.blocks) {
-              if (req.body.blocks[j] == req.body.prefs[i]) {
-                res.json({ error: true, prefs: true });
-                return res.end();
-              }
-            }
-          } else {
-            res.json({error: true, prefs: true, blocks: false, topics: false, roles: false});
-            return res.end();
-          }
-        }
-        //Student Exist
-
-        const studentBlocks = req.body.blocks;
-        //Check in Student JSON
-
-        for (let i in req.body.blocks) {
-          if (studentsName.includes(req.body.blocks[i])) {
-            for (let j in students.blocks) {
-              if (students.blocks[j] == req.body.blocks[i]) {
-                res.json({error: true, prefs: false, blocks: true, topics: false, roles: false});
-                return res.end();
-              }
-            }
-          } else {
-            res.json({error: true, prefs: false, blocks: true, topics: false, roles: false});
-            return res.end();
-          }
-        }
-        const studentTopics = getTopicList(topicList, req.body.topics)
-        //Check in Topic JSON
-        if (topicList.length < req.body.topics.length || 0 > req.body.topics.length){
-          res.json({error: true, prefs: false, blocks: false, topics: true, roles: false});
-          return res.end();
-        }
-
-        const studentRoles = req.body.roles;
-        //Future check for if the roles are equal to the roles made by coordinator
-        if (9 < req.body.topics.length || 0 > req.body.topics.length) {
-          res.json({error: true, prefs: false, blocks: false, topics: false, roles: true});
-          return res.end();
-        }
-        console.log("Adding to user" + std.name);
-        console.log(studentTopics.length);
-        for (let k in studentPreferences) {
-          std.prefs.push(studentPreferences[k]);
-        }
-        for (let k in studentBlocks) {
-          std.blocks.push(studentBlocks[k]);
-        }
-        for (let k in studentTopics) {
-          std.topics.push(studentTopics[k]);
-        }
-        for (let k in studentRoles) {
-          std.roles.push(studentRoles[k]);
-        }
-
-        fs.writeFile(
-          "./database/" + req.session.class + "/students.json",
-          JSON.stringify(students, null, 4),
-          (err) => {
-            if (err) {
-              console.error(err);
-            }
-          }
-        );
-        
-        res.json({error: false, prefs: false, blocks: false, topics: false, roles: false});
-        return res.end();
-
+      const studentPreferences = req.body.prefs;
+      //Check in Student JSON
+      let studentsName = [];
+      for (let i in students) {
+        studentsName.push(students[i].name);
       }
+
+      for (let i in req.body.prefs) {
+        if (studentsName.includes(req.body.prefs[i])) {
+          for (let j in req.body.blocks) {
+            if (req.body.blocks[j] == req.body.prefs[i]) {
+              res.json({ error: true, prefs: true });
+              return res.end();
+            }
+          }
+        } else {
+          res.json({error: true, prefs: true, blocks: false, topics: false, roles: false});
+          return res.end();
+        }
+      }
+      //Student Exist
+
+      const studentBlocks = req.body.blocks;
+      //Check in Student JSON
+
+      for (let i in req.body.blocks) {
+        if (studentsName.includes(req.body.blocks[i])) {
+          for (let j in students.blocks) {
+            if (students.blocks[j] == req.body.blocks[i]) {
+              res.json({error: true, prefs: false, blocks: true, topics: false, roles: false});
+              return res.end();
+            }
+          }
+        } else {
+          res.json({error: true, prefs: false, blocks: true, topics: false, roles: false});
+          return res.end();
+        }
+      }
+      const studentTopics = getTopicList(topicList, req.body.topics)
+      //Check in Topic JSON
+      if (topicList.length < req.body.topics.length || 0 > req.body.topics.length){
+        res.json({error: true, prefs: false, blocks: false, topics: true, roles: false});
+        return res.end();
+      }
+
+      const studentRoles = req.body.roles;
+      //Future check for if the roles are equal to the roles made by coordinator
+      if (9 < req.body.topics.length || 0 > req.body.topics.length) {
+        res.json({error: true, prefs: false, blocks: false, topics: false, roles: true});
+        return res.end();
+      }
+      console.log("Adding to user" + std.name);
+      console.log(studentTopics.length);
+      for (let k in studentPreferences) {
+        std.prefs.push(studentPreferences[k]);
+      }
+      for (let k in studentBlocks) {
+        std.blocks.push(studentBlocks[k]);
+      }
+      for (let k in studentTopics) {
+        std.topics.push(studentTopics[k]);
+      }
+      for (let k in studentRoles) {
+        std.roles.push(studentRoles[k]);
+      }
+
+      fs.writeFile(
+        "./database/" + req.session.class + "/students.json",
+        JSON.stringify(students, null, 4),
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
+      );
       
-    });
+      res.json({error: false, prefs: false, blocks: false, topics: false, roles: false});
+      return res.end();
+
+    }
+    
+  });
   
 });
 
@@ -1101,6 +1107,7 @@ function isJSON(file) {
 
   var file = fs.readFileSync(filepath, "utf8");
 
+  // Checks if it is a valid JSON by trying to parse it as JSON
   try {
     JSON.parse(file);
   } catch (e) {
