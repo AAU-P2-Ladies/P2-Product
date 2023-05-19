@@ -164,7 +164,7 @@ app.post("/login", (req, res) => {
           let keycode = "";
           let class1 = "";
 
-          // Loops through all the keycodes, if any.
+          // Loops through all the , if any.
           for (let index = 0; index < keycodes.length; index++) {
             // Checks if the user has inputted a keycode that matches a class
             if (keycodes[index].keycode == req.body.keycode) {
@@ -252,7 +252,7 @@ app.post("/login", (req, res) => {
                 }
               }
 
-              // Writes the keycodes back into the keycodes file
+              // Writes the  back into the keycodes file
               fs.writeFile(
                 "./database/keycodes.json",
                 JSON.stringify(keycodes, null, 4),
