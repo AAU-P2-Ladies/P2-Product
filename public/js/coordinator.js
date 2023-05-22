@@ -67,7 +67,7 @@ function createDynamicList(input) {
                 }
 
                 dynalist.appendChild(dyn);
-
+                document.getElementById("myInput").setAttribute("Placeholder", "Search for names..")
                 document.getElementById("myUL").addEventListener("click", function (e) {
                     if (e.target && e.target.matches("li")) {
                         document.getElementById("myInput").value = e.target.innerText; // new class name here
@@ -101,12 +101,12 @@ function createDynamicList(input) {
                 }
 
                 dynalist2.appendChild(dyn2);
-
+                document.getElementById("BlockedInput").setAttribute("Placeholder", "Search for names..")
                 document.getElementById("BlockedUL").addEventListener("click", function (e) {
                     if (e.target && e.target.matches("li")) {
                         document.getElementById("BlockedInput").value = e.target.innerText; // new class name here
                         document.getElementById("BlockedInput").setAttribute("Placeholder", "Selected")
-                    }
+                    } 
                 });
 
             }
@@ -341,7 +341,7 @@ function BlockedList(StudentA, StudentB) {
    
 
     if (document.getElementById(StudentA).placeholder != "Selected" || document.getElementById(StudentB).placeholder != "Selected") {
-        return (alert("You have to choose 2 Students!"));
+        return (alert("You have to select 2 Students!"));
     }
 
     if (blockedPair[0] == blockedPair[1]) {
