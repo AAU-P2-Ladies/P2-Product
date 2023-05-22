@@ -1,6 +1,8 @@
 let boksenn = document.getElementById("divBoks");
 
-window.onload = fetch('./getGroup', {
+let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
+
+window.onload = fetch(url + '/getGroup', {
     }).then((response) => response.json()).then((data) => {
         console.log(data)
         createTable(data, boksenn)

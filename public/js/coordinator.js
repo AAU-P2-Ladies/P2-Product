@@ -19,7 +19,8 @@ let AmountOfGroupMembers = document.getElementById("amountOfGroupMembers");
 let AmountOfStudentPreferences = document.getElementById("studentPreferences");
 let blocked = [];
 
-
+let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
+let className = (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2];
 
 /**
  * This function creates a dynamic list by fetching from the server the data on the input 
@@ -28,14 +29,14 @@ let blocked = [];
  */
 function createDynamicList(input) {
 
-    fetch('./../search', {
+    fetch(url + '/search', {
         method: "POST",
         headers: {
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2],
+            className: className,
             name: input.value
         }),
     })
@@ -152,7 +153,7 @@ if (next_btn) {
             formData.append("studentListInput", studentListInput.files[0]);
             formData.append("topicsInput", topicsInput.files[0]);
 
-            fetch('./fileGroupUpload', {
+            fetch(url + '/fileGroupUpload', {
                 method: "POST",
                 body: formData
             })
@@ -209,7 +210,7 @@ if (start_new_btn) {
  * @param {*} location The location that the 'next' button will lead to
  */
 function classModalCreator(location){
-    fetch('./getCoordinatorClasses', {
+    fetch(url + '/getCoordinatorClasses', {
         method: "GET",})
         .then((response) => response.json())
         .then((data) => {
@@ -249,7 +250,7 @@ function classModalCreator(location){
 
                 let submitBtn = document.getElementById("submit-btn");
                 submitBtn.addEventListener("click", function () {
-                    fetch('./postCoordinatorClass', {
+                    fetch(url + '/postCoordinatorClass', {
                         method: "POST",
                         headers: {
                             Accept: "application/json, text/plain, */*",
@@ -395,14 +396,14 @@ if (save_btn) {
         let blockedPairArray = tableToArray(document.querySelector("table > tbody"));
         let includeRoles = document.getElementById("include_roles");
 
-        fetch('./../updateClassConfig', {
+        fetch(url + '/updateClassConfig', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2],
+                className: className,
                 amountOfGroupMembers: amountOfGroupMembers.value,
                 studentPreferences: studentPreferences.value,
                 blockedPairArray: blockedPairArray
@@ -425,14 +426,14 @@ if (unlock_btn) {
 
     unlock_btn.addEventListener("click", function () {
 
-        fetch('./../unlockClass', {
+        fetch(url + '/unlockClass', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                className: (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2]
+                className: className
             }),
         })
             .then((response) => response.json())

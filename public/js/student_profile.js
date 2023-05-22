@@ -18,6 +18,7 @@ let submit = document.getElementById("submitProfile");
 let checkboxes = document.getElementsByClassName("checkboxrole");
 let span = document.getElementsByClassName("close")[0];
 
+let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
 
 /**
  * Used to generate a list of students based of the student json file
@@ -26,7 +27,7 @@ let span = document.getElementsByClassName("close")[0];
  */
 function createDynamicBlockList(input) {
 
-  fetch('/../search', {
+  fetch(url + '/search', {
       method: "POST",
       headers: {
           Accept: "application/json, text/plain, */*",
@@ -404,7 +405,7 @@ function saveStudentPreferences(e) {
 //KALDE FUNKTIONER
 
 //Fetch used to get the values from the configFile
-fetch('/getConfig').then((response) => response.json()).then((data) => {
+fetch(url + '/getConfig').then((response) => response.json()).then((data) => {
   
   if(data.roles == 1) {
     
@@ -496,7 +497,7 @@ function ShowTopicTable() {
  * and calls afterwards a function to create the table list shown for the student
  */
 document.getElementById("topicDiv").addEventListener("load",
-  fetch("./getTopics").then((response) => response.json()).then((data) => {
+  fetch(url + "/getTopics").then((response) => response.json()).then((data) => {
     console.log(data);
     createDynamicList2("MyTopicTable", data, "Topic")
   })
@@ -593,7 +594,7 @@ document.getElementById("BlockedButton").addEventListener("click",()=>BlockedLis
  */
 function sendProfile(pref, blocked, topics, roles) {
 
-  fetch('/saveProfile', {
+  fetch(url + '/saveProfile', {
       method:"POST",
       headers: {
         Accept:"application/json, text/plain, */*",
@@ -654,7 +655,7 @@ document.querySelectorAll("#addBlock").forEach(function (element) {
  * Fetching the blocks that the coordiantor has added for the logged-in student
  * and adds it to the table shown for the student.
  */
-fetch('/getBlockedPair').then((response) => response.json()).then((data) => {
+fetch(url + '/getBlockedPair').then((response) => response.json()).then((data) => {
 let Blocktable = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
 for (let i in data.blocked) {
 

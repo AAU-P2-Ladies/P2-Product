@@ -658,7 +658,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
 
   for (let index = 0; index < topicsList.length; index++) {
     // If an object in the topics-file does not have the topic-property, then return an error
-    if (topicsList[index].hasOwnProperty("topic")) {
+    if (!topicsList[index].hasOwnProperty("topic")) {
       res.json({
         error: true,
         groupFormationName: true,
