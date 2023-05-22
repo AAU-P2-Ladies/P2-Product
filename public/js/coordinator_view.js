@@ -6,8 +6,18 @@ let keycodeTable = document.getElementById("keycodeTable");
 let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
 let className = (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2];
 
-window.onload = fetch(url + '/getGroups', {
-}).then((response) => response.json()).then((data) => {
+window.onload = fetch(url + '/makeGroups', {
+        method: "POST",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            className: className
+        }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
     //if groups are not yet generated create the student and keycode table
     if(data.error == true){
         makeStudentTable();
