@@ -530,7 +530,9 @@ app.get("/getCoordinatorClasses", (req, res) => {
 app.post("/postCoordinatorClass", (req, res) => {
   session = req.session
   session.class = req.body.class;
-  //console.log(req.session.class);
+  req.session.class = req.body.class
+  console.log(req.session.class)
+  console.log(session.class)
 });
 
 app.get("/student_start", (req, res) => {
@@ -848,9 +850,11 @@ app.post("/unlockClass", (req, res) => {
   return res.end();
 });
 
-app.get("/getGroups", (req, res) => {
+app.post("/getGroups", (req, res) => {
   const className = req.session.class;
-
+  console.log(session)
+  console.log(req.session)
+  console.log(className)
   // Checks if the 'groups.json'-file exists, if so, return an error
   if (!fs.existsSync("./database/" + className + "/groups.json")) {
     return res.json({ error: true });

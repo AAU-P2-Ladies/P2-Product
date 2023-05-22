@@ -7,6 +7,7 @@ let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
 let className = (window.location.pathname.split('/')[1] != 'node0') ? window.location.pathname.split('/')[1] : window.location.pathname.split('/')[2];
 
 window.onload = fetch(url + '/getGroups', {
+    method: "POST"
 }).then((response) => response.json()).then((data) => {
     //if groups are not yet generated create the student and keycode table
     if(data.error == true){

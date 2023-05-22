@@ -2,6 +2,64 @@
     {
         "students": [
             {
+                "name": "Allan",
+                "prefs": [
+                    "Simon",
+                    "Sina",
+                    "Merete"
+                ],
+                "blocks": [
+                    "Nicolaj"
+                ],
+                "roles": [
+                    "4",
+                    "7"
+                ],
+                "topics": [],
+                "keycode": "r11Q7JX65f",
+                "isRegistered": 0,
+                "index": 0,
+                "groupNr": 0
+            },
+            {
+                "name": "Simon",
+                "prefs": [
+                    "Carmen",
+                    "Allan"
+                ],
+                "blocks": [
+                    "Merete"
+                ],
+                "roles": [],
+                "topics": [],
+                "keycode": "AghXhVuxBv",
+                "isRegistered": 0,
+                "index": 2,
+                "groupNr": 0
+            }
+        ],
+        "isFull": false
+    },
+    {
+        "students": [
+            {
+                "name": "Carmen",
+                "prefs": [
+                    "Nicolaj",
+                    "Kamilla"
+                ],
+                "blocks": [],
+                "roles": [
+                    "Plant",
+                    "Complete finisher"
+                ],
+                "topics": [],
+                "keycode": "1kF3F1GiH0",
+                "isRegistered": 0,
+                "index": 1,
+                "groupNr": 1
+            },
+            {
                 "name": "Nicolaj",
                 "prefs": [
                     "Merete",
@@ -13,10 +71,10 @@
                     "Team Worker"
                 ],
                 "topics": [],
-                "keycode": "2nX06ogUqK",
+                "keycode": "gkvzND8yz3",
                 "isRegistered": 0,
-                "index": 0,
-                "groupNr": 0
+                "index": 3,
+                "groupNr": 1
             },
             {
                 "name": "Merete",
@@ -32,27 +90,10 @@
                     "Master coder"
                 ],
                 "topics": [],
-                "keycode": "8Htg5iLIbu",
+                "keycode": "1h9unAXrNU",
                 "isRegistered": 0,
-                "index": 1,
-                "groupNr": 0
-            },
-            {
-                "name": "Carmen",
-                "prefs": [
-                    "Nicolaj",
-                    "Kamilla"
-                ],
-                "blocks": [],
-                "roles": [
-                    "Plant",
-                    "Complete finisher"
-                ],
-                "topics": [],
-                "keycode": "VKsCaIOLf2",
-                "isRegistered": 0,
-                "index": 5,
-                "groupNr": 0
+                "index": 6,
+                "groupNr": 1
             }
         ],
         "isFull": true
@@ -71,10 +112,10 @@
                     "Shaper"
                 ],
                 "topics": [],
-                "keycode": "FonSGV787g",
+                "keycode": "JnvOPcinek",
                 "isRegistered": 0,
-                "index": 2,
-                "groupNr": 1
+                "index": 4,
+                "groupNr": 2
             },
             {
                 "name": "Sina",
@@ -88,57 +129,9 @@
                     "Coordinator"
                 ],
                 "topics": [],
-                "keycode": "Qw1ykCOB8f",
+                "keycode": "nCCi6EscCi",
                 "isRegistered": 0,
-                "index": 4,
-                "groupNr": 1
-            }
-        ],
-        "isFull": false
-    },
-    {
-        "students": [
-            {
-                "name": "Allan",
-                "prefs": [
-                    "Simon",
-                    "Sina",
-                    "Merete"
-                ],
-                "blocks": [
-                    "Nicolaj"
-                ],
-                "roles": [
-                    "4",
-                    "7"
-                ],
-                "topics": [],
-                "keycode": "kCw4ckeNQO",
-                "isRegistered": 1,
-                "index": 3,
-                "groupNr": 2
-            },
-            {
-                "name": "Simon",
-                "prefs": [
-                    "Carmen",
-                    "Allan"
-                ],
-                "blocks": [
-                    "Merete",
-                    "Simon",
-                    "A",
-                    "Simon",
-                    "A"
-                ],
-                "roles": [
-                    "Implementer",
-                    "Shaper"
-                ],
-                "topics": [],
-                "keycode": "EasY5kgU7w",
-                "isRegistered": 0,
-                "index": 6,
+                "index": 5,
                 "groupNr": 2
             }
         ],
