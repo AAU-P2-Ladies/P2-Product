@@ -84,7 +84,7 @@ if(groupButton){
     groupButton.addEventListener("click", () => {
 
         groupButton.disabled = "disabled";
-        alert('The algorithm is about to start... Please press "Ok" to start the algorithm.');
+        alert('The algorithm is about to start... Please press "OK" to start the algorithm.');
     
         fetch(url + '/makeGroups', {
             method: "POST",
