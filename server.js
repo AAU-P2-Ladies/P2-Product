@@ -851,10 +851,7 @@ app.post("/unlockClass", (req, res) => {
 });
 
 app.post("/getGroups", (req, res) => {
-  const className = req.session.class;
-  console.log(session)
-  console.log(req.session)
-  console.log(className)
+  const className = req.body.className;
   // Checks if the 'groups.json'-file exists, if so, return an error
   if (!fs.existsSync("./database/" + className + "/groups.json")) {
     return res.json({ error: true });
