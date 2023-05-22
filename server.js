@@ -1034,9 +1034,9 @@ app.get("/getBlockedPair", (req, res) => {
   let keycode;
   usersFind:
   for (let i in users) {
-    if (session.userid == users[i].username) {
+    if (req.session.userid == users[i].username) {
       for (let j in users[i].classes) {
-        if (users[i].classes[j].class == session.class) {
+        if (users[i].classes[j].class == req.session.class) {
           keycode = users[i].classes[j].keycode;
           break usersFind;
         }
