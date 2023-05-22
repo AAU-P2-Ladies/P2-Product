@@ -80,7 +80,7 @@ function createDynamicBlockList(input) {
       } 
 
       //Creates the list for each preference field
-      let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length
+      let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length;
       for (let i = 1; i <= numberOfStudentPreferences; i++) {
 
       if (input.id == (i + 'prio')) {
@@ -229,7 +229,7 @@ function createSearchPref(number) {
     let inputText = document.createElement("input");
     inputText.setAttribute("type", "text");
     inputText.id = currentNumber + "prio";
-    inputText.className = "prioClass" 
+    inputText.className = "prioClass";
     inputText.setAttribute("placeholder", "Search");
     inputText.addEventListener("keyup", () => SearchField(inputText.id, "myUL" + currentNumber)); 
   
@@ -329,43 +329,55 @@ function saveStudentPreferences(e) {
 
   let arrayPrefStudents = [];
 
-  let preferenceFields = document.getElementsByClassName("prioClass")
+  let preferenceFields = document.getElementsByClassName("prioClass");
   for (let i = 0;i<preferenceFields.length;i++){
-    console.log(i + "debug")
-    let currentField = document.getElementById(preferenceFields[i].id)
+    
+    let currentField = document.getElementById(preferenceFields[i].id);
 
     for (let j = i/1 + 1; j < preferenceFields.length; j++){
-      let nextField = document.getElementById(preferenceFields[j].id)
+
+      let nextField = document.getElementById(preferenceFields[j].id);
       if (currentField.value == nextField.value){
+
         if(currentField.value != ""){
-          return alert("Student " + currentField.value + " cannot be added as preference twice")
+
+          return alert("Student " + currentField.value + " cannot be added as preference twice");
+
         }
+
       }
+
     }
 
     let blockedDataHead = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
-  for (let i = 1; i<blockedDataHead.children.length; i++){
-    console.log(i)
-    if (currentField.value == blockedDataHead.children[i].innerText){
-      return alert("Student "+ blockedDataHead.children[i].innerText+ " is blocked")
+    for (let i = 1; i<blockedDataHead.children.length; i++){
+      
+      if (currentField.value == blockedDataHead.children[i].innerText){
+
+        return alert("Student "+ blockedDataHead.children[i].innerText+ " is blocked");
+
+      }
+
     }
+
+    let blockedDataBody = document.getElementById("blockTableDivID").getElementsByTagName('tbody')[0];
+    for (let i = 0; i<blockedDataBody.children.length; i++){
+
+      if (currentField.value == blockedDataBody.children[i].children[0].innerText){
+
+        return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is blocked");
+
+      }
+
+    }
+
   }
 
-  let blockedDataBody = document.getElementById("blockTableDivID").getElementsByTagName('tbody')[0];
-  for (let i = 0; i<blockedDataBody.children.length; i++){
-    if (currentField.value == blockedDataBody.children[i].children[0].innerText){
-      return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is blocked")
-    }
-  }
-  }
-
-  let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length
+  let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length;
   for (let priority = 1; priority <= numberOfStudentPreferences; priority++) {
 
     let currentStudent = document.getElementById(priority + "prio");
     currentStudent.style.background = "white";
-
-
 
       if (document.getElementById("p" + priority) === null) {
 
@@ -374,7 +386,7 @@ function saveStudentPreferences(e) {
         prioriText.innerText = priority + " . Priority";
         prioriText.id = "heading" + priority;
         text.id = "p" + priority;
-        text.className = "priorities"
+        text.className = "priorities";
         let name = document.getElementById(priority + "prio");
         text.innerText = name.value;
         addPrefDiv.append(prioriText);
@@ -409,10 +421,12 @@ fetch('/getConfig').then((response) => response.json()).then((data) => {
   if(data.roles == 1) {
     
     roleTable.style.display = "";
-    roleTable.addEventListener("load", createDynamicList2("rolesTable", roles, "role"));
+    roleTable.addEventListener("load", createDynamicListWithCheckbox("rolesTable", roles, "role"));
 
     for (let i = 0; i<=8;i++) {
+
       document.getElementById("role"+i).addEventListener("click",() =>checkboxControl(i));
+
     }
 
   } else {
@@ -442,7 +456,7 @@ fetch('/getConfig').then((response) => response.json()).then((data) => {
  * @param {Array} SubjectArray Array with data of what the innerHTML in first cell should be set to 
  * @param {string} Subject String descripting which table is being created
  */
-function createDynamicList2(TableID, SubjectArray, Subject) {
+function createDynamicListWithCheckbox(TableID, SubjectArray, Subject) {
 
   //Selects specificly the tbody part of the table
   let table = document.getElementById(TableID).getElementsByTagName('tbody')[0];
@@ -454,6 +468,7 @@ function createDynamicList2(TableID, SubjectArray, Subject) {
   }
  
   for(let i = 0; i < SubjectArray.length; i++ ) {
+
     let row = table.insertRow(i);
     let cell1 = row.insertCell(0);
     let cell2 = row.insertCell(1);
@@ -464,9 +479,13 @@ function createDynamicList2(TableID, SubjectArray, Subject) {
     checkbox.id = Subject + i;
     checkbox.name = Subject + i;
     checkbox.checked = false;
+
     if (Subject == "Block"){
+
       checkbox.checked = true;  
+
     }
+
     cell2.append(checkbox);
 
   }
@@ -497,15 +516,17 @@ function ShowTopicTable() {
  */
 document.getElementById("topicDiv").addEventListener("load",
   fetch("./getTopics").then((response) => response.json()).then((data) => {
-    console.log(data);
-    createDynamicList2("MyTopicTable", data, "Topic")
+
+    createDynamicListWithCheckbox("MyTopicTable", data, "Topic")
+
   })
+
 );
 
 document.getElementById('DoesTopicMatterID').addEventListener('click', ShowTopicTable);
 
 
-document.getElementById("addBlock").addEventListener("keyup", () => SearchField('addBlock', 'myUL'))
+document.getElementById("addBlock").addEventListener("keyup", () => SearchField('addBlock', 'myUL'));
 
 /**
  * Creates an element with the given type and properties 
@@ -549,39 +570,53 @@ function BlockedList(fieldID) {
 
   //Checks if the logged-in student has written a student to block
   if (blockedPair == "") {
-    return alert("You have to input a student to block")
+
+    return alert("You have to input a student to block");
+
   }
 
   //Checks if a student is already add as a preference by the logged-in student
-  let studentPreferences = document.getElementsByClassName("priorities")
+  let studentPreferences = document.getElementsByClassName("priorities");
   for (let i in studentPreferences){
-  if (blockedPair == studentPreferences[i].innerText){
-    return alert("Student "+studentPreferences[i].innerText+ " is added as a preference")
-  } 
+
+    if (blockedPair == studentPreferences[i].innerText){
+
+      return alert("Student "+studentPreferences[i].innerText+ " is added as a preference");
+
+    } 
+
   }
 
   //Checks if a student is already blocked by the coordinator
   let blockedDataHead = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
   for (let i = 1; i<blockedDataHead.children.length; i++){
+
     if (blockedPair == blockedDataHead.children[i].innerText){
-      return alert("Student "+ blockedDataHead.children[i].innerText+ " is already blocked")
+
+      return alert("Student "+ blockedDataHead.children[i].innerText+ " is already blocked");
+
     }
+
   }
 
   //Checks if a student is already blocked by the logged-in student
   let blockedDataBody = document.getElementById("blockTableDivID").getElementsByTagName('tbody')[0];
   for (let i = 0; i<blockedDataBody.children.length; i++){
+
     if (blockedPair == blockedDataBody.children[i].children[0].innerText){
-      return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is already blocked")
+
+      return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is already blocked");
+
     }
+
   }
 
     //Calls the funktion to add the chosen student to the blocked table
-    createDynamicList2("studentBlockTableID", blockedPair, "Block")
+    createDynamicListWithCheckbox("studentBlockTableID", blockedPair, "Block")
     
 }
 
-document.getElementById("BlockedButton").addEventListener("click",()=>BlockedList('addBlock'))
+document.getElementById("BlockedButton").addEventListener("click",()=>BlockedList('addBlock'));
 
 /**
  * Sends data to the server for validation and either prompts an error or writes the data to the student json file
@@ -610,23 +645,19 @@ function sendProfile(pref, blocked, topics, roles) {
     if(data.error){
       if (data.blocks)
       {
-        alert("Invalid blocks")
-        console.log(1);
+        alert("Invalid blocks");
       } 
       if (data.prefs)
       {
-        alert("Invalid prefs")
-        console.log(2);
+        alert("Invalid prefs");
       } 
       if (data.roles)
       {
-        alert("Invalid roles")
-        console.log(3);
+        alert("Invalid roles");
       } 
       if (data.topics)
       {
         alert("Invalid topics")
-        console.log(4);
       } 
     } else {
       location.href = './student_start';
@@ -661,7 +692,7 @@ for (let i in data.blocked) {
   let row = Blocktable.insertRow(1);
   let cell1 = row.insertCell(0);
   cell1.innerText = data.blocked[i];
-  cell1.setAttribute("disabled", true)
+  cell1.setAttribute("disabled", true);
 }
 })
 
@@ -673,11 +704,17 @@ function getBlockedStudents () {
   let blockedCheckboxData = document.getElementsByClassName("checkboxBlock");
   let blockedData= document.getElementById('studentBlockTableID').getElementsByTagName('tbody')[0];
   for (let i = 0; i<blockedCheckboxData.length; i++){
+
     if(blockedCheckboxData[i].checked){
-      blocked.push(blockedData.children[i].children[0].innerText)
+
+      blocked.push(blockedData.children[i].children[0].innerText);
+
     }
+
   } 
+
   return blocked
+
 }
 
 /**
@@ -685,7 +722,7 @@ function getBlockedStudents () {
  */
 function getPriorities(){
   if(document.getElementsByClassName('priorities')){
-    let array=[]
+    let array=[];
     for(i in document.getElementsByClassName('priorities')){
       if(!document.getElementsByClassName('priorities')[i].innerHTML == "")
         array.push(document.getElementsByClassName('priorities')[i].innerHTML);
@@ -701,13 +738,13 @@ function getPriorities(){
  */
 function getIndexOfChecked(subject){
   let checkedboxes = [];
-  subject = "checkbox"+subject
+  subject = "checkbox"+subject;
 
-  data = document.getElementsByClassName(subject)
+  data = document.getElementsByClassName(subject);
 
   for (i in data){
     if(data[i].checked)
-    checkedboxes.push(i) 
+    checkedboxes.push(i);
   }
   
   return checkedboxes
@@ -715,7 +752,7 @@ function getIndexOfChecked(subject){
 
 //Sends data to the server site for validation
 submit.addEventListener('click', () => {sendProfile(getPriorities(),getBlockedStudents(),getIndexOfChecked("Topic"),getIndexOfChecked("role"))
-  })
+  });
 
   
  
