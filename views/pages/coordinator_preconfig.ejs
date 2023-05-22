@@ -4,9 +4,8 @@
 
     <%- include('../partials/head'); %>
 
-    <title>Coordinator configuration</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <script type="application/javascript" src="./js/coordinator.js" defer></script>
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+    <script type="application/javascript" src="<%= baseUrl %>/js/coordinator.js" defer></script>
     
 </head>
 <body>
@@ -20,19 +19,19 @@
 
         <div class="file_upload">
             <form id="fileForm"><!--atm do not want page to reload when submitting to form-->
-                <label for="name_group_formation">Name of Group formation:</label>
-                <input type="text" id="name_group_formation" name="name_group_formation" required><br><br>
-                <p>Upload student list:</p>
+                <label for="name_group_formation" class="paragrafCoordinator">Name of Group formation:</label>
+                <input type="text" class="form-control" id="name_group_formation" name="name_group_formation" required><br>
+                <p class="paragrafCoordinator" >Upload student list:</p>
                 <input type="file" id="student_list" name="student_list" accept=".json,application/json" required><br><br>
-                <p>Upload topic list:</p>
-                <input type="file" id="topics" name="topics" required>
+                <p class="paragrafCoordinator" >Upload topic list:</p>
+                <input type="file" id="topics" name="topics" accept=".json,application/json" required>
             </form>
         </div>
 
         <div class="buttons">
-            <p>When you have finished configuration, please save and unlock student page to continue!🌟</p>
-            <button type="button" class="buttonsCoordinator" id="back_btn">Go back</button>
-            <button type="button" class="buttonsCoordinator" id="next_btn">Next</button>
+            <p class="paragrafCoordinator">When you have finished the preconfiguration, please click "next" to continue!🌟</p>
+            <button type="button" class="btn btn-primary" id="back_btn">Go back</button>
+            <button type="button" class="btn btn-primary" id="next_btn">Next</button>
         </div>
     </div>
     

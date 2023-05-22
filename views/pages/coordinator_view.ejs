@@ -4,51 +4,50 @@
 
         <%- include('../partials/head'); %>
 
-        <title>Coordinator configuration</title>
-        <link rel="stylesheet" href="./../css/style.css">
-        <script type="application/javascript" src="./../js/coordinator_view.js" defer></script>
+        <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+        <script type="application/javascript" src="<%= baseUrl %>/js/coordinator_view.js" defer></script>
     
     </head>
 <body>
 
     <%- include('../partials/navbar'); %>
-    
-    <div class="table table-bordered table-responsive">    
-        <table id="keycodeTable">
-            <thead>
-                <tr> 
-                    <!--headers for the table--> 
-                    <th scope="col">Student</th>
-                    <th scope="col">Keycode</th>
-                    <th scope="col">Is registered?</th>
-                </tr>
-            </thead>
-                <tbody>
-                    <!--body is updated dynamically via js-->          
-                </tbody>
-        </table>                       
+    <div class="outerCoordinator"> 
+        <div class="table table-bordered table-responsive">    
+            <table id="keycodeTable">
+                <thead>
+                    <tr> 
+                        <!--headers for the table--> 
+                        <th scope="col">Student</th>
+                        <th scope="col">Keycode</th>
+                        <th scope="col">Is registered?</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <!--body is updated dynamically via js-->          
+                    </tbody>
+            </table>                       
+        </div>
+
+
+        <button type="button" class="btn btn-primary" id="createGroups">DO THE THING!!!!!!</button><br><br><br>
+
+        <div class="table table-bordered table-responsive">    
+            <table id="groupsTable">
+                <thead>
+                    <tr> 
+                        <!--headers for the table--> 
+                        <th scope="col">Group number</th>
+                        <th scope="col">Students</th>
+                        
+                    </tr>
+                </thead>
+                    <tbody>
+                        <!--body is updated dynamically via js-->  
+
+                    </tbody>
+            </table>                       
+        </div>
     </div>
-
-
-    <button type="button" class="btn btn-primary" id="createGroups">DO THE THING!!!!!!</button>
-
-    <div class="table table-bordered table-responsive">    
-        <table id="groupsTable">
-            <thead>
-                <tr> 
-                    <!--headers for the table--> 
-                    <th scope="col">Group number</th>
-                    <th scope="col">Students</th>
-                    
-                </tr>
-            </thead>
-                <tbody>
-                    <!--body is updated dynamically via js-->  
-
-                </tbody>
-        </table>                       
-    </div>
-
     
     <%- include('../partials/footer'); %>
 

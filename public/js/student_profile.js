@@ -2,14 +2,8 @@ let roles = ["Resource Investigator", "Teamworker", "Co-ordinator",
               "Plant", "Monitor Evaluator", "Specialist", "Shaper", 
                 "Implementer", "Completer Finisher"];
 
-
-
-
-
 let blocked=[];
 let preferences=[];
-let numberOfStudentPreferences = 3;
-let rolesIncluded = true;
 
 //ændre navn af variabel list til form eller noget
 const list = document.getElementById("StudentProfile");
@@ -24,13 +18,16 @@ let submit = document.getElementById("submitProfile");
 let checkboxes = document.getElementsByClassName("checkboxrole");
 let span = document.getElementsByClassName("close")[0];
 
-submit.addEventListener('click', () => {sendProfile(getPriorities(),blocked,getIndexOfChecked("Topic"),getIndexOfChecked("role"))
-  })
+let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
 
-
+/**
+ * Used to generate a list of students based of the student json file
+ * and what the logged-in student has inputted in the field
+ * @param {ID} input field ID  
+ */
 function createDynamicBlockList(input) {
 
-  fetch('./search', {
+  fetch(url + '/search', {
       method: "POST",
       headers: {
           Accept: "application/json, text/plain, */*",
@@ -45,8 +42,7 @@ function createDynamicBlockList(input) {
   .then((data) => {
 
     let nameArray2 = data.students;
-    console.log(nameArray2);
-    console.log(input.id);
+
       if (input.id == 'addBlock') {
 
           let dynalist = document.getElementById("blockTableDivID");
@@ -71,6 +67,7 @@ function createDynamicBlockList(input) {
 
               dynalist.prepend(dyn);
 
+              //EventListener to check whether the inputted data matches student(s) in the list
               document.getElementById("myUL").addEventListener("click", function (e) {
                 if (e.target && e.target.matches("li")) {
                     document.getElementById("addBlock").value = e.target.innerText; // new class name here
@@ -83,9 +80,10 @@ function createDynamicBlockList(input) {
           
       } 
 
-      for (let i = 1; i <= numberOfStudentPreferences; i++){
+      //Creates the list for each preference field
+      let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length
+      for (let i = 1; i <= numberOfStudentPreferences; i++) {
 
-      
       if (input.id == (i + 'prio')) {
 
         let dynalist = document.getElementById("prefDiv" + i);
@@ -112,6 +110,7 @@ function createDynamicBlockList(input) {
 
             document.getElementById("myUL" + i).addEventListener("click", function(e) {
 
+              //EventListener to check whether the inputted data matches student(s) in the list
               if (e.target && e.target.matches("li")) {
                 document.getElementById(i + "prio").value = e.target.innerText;
                 document.getElementById("myUL" + i).hidden = "hidden";
@@ -131,15 +130,7 @@ function createDynamicBlockList(input) {
 
 } 
 
-if (rolesIncluded) {
 
-  roleTable.style.display = "";
-
-} else {
-
-  roleTable.style.display = "none";
-
-}
 
 /**
  * CheckboxControl checks if more than three boxes have been checked, 
@@ -172,18 +163,10 @@ function checkboxControl(clickedCheckBox) {
 
 }
 
-/**
- * addPrefFunction will display a modal when the Add-student-preference button is clicked.
- * @param {event} e 
- */
-function addPrefFunction(event){
-  
+document.getElementById("addPref").addEventListener("click", (event)=>{
   event.preventDefault();
   modal.style.display = "block";
-
-}
-
-document.getElementById("addPref").addEventListener("click", addPrefFunction);
+});
 
 /**
  * The modal will not be displayed when the span X is clicked.
@@ -206,8 +189,7 @@ function createDivs(numberOfDivs) {
     let divElement = document.createElement("div");
     divElement.id = "prefDiv" + divNumber;
     modalDiv.append(divElement);
-    //divElement.addEventListener("load", createDynamicList(divElement.id, divNumber));
-
+   
   }
   
 }
@@ -217,7 +199,6 @@ function createDivs(numberOfDivs) {
  * @param {The id of the current div which the list will be created in} id 
  * @param {The number of the current div} divNumber 
  */
-
 function createDynamicList(id, divNumber) {   
 
   let divForList = document.getElementById(id);
@@ -249,8 +230,7 @@ function createSearchPref(number) {
     let inputText = document.createElement("input");
     inputText.setAttribute("type", "text");
     inputText.id = currentNumber + "prio";
-    //inputText.class = "searchPrefClass";
-    
+    inputText.className = "prioClass" 
     inputText.setAttribute("placeholder", "Search");
     inputText.addEventListener("keyup", () => SearchField(inputText.id, "myUL" + currentNumber)); 
   
@@ -350,13 +330,43 @@ function saveStudentPreferences(e) {
 
   let arrayPrefStudents = [];
 
+  let preferenceFields = document.getElementsByClassName("prioClass")
+  for (let i = 0;i<preferenceFields.length;i++){
+    console.log(i + "debug")
+    let currentField = document.getElementById(preferenceFields[i].id)
+
+    for (let j = i/1 + 1; j < preferenceFields.length; j++){
+      let nextField = document.getElementById(preferenceFields[j].id)
+      if (currentField.value == nextField.value){
+        if(currentField.value != ""){
+          return alert("Student " + currentField.value + " cannot be added as preference twice")
+        }
+      }
+    }
+
+    let blockedDataHead = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
+  for (let i = 1; i<blockedDataHead.children.length; i++){
+    console.log(i)
+    if (currentField.value == blockedDataHead.children[i].innerText){
+      return alert("Student "+ blockedDataHead.children[i].innerText+ " is blocked")
+    }
+  }
+
+  let blockedDataBody = document.getElementById("blockTableDivID").getElementsByTagName('tbody')[0];
+  for (let i = 0; i<blockedDataBody.children.length; i++){
+    if (currentField.value == blockedDataBody.children[i].children[0].innerText){
+      return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is blocked")
+    }
+  }
+  }
+
+  let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length
   for (let priority = 1; priority <= numberOfStudentPreferences; priority++) {
-    
 
     let currentStudent = document.getElementById(priority + "prio");
     currentStudent.style.background = "white";
 
-    if ((arrayPrefStudents.indexOf(currentStudent.value) < 0) || (currentStudent.value == "")) {
+
 
       if (document.getElementById("p" + priority) === null) {
 
@@ -386,18 +396,6 @@ function saveStudentPreferences(e) {
         modal.style.display = "none";
   
       }
-  
-    } else {
-
-      currentStudent.style.background = "red";
-
-      alert("You can't choose the same person twice");
-      modal.style.display = "block";
-      text.innerText = priority + ". Priority: ";
-      break;
-
-    }
-
     
     arrayPrefStudents.push(currentStudent.value);
 
@@ -406,27 +404,48 @@ function saveStudentPreferences(e) {
 }
 //KALDE FUNKTIONER
 
-createDivs(numberOfStudentPreferences);
+//Fetch used to get the values from the configFile
+fetch(url + '/getConfig').then((response) => response.json()).then((data) => {
+  
+  if(data.roles == 1) {
+    
+    roleTable.style.display = "";
+    roleTable.addEventListener("load", createDynamicList2("rolesTable", roles, "role"));
 
-createSearchPref(numberOfStudentPreferences);
+    for (let i = 0; i<=8;i++) {
+      document.getElementById("role"+i).addEventListener("click",() =>checkboxControl(i));
+    }
 
+  } else {
+    
+    roleTable.style.display = "none";
+    
+  }
 
-for (let i = 1; i <= numberOfStudentPreferences; i++) {
+  createDivs(data.pref);
 
-  let test = document.getElementById(i + "prio");
-  test.addEventListener("keyup", SearchField(test.id, "myUL" + i));
+  createSearchPref(data.pref);
 
-}
-createSaveButton();
+  for (let i = 1; i <= data.pref; i++) {
 
+    let test = document.getElementById(i + "prio");
+    test.addEventListener("keyup", SearchField(test.id, "myUL" + i));
+  
+  }
 
-/*
-fjerne students fra listen hvis de er valgt
-*/
+  createSaveButton();
 
+  })
 
+/**
+ * Function used to create a table with 2 cells (string and checkbox) in each row. 
+ * @param {string} TableID The ID of the table
+ * @param {Array} SubjectArray Array with data of what the innerHTML in first cell should be set to 
+ * @param {string} Subject String descripting which table is being created
+ */
 function createDynamicList2(TableID, SubjectArray, Subject) {
-console.log(SubjectArray)
+
+  //Selects specificly the tbody part of the table
   let table = document.getElementById(TableID).getElementsByTagName('tbody')[0];
 
   if (Subject == "Topic") {
@@ -446,12 +465,19 @@ console.log(SubjectArray)
     checkbox.id = Subject + i;
     checkbox.name = Subject + i;
     checkbox.checked = false;
+    if (Subject == "Block"){
+      checkbox.checked = true;  
+    }
     cell2.append(checkbox);
-    console.log(i);
+
   }
   
 }
 
+/**
+ * Function used in an eventListener for the student to click whether 
+ * they want to see the topic table, for them to choose topic
+ */
 function ShowTopicTable() {
 
   if (document.getElementById("DoesTopicMatterID").checked) {
@@ -466,8 +492,12 @@ function ShowTopicTable() {
 
 }
 
+/**
+ * EventListener for the topic Division. Loads the topics from the topic json file
+ * and calls afterwards a function to create the table list shown for the student
+ */
 document.getElementById("topicDiv").addEventListener("load",
-  fetch("./getTopics").then((response) => response.json()).then((data) => {
+  fetch(url + "/getTopics").then((response) => response.json()).then((data) => {
     console.log(data);
     createDynamicList2("MyTopicTable", data, "Topic")
   })
@@ -475,17 +505,15 @@ document.getElementById("topicDiv").addEventListener("load",
 
 document.getElementById('DoesTopicMatterID').addEventListener('click', ShowTopicTable);
 
-roleTable.addEventListener("load", createDynamicList2("rolesTable", roles, "role"));
-document.getElementById("role1").addEventListener("click",() =>checkboxControl(0));
-document.getElementById("role2").addEventListener("click",() =>checkboxControl(1)); 
-document.getElementById("role3").addEventListener("click",() =>checkboxControl(2));
-document.getElementById("role4").addEventListener("click",() =>checkboxControl(3));
-document.getElementById("role5").addEventListener("click",() =>checkboxControl(4));
-document.getElementById("role6").addEventListener("click",() =>checkboxControl(5));
-document.getElementById("role7").addEventListener("click",() =>checkboxControl(6));
-document.getElementById("role8").addEventListener("click",() =>checkboxControl(7));
+
 document.getElementById("addBlock").addEventListener("keyup", () => SearchField('addBlock', 'myUL'))
 
+/**
+ * Creates an element with the given type and properties 
+ * @param {*} type descripes which type of element to create ('li','ul',..)
+ * @param {*} props descripes which properties have to be set in the element
+ * @returns The created element with the given type and properties
+ */
 function createElement(type, props) {
 
   let element = document.createElement(type);
@@ -511,17 +539,62 @@ function createElement(type, props) {
 
 }
 
+/**
+ * Checks the blocked student for errors and calls another function to add if no error occurs 
+ * @param {string} fieldID The ID of the search field for blocking students 
+ * @returns Outputs an informative error or preceeds to function call in order to blocked a student  
+ */
+function BlockedList(fieldID) {
 
-function BlockedList(Student) {
-  let blockedPair = [document.getElementById(Student).value];
-  blocked.push(blockedPair[0]);
-  console.log(document.getElementById(Student).ariaPlaceholder)
-  createDynamicList2("studentBlockTableID", blockedPair, "Block")
+  let blockedPair = [document.getElementById(fieldID).value];
+
+  //Checks if the logged-in student has written a student to block
+  if (blockedPair == "") {
+    return alert("You have to input a student to block")
+  }
+
+  //Checks if a student is already add as a preference by the logged-in student
+  let studentPreferences = document.getElementsByClassName("priorities")
+  for (let i in studentPreferences){
+  if (blockedPair == studentPreferences[i].innerText){
+    return alert("Student "+studentPreferences[i].innerText+ " is added as a preference")
+  } 
+  }
+
+  //Checks if a student is already blocked by the coordinator
+  let blockedDataHead = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
+  for (let i = 1; i<blockedDataHead.children.length; i++){
+    if (blockedPair == blockedDataHead.children[i].innerText){
+      return alert("Student "+ blockedDataHead.children[i].innerText+ " is already blocked")
+    }
+  }
+
+  //Checks if a student is already blocked by the logged-in student
+  let blockedDataBody = document.getElementById("blockTableDivID").getElementsByTagName('tbody')[0];
+  for (let i = 0; i<blockedDataBody.children.length; i++){
+    if (blockedPair == blockedDataBody.children[i].children[0].innerText){
+      return alert("Student "+ blockedDataBody.children[i].children[0].innerText+ " is already blocked")
+    }
+  }
+
+    //Calls the funktion to add the chosen student to the blocked table
+    createDynamicList2("studentBlockTableID", blockedPair, "Block")
+    
 }
 
+document.getElementById("BlockedButton").addEventListener("click",()=>BlockedList('addBlock'))
+
+/**
+ * Sends data to the server for validation and either prompts an error or writes the data to the student json file
+ * @param {array} pref Contains the student's student preferences 
+ * @param {array} blocked Contains the student's student blocks
+ * @param {array} topics Contains the student's topics
+ * @param {array} roles Contains the student's roles
+ * Return either an error message or redirects to student homepage
+ */
 function sendProfile(pref, blocked, topics, roles) {
 
-  fetch('./saveProfile', {
+  fetch(url + '/saveProfile', {
       method:"POST",
       headers: {
         Accept:"application/json, text/plain, */*",
@@ -539,18 +612,22 @@ function sendProfile(pref, blocked, topics, roles) {
       if (data.blocks)
       {
         alert("Invalid blocks")
+        console.log(1);
       } 
       if (data.prefs)
       {
         alert("Invalid prefs")
+        console.log(2);
       } 
       if (data.roles)
       {
         alert("Invalid roles")
+        console.log(3);
       } 
       if (data.topics)
       {
         alert("Invalid topics")
+        console.log(4);
       } 
     } else {
       location.href = './student_start';
@@ -560,7 +637,10 @@ function sendProfile(pref, blocked, topics, roles) {
 }
 
 
-
+/**
+ * Selects and adds eventListener for the Add block field
+ * in order to call createDynamicBlockList to search for students
+ */
 document.querySelectorAll("#addBlock").forEach(function (element) {
 
   element.addEventListener("input", function () {
@@ -571,7 +651,11 @@ document.querySelectorAll("#addBlock").forEach(function (element) {
 
 });
 
-fetch('./getBlockedPair').then((response) => response.json()).then((data) => {
+/**
+ * Fetching the blocks that the coordiantor has added for the logged-in student
+ * and adds it to the table shown for the student.
+ */
+fetch(url + '/getBlockedPair').then((response) => response.json()).then((data) => {
 let Blocktable = document.getElementById("blockTableDivID").getElementsByTagName('thead')[0];
 for (let i in data.blocked) {
 
@@ -582,6 +666,24 @@ for (let i in data.blocked) {
 }
 })
 
+/**
+ * Sets all the blocks that the Student has added into an array which is returned
+ */
+function getBlockedStudents () {
+  blocked = [];
+  let blockedCheckboxData = document.getElementsByClassName("checkboxBlock");
+  let blockedData= document.getElementById('studentBlockTableID').getElementsByTagName('tbody')[0];
+  for (let i = 0; i<blockedCheckboxData.length; i++){
+    if(blockedCheckboxData[i].checked){
+      blocked.push(blockedData.children[i].children[0].innerText)
+    }
+  } 
+  return blocked
+}
+
+/**
+ * Adds all student priorities into an array which is returned
+ */
 function getPriorities(){
   if(document.getElementsByClassName('priorities')){
     let array=[]
@@ -594,6 +696,10 @@ function getPriorities(){
   }else{console.log("fejl");}
 }
 
+/**
+ * @param {string} subject that tells which checkboxes is being checked}  
+ * @returns Array with the checkboxes that are checked
+ */
 function getIndexOfChecked(subject){
   let checkedboxes = [];
   subject = "checkbox"+subject
@@ -608,3 +714,9 @@ function getIndexOfChecked(subject){
   return checkedboxes
 }
 
+//Sends data to the server site for validation
+submit.addEventListener('click', () => {sendProfile(getPriorities(),getBlockedStudents(),getIndexOfChecked("Topic"),getIndexOfChecked("role"))
+  })
+
+  
+ 

@@ -6,18 +6,11 @@
             "Allan"
         ],
         "blocks": [
-            "Merete",
-            "Simon",
-            "A",
-            "Simon",
-            "A"
+            "Merete"
         ],
-        "roles": [
-            "Implementer",
-            "Shaper"
-        ],
+        "roles": [],
         "topics": [],
-        "keycode": "EasY5kgU7w",
+        "keycode": "AghXhVuxBv",
         "isRegistered": 0
     },
     {
@@ -35,8 +28,8 @@
             "7"
         ],
         "topics": [],
-        "keycode": "kCw4ckeNQO",
-        "isRegistered": 1
+        "keycode": "r11Q7JX65f",
+        "isRegistered": 0
     },
     {
         "name": "Nicolaj",
@@ -50,7 +43,7 @@
             "Team Worker"
         ],
         "topics": [],
-        "keycode": "2nX06ogUqK",
+        "keycode": "gkvzND8yz3",
         "isRegistered": 0
     },
     {
@@ -65,7 +58,7 @@
             "Coordinator"
         ],
         "topics": [],
-        "keycode": "Qw1ykCOB8f",
+        "keycode": "nCCi6EscCi",
         "isRegistered": 0
     },
     {
@@ -80,7 +73,7 @@
             "Shaper"
         ],
         "topics": [],
-        "keycode": "FonSGV787g",
+        "keycode": "JnvOPcinek",
         "isRegistered": 0
     },
     {
@@ -97,7 +90,7 @@
             "Master coder"
         ],
         "topics": [],
-        "keycode": "8Htg5iLIbu",
+        "keycode": "1h9unAXrNU",
         "isRegistered": 0
     },
     {
@@ -112,7 +105,7 @@
             "Complete finisher"
         ],
         "topics": [],
-        "keycode": "VKsCaIOLf2",
+        "keycode": "1kF3F1GiH0",
         "isRegistered": 0
     }
 ]

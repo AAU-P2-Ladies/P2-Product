@@ -17,11 +17,6 @@
     margin: 10px 10px 10px 10px;
     border-radius: 5px;
 }
-/*
-.hide{
-    visibility:hidden;  
-  }
-*/
 .div1{
     float: left;
     margin-left: 175px;
@@ -47,6 +42,7 @@
     width: 75%;
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
     padding: 10px;
+    margin-top: 10px;
     text-align: center;
 }
   
@@ -147,11 +143,26 @@ form > div.form-group {
 }
 
 .file_upload{
-    margin-left: auto;
-    margin-right: auto;
-    width: 75%;
-    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    
+    width: 70%;
+    box-shadow: rgba(230, 234, 239, 0.568) 0px 0px 0px 2px, rgba(166, 166, 166, 0.65) 0px 4px 6px -1px, rgba(181, 176, 176, 0.08) 0px 1px 0px inset;
     padding: 10px;
-    margin: 0 auto;
+    margin: 0px auto 30px;
+    text-align: center;
+    
+}
+
+#TableDivId{
+    width: 70%;
+    box-shadow: rgba(230, 234, 239, 0.568) 0px 0px 0px 2px, rgba(166, 166, 166, 0.65) 0px 4px 6px -1px, rgba(181, 176, 176, 0.08) 0px 1px 0px inset;
+    padding: 10px;
+    margin: 0px auto 30px;
+    text-align: center;
+}
+
+#MyBlockedTable, #keycodeTable, #groupsTable{
+    width: 70%;
+    padding: 10px;
+    margin: 0px auto 30px;
     text-align: center;
 }

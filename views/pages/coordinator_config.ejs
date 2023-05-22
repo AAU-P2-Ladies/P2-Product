@@ -4,62 +4,56 @@
 
         <%- include('../partials/head'); %>
 
-        <title>Coordinator configuration</title>
-        <link rel="stylesheet" href="./../css/style.css">
-        <script type="application/javascript" src="./../js/coordinator.js" defer></script>
+        <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+        <script type="application/javascript" src="<%= baseUrl %>/js/coordinator.js" defer></script>
     
     </head>
 <body>
 
     <%- include('../partials/navbar'); %>
 
-    <div class="outer"> 
-      <div class="middle">
-        <div class="inner">
-          <div class="heading_coordinator">
-            <h1 id="heading">Configuration page</h1>
-            <p>Welcome to the configuration page, please proceed to fill out below!</p>
-            <p></p>
-          </div>
-        
-          <div class="input_form">
-            <p>This form will configure the specific questions desired/roles to be used</p>
-            <form action="javascript:void(0);"> <!atm do not want page to reload when submitting to form>
-              <div class="proeve" id="proeveDiv">
-                <label for="amount_of_group_members">Amount of Group members per group:</label>
-                <input type="number" id="amountOfGroupMembers" name="amountOfGroupMembers" min="3"><br><br>
+    <div class="outerCoordinator"> 
+      <div class="heading_coordinator">
+        <h1 class="headingCoordinator" id="heading">Configuration page</h1>
+      </div>
+      <div class="input_form">
+        <p class="paragrafCoordinator">This form will configure the specific questions desired/roles to be used</p><br>
+        <form action="javascript:void(0);"> <!atm do not want page to reload when submitting to form>
+          <div class="file_upload" id="proeveDiv">
+            <label for="amount_of_group_members" class="paragrafCoordinator">Amount of Group members per group:</label><br>
+            <input type="number" class="form-control" id="amountOfGroupMembers" name="amountOfGroupMembers" min="3"><br><br>
                       
-                <label for="studentPreferences">Allowed number of preferences for group members:</label>
-                <input type="number" id="studentPreferences" name="studentPreferences" min="0"><br><br>
+            <label for="studentPreferences" class="paragrafCoordinator">Allowed number of preferences for group members:</label><br>
+            <input type="number" class="form-control" id="studentPreferences" name="studentPreferences" min="0"><br><br>
 
-                <button id="addPref" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Block Pairs</button><br><br>
+            <button id="addPref" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Click to block pair</button><br><br>
           
-                <div class="table-data table-bordered" id="TableDivId">
-                  <table id="MyBlockedTable">
-                    <thead>
-                      <tr>
-                        <th>Student A</th>
-                        <th>Student B</th>
-                        <th>Blocked</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+              <div class="table-data table-bordered" id="TableDivId">
+                <table id="MyBlockedTable">
+                  <thead>
+                    <tr>
+                      <th>Student A</th>
+                      <th>Student B</th>
+                      <th>Blocked</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                                   
-                    </tbody>
-                  </table>
-                </div><br>
-                <div>
-                  <input type="checkbox" id="include_roles" name="include_roles">
-                  <label for="vehicle1"> Should roles be included?</label><br>
-                </div>
-            </form>
+                  </tbody>
+                </table>
+              </div><br>
+              <div>
+                <input type="checkbox" id="include_roles" name="include_roles">
+                <label for="vehicle1" class="paragrafCoordinator"> Should roles be included?</label><br>
+              </div>
           </div>
-          <div class="buttons">
-            <p>When you have finished configuration, please save and unlock student page to continue!</p>
-            <button type="button" id="back_btn">Go back</button>
-            <button type="button" id="save_btn">Save configurations</button>
-            <button type="button" id="unlock_btn">Unlock student profile page</button>
-          </div>
+        </form>
+          
+        <div class="buttons">
+          <p class="paragrafCoordinator">When you have finished configuration, please save and unlock student page to continue!</p><br>
+          <button type="button" class="btn btn-primary" id="back_btn">Go back</button>
+          <button type="button" class="btn btn-primary" id="save_btn">Save configurations</button>
+          <button type="button" class="btn btn-primary" id="unlock_btn">Unlock student profile page</button>
         </div>
       </div>
     </div>  
@@ -74,11 +68,11 @@
           <div class="modal-body">
             <form>
               <div class="div1" id="MyDivUL">
-                <input type="text" id="myInput" onkeyup=   placeholder="Search for names.." required>
+                <input type="text" id="myInput" placeholder="Search for names.." required>
               </div>
 
               <div class="div2" id="MyDivBlockedUL"> 
-                <input type="text" id="BlockedInput" onkeyup="SearchField('BlockedInput','BlockedUL')" placeholder="Search for names.." class="selected">        
+                <input type="text" id="BlockedInput" placeholder="Search for names.." class="selected">        
               </div>
 
               <div class="div3" id="BlockThePairs">

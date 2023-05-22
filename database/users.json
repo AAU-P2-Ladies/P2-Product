@@ -29,6 +29,9 @@
             },
             {
                 "class": "testcssS"
+            },
+            {
+                "class": "yoyo"
             }
         ],
         "isCoordinator": 1
@@ -164,6 +167,83 @@
             {
                 "class": "DAT2",
                 "keycode": "kCw4ckeNQO"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "lili",
+        "password": "lili",
+        "classes": [
+            {
+                "class": "DAT4",
+                "keycode": "2CGcCiAK20"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "BIBI",
+        "password": "BIBI",
+        "classes": [
+            {
+                "class": "DAT4",
+                "keycode": "jLtj6kqBpN"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "SISI",
+        "password": "SISI",
+        "classes": [
+            {
+                "class": "DAT4",
+                "keycode": "QAVZLTsFa4"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "dada",
+        "password": "dada",
+        "classes": [
+            {
+                "class": "DAT4",
+                "keycode": "5OhEaXE46c"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "nene",
+        "password": "nene",
+        "classes": [
+            {
+                "class": "DAT4",
+                "keycode": "LDVDjZpQGW"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "TITI",
+        "password": "TITI",
+        "classes": [
+            {
+                "class": "DAT4",
+                "keycode": "HRv8il91rc"
+            }
+        ],
+        "isCoordinator": 0
+    },
+    {
+        "username": "psps",
+        "password": "psps",
+        "classes": [
+            {
+                "class": "DAT4",
+                "keycode": "kLG86LQskm"
             }
         ],
         "isCoordinator": 0

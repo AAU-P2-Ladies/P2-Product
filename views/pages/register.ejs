@@ -4,8 +4,7 @@
 
     <%- include('../partials/head'); %>
     
-    <title>Register login</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
     
 </head>
 <body class="d-flex flex-column h-100">
@@ -15,7 +14,7 @@
     <div class="outer"> 
         <div class="middle">
             <div class="inner">
-              <form action="./register" method="post" id="register-form">
+              <form action="<%= baseUrl %>/register" method="post" id="register-form">
                 <div class="form-group">
                   <label for="username">Username</label>
                   <input type="text" class="form-control" id="register-username" name="username" placeholder="Enter your username">
@@ -32,6 +31,6 @@
 
     <%- include('../partials/footer'); %>
     
-    <script type="application/javascript" src="./js/register.js"></script>
+    <script type="application/javascript" src="<%= baseUrl %>/js/register.js"></script>
 </body>
 </html>

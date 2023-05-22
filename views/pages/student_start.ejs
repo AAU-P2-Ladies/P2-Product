@@ -4,9 +4,8 @@
     
     <%- include('../partials/head'); %>
     
-    <title>Student Start</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/style_student.css">
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style_student.css">
 
   </head>
   <body class="d-flex flex-column h-100">
@@ -14,16 +13,13 @@
     <%- include('../partials/navbar'); %>
 
     <div class="boks">
-      <a href="./student_profile" id="anchor1">Create your profile HERE!</a><br>
-      <a href="./student_profile" id="anchor2">Watch your current group and submit feedback</a><br>
-      <a href="./student_profile" id="anchor3">The groups are DONE. Watch them HERE!</a><br><br>
-      <br>
-      <button value="knapknap" id="knapidd"> YELPOW</button>
+      <a href="<%= baseUrl %>/student_profile" id="studentProfileButton" class="btn btn-secondary" >Create your profile HERE!</a><br><br>
+      <a href="<%= baseUrl %>/student_group" id="studentGroupsButton" class="btn btn-secondary"> Watch your current group and submit feedback </a>
     </div>
 
     <%- include('../partials/footer'); %>
       
-    <script type="application/javascript" src="./js/student_start.js"></script>
+    <script type="application/javascript" src="<%= baseUrl %>/js/student_start.js"></script>
   </body>
 </html>
 

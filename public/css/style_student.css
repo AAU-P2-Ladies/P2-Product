@@ -70,38 +70,29 @@ p {
     
 }
 
-.buttonS, #knapidd, #addPref, #addBlock, #searchPref, #SaveStudentPreferencesButton{
-    background-color: white;
+.buttonS, #knapidd, #addBlock, #searchPref, #SaveStudentPreferencesButton, #BlockedButton, #addPref{
+    background-color: rgb(255, 255, 255);
     color:rgba(0, 0, 0, 0.4);
     border-radius: 5px;
 }
-/*
-#SaveStudentPreferencesButton{
-    width: 40%;
-}
-*/
+
 .buttonS:hover,
 .buttonS:focus,
 #knapidd:hover,
 #knapidd:focus,
-#addPref:hover,
-#addPref:focus,
 #searchPref:hover,
 #searchPref:focus,
 #SaveStudentPreferencesButton:hover,
-#SaveStudentPreferencesButton:focus{
+#SaveStudentPreferencesButton:focus,
+#BlockedButton:focus,
+#BlockedButton:hover,
+#addPref:hover,
+#addPref:focus{
   color: #000;
   text-decoration: none;
   cursor: pointer;
 }
-/*
-#searchPref{
-    
-    width: 50%;
-    display: flex;
-    margin: auto;
-    text-align: right;
-}*/
+
 #override{
     text-align: center;
 
@@ -120,6 +111,7 @@ p {
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
     padding: 10px;
     text-align: center;
+    margin-top: 10px;
 }
 
 
@@ -175,4 +167,17 @@ p {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+#studentBlockTableID{
+    width: 30%;
+    padding: 10px;
+    margin: 0px auto 30px;
+    text-align: center;
+
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    
 }

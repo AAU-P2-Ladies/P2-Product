@@ -3,92 +3,91 @@
   <head>
 
     <%- include('../partials/head'); %>
-    <title>Student Profile</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/style_student.css">
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style.css">
+    <link rel="stylesheet" href="<%= baseUrl %>/css/style_student.css">
   </head>
   <body class="d-flex flex-column h-100">
 
     <%- include('../partials/navbar'); %>
+    <div class="outer">
+      <div class="boks">
+        <h5>You have been invited to a group formation. Input your preferences!</h5>
+        <form id="StudentProfile">
 
-    <div class="boks">
-      <h5>You have been invited to a group formation. Input your preferences!</h5>
-      <form id="StudentProfile">
+          <div id="topicDiv" class="topics">
+            <label> Does topic matter to you?</label>
+            <input type="checkbox" id="DoesTopicMatterID" name="DoesTopicMatter">
+            <table id="MyTopicTable">
+              <thead>
+                <tr>
+                  <th>Topics</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+              </tbody>
+            </table>
+          </div><br>
 
-        <div id="topicDiv" class="topics">
-          <label> Does topic matter to you?</label>
-          <input type="checkbox" id="DoesTopicMatterID" name="DoesTopicMatter">
-          <table id="MyTopicTable">
-            <thead>
-              <tr>
-                <th>Topics</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-            </tbody>
-          </table>
-        </div>
-
-        <div id="addPrefDiv">
-          <button id="addPref">Add student preference</button><br><br>
-        </div>
-
-        <div id="prefModal" class="modal">
-          <div id ="modalContent" class="modal-content">
-            <span class="close">&times;</span>
-            
+          <div id="addPrefDiv">
+            <button id="addPref">Add student preference</button><br><br>
           </div>
-        </div>
 
-        <div id="">
-          <label>Block Students</label><br>
-          <input id="addBlock" placeholder="Search for names.."><br><br>
-          <input type="button" id="BlockedButton" value="Add Blocked Person" onclick="BlockedList('addBlock')">  
-        </div>
-      
+          <div id="prefModal" class="modal">
+            <div id ="modalContent" class="modal-content">
+              <span class="close">&times;</span>
+              
+            </div>
+          </div>
+
+          <div id="blockSearch">
+            <label>Block Students</label><br>
+            <input id="addBlock" placeholder="Search for names..">
+            <input type="button" id="BlockedButton" value="Add Blocked Person">  
+          </div>
         
-        <div id="blockTableDivID">
           
-          <table id="studentBlockTableID">
+          <div id="blockTableDivID">
+            
+            <table id="studentBlockTableID">
 
+              <thead>
+                <tr>
+                  <th>Blocked Student</th>
+                  <th>Block</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                
+              </tbody>
+
+            </table>
+
+          </div>
+
+          <span id="error" style="color: rgb(44, 44, 44)">Choose your roles:</span>
+
+          <table id="rolesTable">
             <thead>
               <tr>
-                <th>Blocked Student</th>
-                <th>Block</th>
+                <th>Belbin Roles</th>
               </tr>
             </thead>
 
             <tbody>
-              
-            </tbody>
-
-          </table>
-
-        </div>
-
-        <span id="error" style="color: rgb(44, 44, 44)">Choose your roles:</span>
-
-        <table id="rolesTable">
-          <thead>
-            <tr>
-              <th>Belbin Roles</th>
-            </tr>
-          </thead>
-
-          <tbody>
-           
-          </tbody>
             
-        </table>
+            </tbody>
               
-        <input type="button" id="submitProfile" class="buttonS" value="Join Group formation">
-          
-      </form>
+          </table>
+                
+          <input type="button" id="submitProfile" class="btn btn-primary" value="Join Group formation">
+            
+        </form>
+      </div>
     </div>
-      
     <%- include('../partials/footer'); %>
     
-    <script type="application/javascript" src="./js/student_profile.js"></script>
+    <script type="application/javascript" src="<%= baseUrl %>/js/student_profile.js"></script>
   </body>
 </html>

@@ -1,9 +1,133 @@
 [
-    {"name":"Allan Vester"},
-    {"name":"Carmen-Ioana Mihut"},
-    {"name":"Kamilla Bøgedal Jacobi"},
-    {"name":"Merete Kaldahl Andersen"},
-    {"name":"Nicolaj Skjødt"},
-    {"name":"Simon Thordal"},
-    {"name":"Sina Grün"}
+    {
+        "name": "Allan Vester",
+        "prefs": [
+            "Sina Grün"
+        ],
+        "blocks": [
+            "Nicolaj Skjødt"
+        ],
+        "roles": [
+            "5",
+            "7"
+        ],
+        "topics": [],
+        "keycode": "kLG86LQskm",
+        "isRegistered": 1
+    },
+    {
+        "name": "Carmen-Ioana Mihut",
+        "prefs": [
+            "Simon Thordal"
+        ],
+        "blocks": [
+            "Merete Kaldahl Andersen"
+        ],
+        "roles": [
+            "0",
+            "2",
+            "4"
+        ],
+        "topics": [],
+        "keycode": "HRv8il91rc",
+        "isRegistered": 1
+    },
+    {
+        "name": "Kamilla Bøgedal Jacobi",
+        "prefs": [
+            "Merete Kaldahl Andersen"
+        ],
+        "blocks": [
+            "Nicolaj Skjødt"
+        ],
+        "roles": [
+            "3",
+            "4",
+            "5"
+        ],
+        "topics": [
+            "Olie"
+        ],
+        "keycode": "LDVDjZpQGW",
+        "isRegistered": 1
+    },
+    {
+        "name": "Merete Kaldahl Andersen",
+        "prefs": [
+            "Sina Grün"
+        ],
+        "blocks": [
+            "Allan Vester"
+        ],
+        "roles": [
+            "0",
+            "2",
+            "5"
+        ],
+        "topics": [
+            "Olie"
+        ],
+        "keycode": "5OhEaXE46c",
+        "isRegistered": 1
+    },
+    {
+        "name": "Nicolaj Skjødt",
+        "prefs": [
+            "Sina Grün"
+        ],
+        "blocks": [
+            "Kamilla Bøgedal Jacobi",
+            "Nicolaj Skjødt"
+        ],
+        "roles": [
+            "2",
+            "6",
+            "8"
+        ],
+        "topics": [],
+        "keycode": "QAVZLTsFa4",
+        "isRegistered": 1
+    },
+    {
+        "name": "Simon Thordal",
+        "prefs": [
+            "Carmen-Ioana Mihut",
+            "Carmen-Ioana Mihut"
+        ],
+        "blocks": [
+            "Sina Grün",
+            "Kamilla Bøgedal Jacobi"
+        ],
+        "roles": [
+            "2",
+            "3",
+            "5",
+            "1",
+            "2",
+            "3"
+        ],
+        "topics": [],
+        "keycode": "jLtj6kqBpN",
+        "isRegistered": 1
+    },
+    {
+        "name": "Sina Grün",
+        "prefs": [
+            "Carmen-Ioana Mihut",
+            "Allan Vester"
+        ],
+        "blocks": [
+            "Simon Thordal",
+            "Nicolaj Skjødt"
+        ],
+        "roles": [
+            "0",
+            "3"
+        ],
+        "topics": [
+            "Olie"
+        ],
+        "keycode": "2CGcCiAK20",
+        "isRegistered": 1
+    }
 ]
