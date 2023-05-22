@@ -406,7 +406,8 @@ if (save_btn) {
                 className: className,
                 amountOfGroupMembers: amountOfGroupMembers.value,
                 studentPreferences: studentPreferences.value,
-                blockedPairArray: blockedPairArray
+                blockedPairArray: blockedPairArray,
+                includeRoles: includeRoles
             }),
         })
             .then((response) => response.json())
