@@ -4,8 +4,6 @@ let roles = ["Resource Investigator", "Teamworker", "Co-ordinator",
 
 let blocked=[];
 let preferences=[];
-let numberOfStudentPreferences = 3;
-let rolesIncluded = true;
 
 //ændre navn af variabel list til form eller noget
 const list = document.getElementById("StudentProfile");
@@ -82,6 +80,7 @@ function createDynamicBlockList(input) {
       } 
 
       //Creates the list for each preference field
+      let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length
       for (let i = 1; i <= numberOfStudentPreferences; i++) {
 
       if (input.id == (i + 'prio')) {
@@ -130,15 +129,7 @@ function createDynamicBlockList(input) {
 
 } 
 
-if (rolesIncluded) {
 
-  roleTable.style.display = "";
-
-} else {
-
-  roleTable.style.display = "none";
-
-}
 
 /**
  * CheckboxControl checks if more than three boxes have been checked, 
@@ -368,6 +359,7 @@ function saveStudentPreferences(e) {
   }
   }
 
+  let numberOfStudentPreferences = document.getElementsByClassName("prioClass").length
   for (let priority = 1; priority <= numberOfStudentPreferences; priority++) {
 
     let currentStudent = document.getElementById(priority + "prio");
@@ -411,18 +403,38 @@ function saveStudentPreferences(e) {
 }
 //KALDE FUNKTIONER
 
-createDivs(numberOfStudentPreferences);
+//Fetch used to get the values from the configFile
+fetch('/getConfig').then((response) => response.json()).then((data) => {
+  
+  if(data.roles == 1) {
+    
+    roleTable.style.display = "";
+    roleTable.addEventListener("load", createDynamicList2("rolesTable", roles, "role"));
 
-createSearchPref(numberOfStudentPreferences);
+    for (let i = 0; i<=8;i++) {
+      document.getElementById("role"+i).addEventListener("click",() =>checkboxControl(i));
+    }
 
-//
-for (let i = 1; i <= numberOfStudentPreferences; i++) {
+  } else {
+    
+    roleTable.style.display = "none";
+    
+  }
 
-  let test = document.getElementById(i + "prio");
-  test.addEventListener("keyup", SearchField(test.id, "myUL" + i));
+  createDivs(data.pref);
 
-}
-createSaveButton();
+  createSearchPref(data.pref);
+
+  for (let i = 1; i <= data.pref; i++) {
+
+    let test = document.getElementById(i + "prio");
+    test.addEventListener("keyup", SearchField(test.id, "myUL" + i));
+  
+  }
+
+  createSaveButton();
+
+  })
 
 /**
  * Function used to create a table with 2 cells (string and checkbox) in each row. 
@@ -492,16 +504,7 @@ document.getElementById("topicDiv").addEventListener("load",
 
 document.getElementById('DoesTopicMatterID').addEventListener('click', ShowTopicTable);
 
-roleTable.addEventListener("load", createDynamicList2("rolesTable", roles, "role"));
-document.getElementById("role0").addEventListener("click",() =>checkboxControl(0));
-document.getElementById("role1").addEventListener("click",() =>checkboxControl(1));
-document.getElementById("role2").addEventListener("click",() =>checkboxControl(2)); 
-document.getElementById("role3").addEventListener("click",() =>checkboxControl(3));
-document.getElementById("role4").addEventListener("click",() =>checkboxControl(4));
-document.getElementById("role5").addEventListener("click",() =>checkboxControl(5));
-document.getElementById("role6").addEventListener("click",() =>checkboxControl(6));
-document.getElementById("role7").addEventListener("click",() =>checkboxControl(7));
-document.getElementById("role8").addEventListener("click",() =>checkboxControl(8));
+
 document.getElementById("addBlock").addEventListener("keyup", () => SearchField('addBlock', 'myUL'))
 
 /**
@@ -713,3 +716,6 @@ function getIndexOfChecked(subject){
 //Sends data to the server site for validation
 submit.addEventListener('click', () => {sendProfile(getPriorities(),getBlockedStudents(),getIndexOfChecked("Topic"),getIndexOfChecked("role"))
   })
+
+  
+ 

@@ -1054,6 +1054,17 @@ app.get("/getTopics", (req, res) => {
   return res.end();
 
 })
+
+/**
+ * Get used to get some of the values from the configFile, used in student profile page
+ */
+app.get("/getConfig", (req, res) => {
+  let configFile = getJSONFile(req.session.class + "/config.json");
+  let includeRoles = configFile.includeRoles
+  let studentPreference = configFile.studentPreferences;
+  res.json({roles: includeRoles,pref: studentPreference})
+  return res.end();
+  });
 /**
  * Logs the servers url
  */
