@@ -530,7 +530,9 @@ app.get("/getCoordinatorClasses", (req, res) => {
 app.post("/postCoordinatorClass", (req, res) => {
   session = req.session
   session.class = req.body.class;
-  //console.log(req.session.class);
+  req.session.class = req.body.class
+  console.log(req.session.class)
+  console.log(session.class)
 });
 
 app.get("/student_start", (req, res) => {
@@ -658,7 +660,7 @@ app.post("/fileGroupUpload", multer(multerConfig).any(), (req, res) => {
 
   for (let index = 0; index < topicsList.length; index++) {
     // If an object in the topics-file does not have the topic-property, then return an error
-    if (topicsList[index].hasOwnProperty("topic")) {
+    if (!topicsList[index].hasOwnProperty("topic")) {
       res.json({
         error: true,
         groupFormationName: true,
@@ -848,9 +850,8 @@ app.post("/unlockClass", (req, res) => {
   return res.end();
 });
 
-app.get("/getGroups", (req, res) => {
-  const className = req.session.class;
-
+app.post("/getGroups", (req, res) => {
+  const className = req.body.className;
   // Checks if the 'groups.json'-file exists, if so, return an error
   if (!fs.existsSync("./database/" + className + "/groups.json")) {
     return res.json({ error: true });
@@ -1030,9 +1031,9 @@ app.get("/getBlockedPair", (req, res) => {
   let keycode;
   usersFind:
   for (let i in users) {
-    if (session.userid == users[i].username) {
+    if (req.session.userid == users[i].username) {
       for (let j in users[i].classes) {
-        if (users[i].classes[j].class == session.class) {
+        if (users[i].classes[j].class == req.session.class) {
           keycode = users[i].classes[j].keycode;
           break usersFind;
         }

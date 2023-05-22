@@ -5,13 +5,15 @@ const loginButton = document.getElementById("login-modal");
 const loginButton2 = document.getElementById("login-submit");
 const loginKeycode = document.getElementById("keycode");
 
+let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
+
 //Event, activated when login button on the main page is pressed
 loginButton.addEventListener("click", (e) => {
 
   e.preventDefault();  
 
   // Posts to '/checkUserLogin' with username and password
-  fetch('./checkUserLogin', {
+  fetch(url + '/checkUserLogin', {
     method: "POST",
     headers: {
         Accept: "application/json, text/plain, */*",
@@ -90,7 +92,7 @@ loginButton.addEventListener("click", (e) => {
          */
         classesSelect.addEventListener("change", (e) => {
 
-          fetch('./login', {
+          fetch(url + '/login', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -141,7 +143,7 @@ loginButton.addEventListener("click", (e) => {
          */
         loginButton2.addEventListener("click", (e) => {
 
-          fetch('./login', {
+          fetch(url + '/login', {
             method: "POST",
             headers: {
                 Accept: "application/json, text/plain, */*",

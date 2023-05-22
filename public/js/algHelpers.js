@@ -119,7 +119,12 @@ function checkRoleDiversity(students, roleNumber){
             }
             }
     }
-    return uniqueRoles.length/totalRoles;
+    if (totalRoles == 0){
+        return 1
+    }
+    else {
+        return uniqueRoles.length/totalRoles;
+    }
 }
 
 

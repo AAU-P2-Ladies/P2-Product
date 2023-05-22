@@ -4,6 +4,8 @@ const registerUsername = document.getElementById("register-username");
 const registerPassword = document.getElementById("register-password");
 const registerButton = document.getElementById("register-submit");
 
+let url = (window.location.pathname.split('/')[1] == 'node0') ? '/node0' : '';
+
 /**
  * Event that is active when the register button is clicked
  */
@@ -13,7 +15,7 @@ registerButton.addEventListener("click", (e) => {
     /**
      * Sends data to the server to be checked 
      */
-    fetch('./register', {
+    fetch(url + '/register', {
         method: "POST",
         headers: {
             Accept: "application/json, text/plain, */*",
